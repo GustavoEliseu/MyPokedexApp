@@ -7,6 +7,7 @@ buildscript {
         okhttp3_ver = "4.11.0"
         coild_ver = "2.4.0"
         palette_ver = "1.0.0"
+        navigation_version = "2.7.3"
 
     }
 }

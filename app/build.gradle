@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace 'com.gustavoeliseu.pokedex'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.gustavoeliseu.pokedex"
@@ -65,20 +65,25 @@ dependencies {
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
 
+    // Navigation
+    implementation "androidx.navigation:navigation-compose:$navigation_version"
+
     // AndroidX Lifecycle
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_ver"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_ver"
+
     // Network
     implementation "com.squareup.retrofit2:retrofit:$retrofit_ver"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_ver"
     implementation "com.squareup.okhttp3:okhttp:$okhttp3_ver"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp3_ver"
+
     // Paging
     implementation "androidx.paging:paging-compose:$paging_ver"
 
-    //Coil
+    // Coil
     implementation("io.coil-kt:coil-compose:$coild_ver")
 
-    //Palette
+    // Palette
     implementation "androidx.palette:palette:$palette_ver"
 }

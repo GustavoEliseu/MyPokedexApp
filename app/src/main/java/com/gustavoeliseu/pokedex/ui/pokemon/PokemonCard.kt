@@ -1,5 +1,6 @@
 package com.gustavoeliseu.pokedex.ui.pokemon
 
+import android.widget.Switch
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -9,9 +10,13 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,6 +31,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,9 +40,13 @@ import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
 import androidx.palette.graphics.Palette
 import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
+import coil.compose.SubcomposeAsyncImage
+import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Scale
 import com.gustavoeliseu.pokedex.R
+import com.gustavoeliseu.pokedex.utils.getContrastColor
 import java.util.Locale
 
 @Composable
@@ -45,24 +56,26 @@ fun PokemonCard(
     picture: String,
     modifier: Modifier = Modifier,
 ) {
+    //TODO - 6 - card Layout improvements
     var boxBackground by remember {
         mutableStateOf(Color.Black)
     }
     var textsColor by remember { mutableStateOf(Color.White) }
 
     Box(
-        modifier = modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+        modifier = modifier
+            .padding(horizontal = 16.dp, vertical = 8.dp)
             .clip(RoundedCornerShape(8.dp))
             .size(170.dp)
             .background(boxBackground)
     ) {
-        val darkTheme = isSystemInDarkTheme()
         Text(
             text = id.toString(),
-            fontSize = 24.sp,
+            fontSize = 20.sp,
             modifier = Modifier
                 .align(Alignment.TopStart)
-                .padding(top = 6.dp, start = 6.dp),
+                .padding(top = 10.dp, start = 10.dp),
+            fontWeight = FontWeight.Bold,
             color = textsColor
         )
 
@@ -85,39 +98,43 @@ fun PokemonCard(
                 boxBackground = Color.Black
                 textsColor = Color.White
             } else {
-                AsyncImage(
+                SubcomposeAsyncImage(
                     model =
                     ImageRequest.Builder(LocalContext.current)
                         .data(picture)
                         .allowHardware(false)
-                        .scale(Scale.FILL)
                         .crossfade(true)
                         .build(),
                     onSuccess = {
                         Palette.from(it.result.drawable.toBitmap()).generate { p ->
-                            val swatch =
-                                if (darkTheme) p?.darkVibrantSwatch else p?.lightVibrantSwatch
+                            val swatch = p?.dominantSwatch
                             swatch?.let {
-                                boxBackground = Color(swatch.rgb)
-                                textsColor = Color(swatch.bodyTextColor)
+                                boxBackground =  Color(swatch.rgb)
+                                textsColor = Color(swatch.titleTextColor)
                             }
                         }
                     },
-                    contentScale = ContentScale.FillBounds,
+                    loading = {CircularProgressIndicator(modifier = Modifier
+                        .requiredHeight(40.dp)
+                        .requiredWidth(40.dp))},
+                    error = {painterResource(R.drawable.missingno)},
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .height(120.dp)
                         .width(120.dp),
-                    placeholder = painterResource(R.drawable.missingno),
                     contentDescription = stringResource(R.string.pokemon_description, name)
                 )
             }
         }
         Text(
             text = name.uppercase(Locale.getDefault()),
-            fontSize = 24.sp,
-            modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 10.dp),
+            fontSize = 15.sp,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 15.dp, end= 8.dp, start = 8.dp),
             color = textsColor,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            fontFamily = FontFamily.SansSerif
         )
     }
 }
@@ -125,5 +142,5 @@ fun PokemonCard(
 @Preview
 @Composable
 fun PokemonCardPreview() {
-    PokemonCard(id = -1, name = "Missigno", picture = "")
+    PokemonCard(id = -1, name = "Missigno", picture = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png")
 }
