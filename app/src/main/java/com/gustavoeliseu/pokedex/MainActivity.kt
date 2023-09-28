@@ -30,47 +30,44 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                 }
-                LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 128.dp),
-                    contentPadding = PaddingValues(
-                        start = 12.dp,
-                        top = 16.dp,
-                        end = 12.dp,
-                        bottom = 16.dp
-                    ),
-                    content = {
-                        items(100) {
-                            PokemonCard(
-                                id = 132,
-                                name = "ditto",
-                                picture = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png",
-                                modifier = Modifier
-                                    .clickable {
-                                        //todo - add click action
-                                        Toast.makeText(
-                                            applicationContext,
-                                            "Clicou no item $it",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    })
-                        }
-                    })
+                PokeList()
             }
         }
     }
 
     @Composable
-    fun Greeting(name: String, modifier: Modifier = Modifier) {
-        Text(
-            text = "Hello $name!",
-            modifier = modifier
-        )
+    fun PokeList() {
+        LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 128.dp),
+            contentPadding = PaddingValues(
+                start = 12.dp,
+                top = 16.dp,
+                end = 12.dp,
+                bottom = 16.dp
+            ),
+            content = {
+                items(100) {
+                    PokemonCard(
+                        id = 132,
+                        name = "ditto",
+                        picture = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png",
+                        modifier = Modifier
+                            .clickable {
+                                //todo - add click action
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Clicou no item $it",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            })
+                }
+            })
     }
 
     @Preview(showBackground = true)
     @Composable
     fun GreetingPreview() {
         MyPokedexTheme {
-            Greeting("Android")
+            PokeList()
         }
     }
 }
