@@ -20,6 +20,7 @@ import com.gustavoeliseu.pokedex.fragment.PokeListFragment
 import com.gustavoeliseu.pokedex.ui.theme.MyPokedexTheme
 import com.gustavoeliseu.pokedex.utils.Const.POKEMON_ID
 import com.gustavoeliseu.pokedex.utils.Const.POKEMON_LIST
+import com.gustavoeliseu.pokedex.utils.Const.POKEMON_NAME
 import com.gustavoeliseu.pokedex.utils.Route
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -30,11 +31,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyPokedexTheme {
                 PokemonAppScreen()
-                //TODO - 2 - ADD RETROFIT and api calls
-                //TODO - 3 - Add data for pokemonList and pokemonDetails
-                //TODO - 4 - ADD KOIN OR HILT FOR DEPENDENCY INJECTION
-                //TODO - 5 - Fill the list data with the data from the requests
-
+                //TODO - 3 - Add data for pokemonDetails
             }
         }
     }
@@ -55,12 +52,12 @@ class MainActivity : ComponentActivity() {
                 type = NavType.IntType
             })
             ) { entry ->
-                val id = entry.arguments?.getInt(POKEMON_ID)
-                if(id == null){
+                val pokeId = entry.arguments?.getInt(POKEMON_ID)
+                if(pokeId == null){
                     Toast.makeText(applicationContext, "Não foi possível identificar o mostro clicado",Toast.LENGTH_SHORT).show()
                     navController.navigate(Route.PokemonListRoute.route)
                 }else {
-                    PokemonDetailScreen(id)
+                    PokemonDetailScreen(pokeId)
                 }
             }
         }

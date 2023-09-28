@@ -4,7 +4,6 @@ import com.gustavoeliseu.pokedex.BuildConfig
 import com.gustavoeliseu.pokedex.domain.repository.PokemonRepository
 import com.gustavoeliseu.pokedex.network.PokemonApi
 import com.gustavoeliseu.pokedex.network.repository.PokemonRepositoryImpl
-import com.gustavoeliseu.pokedex.utils.Const.API_URL
 import com.gustavoeliseu.pokedex.utils.Const.PAGE_SIZE
 import com.gustavoeliseu.pokedex.utils.Const.PAGE_SIZE_TEXT
 import com.gustavoeliseu.pokedex.utils.Const.WEB_API
@@ -25,7 +24,7 @@ class AppModules {
 
     @Provides
     @Named(WEB_API)
-    fun provideWebAPI(): String = API_URL
+    fun provideWebAPI(): String = BuildConfig.BASE_URL
 
     @Provides
     @Named("PAGE_SIZE")

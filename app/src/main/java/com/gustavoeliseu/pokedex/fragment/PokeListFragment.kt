@@ -6,10 +6,12 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.gustavoeliseu.pokedex.R
 import com.gustavoeliseu.pokedex.domain.model.SimplePokemon
 import com.gustavoeliseu.pokedex.ui.pokemon.PokemonCard
 import com.gustavoeliseu.pokedex.utils.getPokemonIdFromUrl
@@ -18,9 +20,9 @@ import com.gustavoeliseu.pokedex.viewmodel.PokemonListViewModel
 @Composable
 fun PokeListFragment(
     modifier: Modifier = Modifier,
-    onClick: (id: Int) -> Unit = {},
-pokemonListViewModel: PokemonListViewModel = hiltViewModel()) {
-    pokeListGrid(
+    onClick: (id: Int) -> Unit ={},
+    pokemonListViewModel: PokemonListViewModel = hiltViewModel()) {
+    PokeListGrid(
         modifier = modifier,
         pokemonList = pokemonListViewModel.pokemonListState.collectAsLazyPagingItems(),
         onClick = onClick
@@ -28,7 +30,7 @@ pokemonListViewModel: PokemonListViewModel = hiltViewModel()) {
 }
 
 @Composable
-fun pokeListGrid(modifier: Modifier = Modifier,
+fun PokeListGrid(modifier: Modifier = Modifier,
                  pokemonList: LazyPagingItems<SimplePokemon>? = null,
                  onClick: (id: Int) -> Unit){
     if(pokemonList == null) return
@@ -46,7 +48,7 @@ fun pokeListGrid(modifier: Modifier = Modifier,
                     PokemonCard(
                         id = pokeId,
                         name = pk.name,
-                        picture = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokeId}.png",
+                        picture = stringResource(id = R.string.pokemon_sprite_url,pokeId),
                         modifier = modifier
                             .clickable {
                                 onClick(pokeId)

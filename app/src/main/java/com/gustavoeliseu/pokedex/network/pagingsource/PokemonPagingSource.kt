@@ -14,11 +14,11 @@ class PokemonPagingSource(private val response: suspend (Int) -> PokemonResponse
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, SimplePokemon> {
         return try {
-            val nextPage = params.key ?: 1
+            val nextPage = params.key ?: 0
             val pokeList = response.invoke((nextPage))
             LoadResult.Page(
                 data = pokeList.results,
-                prevKey = if(nextPage == 1) null else nextPage -1,
+                prevKey = if(nextPage == 0) null else nextPage -1,
                 nextKey = pokeList.next
                     ?.substringAfter("offset=")
                     ?.substringBefore("&")

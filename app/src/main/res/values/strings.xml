@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">My pokedex</string>
     <string name="pokemon_description">Image of the pokemon %s</string>
+    <string name="pokemon_sprite_url">"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/%s.png"</string>
 </resources>
