@@ -31,16 +31,16 @@ class AppModules {
     fun providePageSize(): Int = PAGE_SIZE
 
     @Provides
-    fun provideRetrofit(
-        @Named(WEB_API) webApi: String): Retrofit {
+    fun provideRetrofit(): Retrofit {
         val client = OkHttpClient
             .Builder()
             .addInterceptor(HttpLoggingInterceptor()
-            .setLevel(BuildConfig.INTERCEPTOR_LEVEL))
+            .setLevel(BuildConfig.INTERCEPTOR_LEVEL)).build()
 
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
             .build()
     }
 
