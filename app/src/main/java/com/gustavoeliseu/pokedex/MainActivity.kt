@@ -21,6 +21,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.gustavoeliseu.pokedex.fragment.PokeListFragment
 import com.gustavoeliseu.pokedex.ui.pokemon.PokemonCard
 import com.gustavoeliseu.pokedex.ui.theme.MyPokedexTheme
 import com.gustavoeliseu.pokedex.utils.Const
@@ -49,7 +50,7 @@ class MainActivity : ComponentActivity() {
         val navController = rememberNavController()
         NavHost(navController = navController, startDestination = POKEMON_LIST ){
             composable(route = Route.PokemonList.route) {
-                PokeListScreen(){id->
+                PokeListFragment(){id->
                     navController.navigate(Route.PokemonDetail.createRoute(id)
                     )
                 }
@@ -79,35 +80,11 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    //TODO- 1 - SEPARATE THIS TO ANOTHER FILE
-    @Composable
-    fun PokeListScreen(onClick: (id: Int) -> Unit) {
-        LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 128.dp),
-            contentPadding = PaddingValues(
-                start = 12.dp,
-                top = 16.dp,
-                end = 12.dp,
-                bottom = 16.dp
-            ),
-            content = {
-                items(151) {
-                    PokemonCard(
-                        id = it+1,
-                        name = "Crabominable",
-                        picture = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${it+1}.png",
-                        modifier = Modifier
-                            .clickable {
-                                onClick(it)
-                            })
-                }
-            })
-    }
-
     @Preview(showBackground = true)
     @Composable
     fun GreetingPreview() {
         MyPokedexTheme {
-            PokeListScreen(){Toast.makeText(applicationContext,"teste",Toast.LENGTH_SHORT).show()}
+            PokeListFragment(){Toast.makeText(applicationContext,"teste",Toast.LENGTH_SHORT).show()}
         }
     }
 }
