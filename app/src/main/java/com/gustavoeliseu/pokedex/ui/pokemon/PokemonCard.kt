@@ -125,5 +125,5 @@ fun PokemonCard(
 @Preview
 @Composable
 fun PokemonCardPreview() {
-//    PokemonCard(id = -1, name = "Missigno", picture = "")
+    PokemonCard(id = -1, name = "Missigno", picture = "")
 }
