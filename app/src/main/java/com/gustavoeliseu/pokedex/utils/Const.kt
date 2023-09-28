@@ -6,9 +6,13 @@ object Const {
     const val POKEMON_DETAIL = "pokemon_detail"
     const val POKEMON_ID = "pokemon_id"
 
+    const val PAGE_SIZE_TEXT = "PAGE_SIZE"
     const val PAGE_SIZE = 20
 
+    const val WEB_API = "WEB_API"
+
     //TODO - LOW PRIORITY - MOVE TO BUILDCONFIG
+
     const val API_URL = "https://pokeapi.co/api/v2/"
     const val POKEMONLIST_API = "https://pokeapi.co/api/v2/pokemon/"
 }

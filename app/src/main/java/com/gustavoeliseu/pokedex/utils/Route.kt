@@ -6,8 +6,8 @@ import com.gustavoeliseu.pokedex.utils.Const.POKEMON_LIST
 
 sealed class Route(val route: String){
 
-    object PokemonList: Route(POKEMON_LIST)
-    object PokemonDetail: Route("$POKEMON_DETAIL/{$POKEMON_ID}"){
+    object PokemonListRoute: Route(POKEMON_LIST)
+    object PokemonDetailRoute: Route("$POKEMON_DETAIL/{$POKEMON_ID}"){
         fun createRoute(pokemonId: Int) = "$POKEMON_DETAIL/$pokemonId"
     }
 }
