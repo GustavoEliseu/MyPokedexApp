@@ -17,6 +17,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.gustavoeliseu.pokedex.fragment.PokeListFragment
+import com.gustavoeliseu.pokedex.fragment.PokemonDetailsFragment
 import com.gustavoeliseu.pokedex.ui.theme.MyPokedexTheme
 import com.gustavoeliseu.pokedex.utils.Const.POKEMON_ID
 import com.gustavoeliseu.pokedex.utils.Const.POKEMON_LIST
@@ -57,19 +58,12 @@ class MainActivity : ComponentActivity() {
                     Toast.makeText(applicationContext, "Não foi possível identificar o mostro clicado",Toast.LENGTH_SHORT).show()
                     navController.navigate(Route.PokemonListRoute.route)
                 }else {
-                    PokemonDetailScreen(pokeId)
+                    PokemonDetailsFragment(pokeId = pokeId)
                 }
             }
         }
     }
 
-    //TODO- 6 -Create details view with animation in another file
-    @Composable
-    fun PokemonDetailScreen(id:Int) {
-        Box(Modifier.background(Color.Black)){
-            Text(text = "Entrou $id", color = Color.White)
-        }
-    }
 
     @Preview(showBackground = true)
     @Composable

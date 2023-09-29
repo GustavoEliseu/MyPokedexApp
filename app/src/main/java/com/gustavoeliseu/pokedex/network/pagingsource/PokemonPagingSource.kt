@@ -3,16 +3,16 @@ package com.gustavoeliseu.pokedex.network.pagingsource
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.gustavoeliseu.pokedex.domain.model.PokemonResponse
-import com.gustavoeliseu.pokedex.domain.model.SimplePokemon
+import com.gustavoeliseu.pokedex.domain.model.SimpleGenericPokemonData
 import com.gustavoeliseu.pokedex.utils.SafeCrashlyticsUtil
 
 class PokemonPagingSource(private val response: suspend (Int) -> PokemonResponse):
-    PagingSource<Int, SimplePokemon>() {
-    override fun getRefreshKey(state: PagingState<Int, SimplePokemon>): Int? {
+    PagingSource<Int, SimpleGenericPokemonData>() {
+    override fun getRefreshKey(state: PagingState<Int, SimpleGenericPokemonData>): Int? {
         return state.anchorPosition
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, SimplePokemon> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, SimpleGenericPokemonData> {
         return try {
             val nextPage = params.key ?: 0
             val pokeList = response.invoke((nextPage))

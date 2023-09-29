@@ -13,5 +13,5 @@ data class PokemonResponse(
     val count: Int,
 
     @field:SerializedName("results")
-    val results: List<SimplePokemon> = listOf(),
+    val results: List<SimpleGenericPokemonData> = listOf(),
 )

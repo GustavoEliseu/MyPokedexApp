@@ -79,7 +79,6 @@ fun PokemonCard(
                 boxBackground = Color.Black
                 textsColor = Color.White
             } else {
-                val context = LocalContext.current
                 SubcomposeAsyncImage(
                     model =
                     ImageRequest.Builder(LocalContext.current)
