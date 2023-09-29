@@ -32,7 +32,17 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyPokedexTheme {
                 PokemonAppScreen()
-                //TODO - 3 - Add data for pokemonDetails
+
+                //TODO - NEEDED TO FINISH PART 1
+                //TODO - PART 1 - FINISH the POKEDEX LAYOUT with links to other pokemon
+                //TODO - PART 1 - ADD SCREENS FOR ABILITIES AND MOVES DETAILS
+                //TODO - PART 1 - ADD EXPRESSO AND JUNIT AND DO 100% TESTING
+
+                //TODO - NEEDED FOR PART 2
+                //TODO - add the option to mount your own team and save on local database(room or pure sqlite)
+                //TODO - add Move e type coverage, AND TRY TO DO format validation(for pvp teams)
+                //TODO - search bar ( check if possible on the api) (if not possible, save it on pure sqlite or room and do local searching)
+
             }
         }
     }
