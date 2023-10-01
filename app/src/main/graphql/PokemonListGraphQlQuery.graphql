@@ -1,0 +1,7 @@
+query PokemonListGraphQlQuery($searchTerm :String, $offset : Int, $pageSize: Int) {
+    pokemonItem: pokemon_v2_pokemonspecies(where: {name: {_regex: $searchTerm}}, offset: $offset, limit: $pageSize, order_by: {id: asc}) {
+        name
+        id
+        pokemon_color_id
+    }
+}

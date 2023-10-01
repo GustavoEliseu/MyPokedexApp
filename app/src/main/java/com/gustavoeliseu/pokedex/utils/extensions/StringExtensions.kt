@@ -1,14 +1,14 @@
-package com.gustavoeliseu.pokedex.utils
+package com.gustavoeliseu.pokedex.utils.extensions
 
-import java.lang.Exception
+import com.gustavoeliseu.pokedex.utils.SafeCrashlyticsUtil
 
 
-fun String.getPokemonIdFromUrl(): Int{
+fun String.getPokemonIdFromUrl(): Int {
     return try {
         this.substringAfter("pokemon/")
             .substringBefore("/")
             .toInt()
-    } catch (e: Exception){
+    } catch (e: Exception) {
         SafeCrashlyticsUtil.logException(e)
         return -1
     }

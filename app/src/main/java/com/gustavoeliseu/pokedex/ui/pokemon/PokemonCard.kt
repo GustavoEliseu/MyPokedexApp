@@ -3,6 +3,7 @@ package com.gustavoeliseu.pokedex.ui.pokemon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
@@ -35,7 +36,8 @@ import androidx.palette.graphics.Palette
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.gustavoeliseu.pokedex.R
-import com.gustavoeliseu.pokedex.utils.notBlackNorWhite
+import com.gustavoeliseu.pokedex.utils.extensions.notBlackNorWhite
+import com.gustavoeliseu.pokedex.utils.extensions.shimmerEffect
 import java.util.Locale
 
 @Composable
@@ -45,11 +47,11 @@ fun PokemonCard(
     picture: String,
     modifier: Modifier = Modifier,
 ) {
-    //TODO - 6 - card Layout improvements
     var boxBackground by remember {
         mutableStateOf(Color.White)
     }
     var textsColor by remember { mutableStateOf(Color.White) }
+    var loading by remember { mutableStateOf(true) }
 
     Box(
         modifier = modifier
@@ -58,16 +60,22 @@ fun PokemonCard(
             .size(170.dp)
             .background(boxBackground)
     ) {
-        Text(
-            text = id.toString(),
-            fontSize = 20.sp,
-            modifier = Modifier
-                .align(Alignment.TopStart)
-                .padding(top = 10.dp, start = 10.dp),
-            fontWeight = FontWeight.Bold,
-            color = textsColor
-        )
-
+        if (!loading) {
+            Text(
+                text = id.toString(),
+                fontSize = 20.sp,
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(top = 10.dp, start = 10.dp),
+                fontWeight = FontWeight.Bold,
+                color = textsColor
+            )
+        }
+        if (loading) {
+            Box(modifier = modifier.shimmerEffect().padding(horizontal = 16.dp, vertical = 8.dp)
+                .align(Alignment.Center)
+                .size(120.dp))
+        }
         Box(
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 8.dp)
@@ -87,16 +95,22 @@ fun PokemonCard(
                         .crossfade(true)
                         .build(),
                     onSuccess = {
-                        Palette.from(it.result.drawable.toBitmap())
+                        val mBitmap = it.result.drawable.toBitmap()
+                        val range = 24
+                        Palette.from(mBitmap)
+                            .setRegion( mBitmap.width/2-range,mBitmap.height/2-range,mBitmap.width/2+range,mBitmap.height/2+range)
+                            .clearFilters()
                             .addFilter(Palette.Filter { color, hsl ->
                                 //TODO - modify filters to fix background of beedril, vulpix and some others
                                 color.notBlackNorWhite()
                             })
                             .generate { p ->
                                 p?.let {
-                                    p.dominantSwatch?.let { domSwatch ->
+                                    val domSwatch = if( p.dominantSwatch != null) p.dominantSwatch else {if(p.lightVibrantSwatch != null) p.lightVibrantSwatch else p.swatches[0]}
+                                    domSwatch?.let {
                                         boxBackground = Color(domSwatch.rgb)
                                         textsColor = Color(domSwatch.titleTextColor)
+                                        loading = false
                                     }
                                 }
                             }
@@ -117,16 +131,18 @@ fun PokemonCard(
                 )
             }
         }
-        Text(
-            text = name.uppercase(Locale.getDefault()),
-            fontSize = 15.sp,
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 15.dp, end = 8.dp, start = 8.dp),
-            color = textsColor,
-            fontWeight = FontWeight.Bold,
-            fontFamily = FontFamily.SansSerif
-        )
+        if (!loading) {
+            Text(
+                text = name.uppercase(Locale.getDefault()),
+                fontSize = 15.sp,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 15.dp, end = 8.dp, start = 8.dp),
+                color = textsColor,
+                fontWeight = FontWeight.Bold,
+                fontFamily = FontFamily.SansSerif
+            )
+        }
     }
 }
 

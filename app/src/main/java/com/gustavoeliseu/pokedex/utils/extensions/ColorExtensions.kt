@@ -1,4 +1,4 @@
-package com.gustavoeliseu.pokedex.utils
+package com.gustavoeliseu.pokedex.utils.extensions
 
 import android.graphics.Color
 import androidx.core.graphics.ColorUtils

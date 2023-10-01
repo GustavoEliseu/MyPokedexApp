@@ -5,13 +5,14 @@ plugins {
     id 'com.google.firebase.crashlytics'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id("com.apollographql.apollo3") version "3.8.2"
 }
 
 android {
     namespace 'com.gustavoeliseu.pokedex'
     compileSdk 34
 
-    buildFeatures{
+    buildFeatures {
         buildConfig true
     }
 
@@ -32,14 +33,24 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "BASE_URL", "\"https://pokeapi.co/api/v2/\""
+            buildConfigField "String", "POKEAPI_URL", "\"https://pokeapi.co/api/v2/\""
+            buildConfigField "String", "GRAPHQLAPI_URL", "\"http://beta.pokeapi.co/graphql\""
             buildConfigField "okhttp3.logging.HttpLoggingInterceptor.Level", "INTERCEPTOR_LEVEL", "okhttp3.logging.HttpLoggingInterceptor.Level.HEADERS"
         }
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "BASE_URL", "\"https://pokeapi.co/api/v2/\""
+            buildConfigField "String", "POKEAPI_URL", "\"https://pokeapi.co/api/v2/\""
+            buildConfigField "String", "GRAPHQLAPI_URL", "\"http://beta.pokeapi.co/graphql\""
             buildConfigField "okhttp3.logging.HttpLoggingInterceptor.Level", "INTERCEPTOR_LEVEL", "okhttp3.logging.HttpLoggingInterceptor.Level.BODY"
+        }
+        localHost {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "POKEAPI_URL", "\"https://10.0.2.2:8080/api/v2/\""
+            buildConfigField "String", "GRAPHQLAPI_URL", "\"http://10.0.2.2:8080/v1/graphql\""
+            buildConfigField "okhttp3.logging.HttpLoggingInterceptor.Level", "INTERCEPTOR_LEVEL", "okhttp3.logging.HttpLoggingInterceptor.Level.BODY"
+            signingConfig signingConfigs.debug
         }
     }
 
@@ -54,12 +65,21 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion '1.5.2'
+        kotlinCompilerExtensionVersion '1.3.1'
     }
     packagingOptions {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
+    }
+}
+
+apollo {
+    service("service") {
+        packageName.set("com.gustavoeliseu.pokedex")
+        srcDir("src/main/graphql")
+        // instruct the compiler to generate Kotlin models
+        generateKotlinModels.set(true)
     }
 }
 
@@ -75,6 +95,7 @@ dependencies {
     implementation 'androidx.compose.material3:material3'
     implementation 'com.google.firebase:firebase-crashlytics-ktx:18.4.3'
     implementation 'com.google.firebase:firebase-analytics-ktx:21.3.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.1'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
@@ -91,8 +112,9 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_ver"
 
     // Network
-    implementation "com.squareup.retrofit2:retrofit:$retrofit_ver"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofit_ver"
+    implementation("com.apollographql.apollo3:apollo-runtime:3.8.2")
+    implementation("com.apollographql.apollo3:apollo-api:3.8.2")
+
     implementation "com.squareup.okhttp3:okhttp:$okhttp3_ver"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp3_ver"
 
