@@ -17,7 +17,7 @@ class PokemonPagingSource(private val response: suspend (Int) -> PokemonListGrap
         return LoadResult.Page(
             data = pokeList,
             prevKey = if (nextPage == 0) null else nextPage - 1,
-            nextKey = if (pokeList.isNotEmpty()) pokeList.last().id + 1 else null
+            nextKey = if (pokeList.isNotEmpty()) pokeList.last().id else null
         )
     }
 

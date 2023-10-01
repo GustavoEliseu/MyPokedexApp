@@ -1,6 +1,7 @@
 package com.gustavoeliseu.pokedex.utils.extensions
 
 import android.graphics.Color
+import androidx.compose.ui.graphics.Color as ComposeColor
 import androidx.core.graphics.ColorUtils
 import androidx.palette.graphics.Palette
 import androidx.palette.graphics.Palette.Swatch
@@ -25,7 +26,7 @@ fun getDominantSwatch(palette: Palette?): Swatch? {
 
 fun Int.notBlackNorWhite(): Boolean {
     val luminance = Color.luminance(this)
-    return !(luminance < 0.2 || luminance > 0.8)
+    return !(luminance < 0.2 || luminance > 0.6)
 }
 
 //TODO - CHECK IF STILL NEEDED WHEN POLISHING CARD LIST
@@ -40,4 +41,12 @@ fun Int.isCloseTo(compared: Int?): Boolean {
     if (compared == null) return false
     val comparison = this - compared
     return (comparison in 0..30)
+}
+
+fun ComposeColor.colorDistance(color2: ComposeColor): Double {
+    val deltaRed = (color2.red - this.red).toDouble()
+    val deltaGreen = (color2.green - this.green).toDouble()
+    val deltaBlue = (color2.blue - this.blue).toDouble()
+
+    return Math.sqrt(deltaRed * deltaRed + deltaGreen * deltaGreen + deltaBlue * deltaBlue)
 }

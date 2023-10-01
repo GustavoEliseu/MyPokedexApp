@@ -27,6 +27,7 @@ import com.gustavoeliseu.pokedex.PokemonListGraphQlQuery
 import com.gustavoeliseu.pokedex.R
 import com.gustavoeliseu.pokedex.di.AppModules
 import com.gustavoeliseu.pokedex.ui.pokemon.PokemonCard
+import com.gustavoeliseu.pokedex.utils.ColorEnum
 import com.gustavoeliseu.pokedex.viewmodel.PokemonListViewModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -104,7 +105,9 @@ fun PokeListGrid(
                         modifier = modifier
                             .clickable {
                                 onClick(pk.id)
-                            })
+                            },
+                    colorEnum = ColorEnum.fromInt(pk.pokemon_color_id)
+                    )
                 }
 
             }

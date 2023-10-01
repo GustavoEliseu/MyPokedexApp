@@ -3,7 +3,6 @@ package com.gustavoeliseu.pokedex.ui.pokemon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
@@ -22,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -33,10 +33,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
 import androidx.palette.graphics.Palette
+import androidx.palette.graphics.Target
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.gustavoeliseu.pokedex.R
-import com.gustavoeliseu.pokedex.utils.extensions.notBlackNorWhite
+import com.gustavoeliseu.pokedex.utils.ColorEnum
+import com.gustavoeliseu.pokedex.utils.extensions.colorDistance
+import com.gustavoeliseu.pokedex.utils.extensions.isDarkColor
+import com.gustavoeliseu.pokedex.utils.extensions.notTooDarkNorTooBright
 import com.gustavoeliseu.pokedex.utils.extensions.shimmerEffect
 import java.util.Locale
 
@@ -45,6 +49,7 @@ fun PokemonCard(
     id: Int,
     name: String,
     picture: String,
+    colorEnum: ColorEnum,
     modifier: Modifier = Modifier,
 ) {
     var boxBackground by remember {
@@ -52,6 +57,8 @@ fun PokemonCard(
     }
     var textsColor by remember { mutableStateOf(Color.White) }
     var loading by remember { mutableStateOf(true) }
+    if (picture.isEmpty()) loading = false
+    val baseColor = colorEnum.tintColor
 
     Box(
         modifier = modifier
@@ -72,9 +79,13 @@ fun PokemonCard(
             )
         }
         if (loading) {
-            Box(modifier = modifier.shimmerEffect().padding(horizontal = 16.dp, vertical = 8.dp)
-                .align(Alignment.Center)
-                .size(120.dp))
+            Box(
+                modifier = modifier
+                    .shimmerEffect()
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .align(Alignment.Center)
+                    .size(120.dp)
+            )
         }
         Box(
             modifier = Modifier
@@ -88,32 +99,38 @@ fun PokemonCard(
                 textsColor = Color.White
             } else {
                 SubcomposeAsyncImage(
-                    model =
-                    ImageRequest.Builder(LocalContext.current)
-                        .data(picture)
-                        .allowHardware(false)
-                        .crossfade(true)
-                        .build(),
+                    model = ImageRequest.Builder(LocalContext.current).data(picture)
+                        .allowHardware(false).crossfade(true).build(),
                     onSuccess = {
                         val mBitmap = it.result.drawable.toBitmap()
                         val range = 24
-                        Palette.from(mBitmap)
-                            .setRegion( mBitmap.width/2-range,mBitmap.height/2-range,mBitmap.width/2+range,mBitmap.height/2+range)
-                            .clearFilters()
+                        Palette.from(mBitmap).setRegion(
+                            mBitmap.width / 2 - range,
+                            mBitmap.height / 2 - range,
+                            mBitmap.width / 2 + range,
+                            mBitmap.height / 2 + range
+                        ).clearFilters().addTarget(Target.LIGHT_VIBRANT)
                             .addFilter(Palette.Filter { color, hsl ->
-                                //TODO - modify filters to fix background of beedril, vulpix and some others
-                                color.notBlackNorWhite()
-                            })
-                            .generate { p ->
-                                p?.let {
-                                    val domSwatch = if( p.dominantSwatch != null) p.dominantSwatch else {if(p.lightVibrantSwatch != null) p.lightVibrantSwatch else p.swatches[0]}
-                                    domSwatch?.let {
-                                        boxBackground = Color(domSwatch.rgb)
-                                        textsColor = Color(domSwatch.titleTextColor)
-                                        loading = false
-                                    }
+                                val comparison = Color(
+                                    color
+                                ).colorDistance(baseColor)
+                                hsl.notTooDarkNorTooBright() && (comparison <= .5f)
+                            }).generate { p ->
+                            p?.let {
+                                val domSwatch =
+                                    if (p.dominantSwatch != null) p.dominantSwatch else p.lightVibrantSwatch
+                                if (domSwatch != null) {
+                                    boxBackground = Color(domSwatch.rgb)
+                                    textsColor = Color(domSwatch.titleTextColor)
+                                    loading = false
+                                } else {
+                                    boxBackground = baseColor
+                                    textsColor =
+                                        if ((baseColor.toArgb()).isDarkColor()) Color.White else Color.Black
+                                    loading = false
                                 }
                             }
+                        }
                     },
                     loading = {
                         CircularProgressIndicator(
@@ -164,6 +181,7 @@ fun PokemonCardPreview() {
     PokemonCard(
         id = -1,
         name = "Missigno",
-        picture = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png"
+        picture = "",
+        ColorEnum.BLACK,
     )
 }
