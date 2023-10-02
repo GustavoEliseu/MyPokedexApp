@@ -16,7 +16,6 @@ interface IRefValueEnum : IValueEnum {
     val tintColor: Color
 }
 
-//TODO ADD COLORS FROM POKEAPI
 enum class ColorEnum(override val value: Int) : IRefValueEnum {
     INVALID(-1) {
         override val nameId = R.string.dark_gray

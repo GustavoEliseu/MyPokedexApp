@@ -109,7 +109,7 @@ fun PokemonCard(
                             mBitmap.height / 2 - range,
                             mBitmap.width / 2 + range,
                             mBitmap.height / 2 + range
-                        ).clearFilters().addTarget(Target.LIGHT_VIBRANT)
+                        ).clearFilters()
                             .addFilter(Palette.Filter { color, hsl ->
                                 val comparison = Color(
                                     color
