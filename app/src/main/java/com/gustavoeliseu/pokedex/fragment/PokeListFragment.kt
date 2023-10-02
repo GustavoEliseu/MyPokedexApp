@@ -34,7 +34,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 
 
 @Composable
-fun PokeListFragment(
+fun PokedexListFragment(
     modifier: Modifier = Modifier,
     onClick: (id: Int) -> Unit = {},
     pokemonListViewModel: PokemonListViewModel = hiltViewModel()
@@ -43,44 +43,18 @@ fun PokeListFragment(
         modifier = modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-
-        val listState = remember {
-            mutableStateOf(mutableListOf<PokemonListGraphQlQuery.PokemonItem>())
-        }
-        val scope = rememberCoroutineScope()
         LaunchedEffect(Unit) {
-//            val response = apolloClient?.query(PokemonListGraphQlQuery(Optional.present(""),Optional.present(0),Optional.present(20)))?.execute()
-//            Log.d("POKEMONS LISTA SUCESSO", "Success ${response?.data}")
             pokemonListViewModel.setSearch("")
         }
-
 
         PokeListGrid(
             modifier = modifier,
             pokemonList = pokemonListViewModel.pokemonListState.collectAsLazyPagingItems(),
             onClick = onClick
         ) { value -> pokemonListViewModel.setSearch(value) }
-
-
     }
 }
 
-fun getApolloClient(): ApolloClient {
-    val logging = HttpLoggingInterceptor()
-        .apply { level = BuildConfig.INTERCEPTOR_LEVEL }
-
-    val client = OkHttpClient.Builder()
-        .addInterceptor(AppModules.AuthInterceptor())
-        .addInterceptor(logging)
-        .build()
-
-
-    return ApolloClient.Builder()
-        .serverUrl(BuildConfig.GRAPHQLAPI_URL)
-        .okHttpClient(client).build()
-}
-
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun PokeListGrid(
     modifier: Modifier = Modifier,

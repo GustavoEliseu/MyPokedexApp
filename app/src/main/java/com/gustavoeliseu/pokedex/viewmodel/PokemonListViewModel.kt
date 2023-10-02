@@ -20,7 +20,7 @@ class PokemonListViewModel @Inject constructor(
 ) : ViewModel() {
     private val _search = MutableStateFlow("")
 
-    //TODO - EDIT PAGING AND ADD SEARCH LAYOUT
+    //]TODO - EDIT PAGING AND ADD SEARCH LAYOUT
 
     val search = _search.asStateFlow()
         .stateIn(
@@ -39,7 +39,7 @@ class PokemonListViewModel @Inject constructor(
         )
 
     val pokemonListState: Flow<PagingData<PokemonListGraphQlQuery.PokemonItem>> =
-        pokemonRepository.queryPokemonList("").cachedIn(viewModelScope)
+        pokemonRepository.queryPokemonList(search.value).cachedIn(viewModelScope)
 
     fun setSearch(query: String) {
         _search.value = query

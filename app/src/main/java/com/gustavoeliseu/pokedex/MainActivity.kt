@@ -11,7 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.gustavoeliseu.pokedex.fragment.PokeListFragment
+import com.gustavoeliseu.pokedex.fragment.PokedexListFragment
 import com.gustavoeliseu.pokedex.fragment.PokemonDetailsFragment
 import com.gustavoeliseu.pokedex.ui.theme.MyPokedexTheme
 import com.gustavoeliseu.pokedex.utils.Const.POKEMON_ID
@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
         val navController = rememberNavController()
         NavHost(navController = navController, startDestination = Route.PokemonListRoute.route) {
             composable(route = Route.PokemonListRoute.route) {
-                PokeListFragment(onClick = { id ->
+                PokedexListFragment(onClick = { id ->
                     navController.navigate(
                         Route.PokemonDetailRoute.createRoute(id)
                     )
@@ -93,7 +93,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun GreetingPreview() {
         MyPokedexTheme {
-            PokeListFragment()
+            PokedexListFragment()
         }
     }
 }
