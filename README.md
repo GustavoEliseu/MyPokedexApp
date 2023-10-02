@@ -7,41 +7,42 @@ This is a personal android app project that utilizes Apollo with the GraphQL pok
   <em>Screenshot of the initial version</em>
 </p>
 
+
 ## Part 1 - Pokedex <br>
 #### Testing features that i never used so expect a messy code on this part <br>
 * Implement the basic pokedex feature: <br>
-  * Search - **TODO** (partially done, needs layout and small fixes) <br>
-  * List - **Done** (need small layout fixes) <br>
-  * Use Android Palette to get the pokemon color - **Done** <br>
-  * PokemonDetails Screen - **TODO** (Redo the query because of the rest->graphql change) <br>
-  * AbilityDetails Screen - **TODO** <br>
-  * MoveDetails Screen - **TODO** <br>
-* Add test libraries and start the testing (planning to use espresso and junit) **TODO** <br>
-* Cleanup and improve git Readme layout **TODO** <br>
+  * Search - **${\color{yellow}TODO}$** (partially done, needs layout and small fixes) <br>
+  * List - **${\color{green}DONE}$** (need small layout fixes) <br>
+  * Use Android Palette to get the pokemon color - ****${\color{green}DONE}$**** <br>
+  * PokemonDetails Screen - **${\color{yellow}REOPEN}$** (needs to redo the query due to the rest->graphql change) <br>
+  * AbilityDetails Screen - **${\color{yellow}TODO}$** <br>
+  * MoveDetails Screen - **${\color{yellow}TODO}$** <br>
+* Add test libraries and start the testing - **${\color{yellow}TODO}$** (planning to use espresso and junit) <br>
+* Cleanup and improve git Readme layout - **${\color{yellow}TODO}$** <br>
 
 ## Part 2 - Offline first and improvements <br>
-* Adds error messages for communication errors **TODO**<br>
-* Fixes Architeture flaws **TODO**<br>
-* Add Room database **TODO**<br>
-* Add and configure apolloCache  **TODO**<br>
-* if possible planning to add an option to download the data locally, with option to choose to download or not the images **TODO**<br>
-* Check for accessibility, text-to-speak, manual tests with content readers, test colors for better contrast etc...
+* Adds error messages for communication errors - **${\color{yellow}TODO}$**<br>
+* Fixes Architeture flaws - **${\color{yellow}TODO}$**<br>
+* Add Room database - **${\color{yellow}TODO}$**<br>
+* Add and configure apolloCache - **${\color{yellow}TODO}$**<br>
+* if possible planning to add an option to download the data locally, with option to choose to download or not the images - **${\color{yellow}TODO}$**<br>
+* Check for accessibility, text-to-speak, manual tests with content readers, test colors for better contrast etc... - **${\color{yellow}TODO}$**<br>
 
 ## Part 3 - Mount your own team <br>
-* List with pokemons to choose <br>
-* Choose skills and moves <br>
-* Check type coverage <br>
-* Check move type coverage <br>
+* List with pokemons to choose - **${\color{yellow}TODO}$**<br>
+* Choose skills and moves - **${\color{yellow}TODO}$**<br>
+* Check type coverage - **${\color{yellow}TODO}$** <br>
+* Check move type coverage - **${\color{yellow}TODO}$**<br>
 
 ## Bonus - Better version of mount your team<br>
-* Option to filter for competitive tiers (Uber, OU, BL etc)  (Needs an api with up to date data, maybe Smogon or PokemonShowdown) <br>
-* Add the filter above for pokemons, skills, moves and itens <br>
-* 100% test coverage <br>
+* Option to filter for competitive tiers (Uber, OU, BL etc) - **${\color{yellow}TODO}$** (Needs an api with up to date data, maybe Smogon or PokemonShowdown) <br>
+* Add the filter above for pokemons, skills, moves and itens - **${\color{yellow}TODO}$**<br>
+* 100% test coverage - **${\color{yellow}TODO}$**<br>
 
 
 ## major changes:
-* Removed retrofit and addded Apollo
-* Started using PokeApi Graphql
-* Added localHost build variant
+* Removed retrofit and addded Apollo - **${\color{green}DONE}$**
+* Started using PokeApi Graphql - **${\color{green}DONE}$**
+* Added localHost build variant - **${\color{green}DONE}$**
 
-Credits - TODO( add all libraries and people that helped)
+Credits - **${\color{yellow}TODO}$**<br> ( add all libraries and people that helped)
