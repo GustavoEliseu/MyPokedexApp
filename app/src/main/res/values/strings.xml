@@ -1,9 +1,18 @@
 <resources>
     <string name="app_name">My pokedex</string>
+    <string name="pokedex">Pokedex</string>
     <string name="pokemon_description">Image of the pokemon %s</string>
     <string name="missing_no">Image of missigno, due to not being able to load %s picture</string>
+
+
     <string name="pokemon_sprite_url">"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/%s.png"</string>
 
+
+    <!--Search-->
+    <string name="search">Search</string>
+    <string name="close_search">Close Search</string>
+    <string name="search_placeholder">Search here...</string>
+    <string name="search_icon_desc">Search icon</string>
 
     <!--Colors-->
     <string name="dark_gray">darkGray</string>

@@ -11,16 +11,16 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
 class PokemonListViewModel @Inject constructor(
-    val pokemonRepository: PokemonRepository
+    private val pokemonRepository: PokemonRepository
 ) : ViewModel() {
     private val _search = MutableStateFlow("")
-
-    //]TODO - EDIT PAGING AND ADD SEARCH LAYOUT
 
     val search = _search.asStateFlow()
         .stateIn(
@@ -39,7 +39,9 @@ class PokemonListViewModel @Inject constructor(
         )
 
     val pokemonListState: Flow<PagingData<PokemonListGraphQlQuery.PokemonItem>> =
-        pokemonRepository.queryPokemonList(search.value).cachedIn(viewModelScope)
+        search.debounce(300).flatMapLatest { query ->
+            pokemonRepository.queryPokemonList(query).cachedIn(viewModelScope)
+        }
 
     fun setSearch(query: String) {
         _search.value = query
