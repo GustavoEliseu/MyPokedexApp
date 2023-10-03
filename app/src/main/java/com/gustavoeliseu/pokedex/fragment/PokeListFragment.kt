@@ -2,6 +2,7 @@
 
 package com.gustavoeliseu.pokedex.fragment
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -45,10 +47,17 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.gustavoeliseu.pokedex.PokemonListGraphQlQuery
 import com.gustavoeliseu.pokedex.R
+import com.gustavoeliseu.pokedex.network.connection.ConnectivityObserver
+import com.gustavoeliseu.pokedex.network.connection.NetworkConnectivityObserver
 import com.gustavoeliseu.pokedex.ui.pokemon.PokemonCard
 import com.gustavoeliseu.pokedex.utils.ColorEnum
 import com.gustavoeliseu.pokedex.viewmodel.PokemonListViewModel
+import kotlinx.coroutines.runBlocking
 
+var connectionLost = true
+var position: Int? = null
+var reloadingImages: Boolean = false
+//TODO - FIND A BETTER PLACE TO STORE THIS VARIABLES... MAYBE USING MUTABLE STATE
 
 @Composable
 fun PokedexListFragment(
@@ -56,13 +65,30 @@ fun PokedexListFragment(
     onClick: (id: Int) -> Unit = {},
     pokemonListViewModel: PokemonListViewModel = hiltViewModel()
 ) {
-    //TODO - DIVIDE INTO SMALLER COMPOSES
+    val context = LocalContext.current
+    val connectivityObserver = NetworkConnectivityObserver(context)
+    val isConnectedStatus by connectivityObserver.observe().collectAsState(
+        initial = ConnectivityObserver.Status.Unavailable
+    )
     val isSearching by pokemonListViewModel.isSearchShowing.collectAsState()
     val textSearch by pokemonListViewModel.search.collectAsState()
+    val lazyPokemonList = pokemonListViewModel.pokemonListState.collectAsLazyPagingItems()
+
     Surface(
         modifier = modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
+        if (isConnectedStatus != ConnectivityObserver.Status.Available) {
+            connectionLost = true
+            reloadingImages = false
+        }
+        if (isConnectedStatus == ConnectivityObserver.Status.Available && connectionLost) {
+            runBlocking {
+                lazyPokemonList.refresh()
+                reloadingImages = false
+            }
+            connectionLost = true
+        }
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -114,8 +140,16 @@ fun PokedexListFragment(
                                     .size(48.dp)
                                     .align(Alignment.CenterEnd),
                                 onClick = {
-                                    if (isSearching) pokemonListViewModel.setSearch("")
-                                    pokemonListViewModel.toggleIsSearchShowing()
+                                    if (isConnectedStatus == ConnectivityObserver.Status.Available) {
+                                        if (isSearching) pokemonListViewModel.setSearch("")
+                                        pokemonListViewModel.toggleIsSearchShowing()
+                                    } else {
+                                        Toast.makeText(
+                                            context,
+                                            context.getString(R.string.disable_no_connection),
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
                                 }) {
                                 Icon(
                                     if (!isSearching) Icons.Filled.Search else Icons.Filled.Close,
@@ -130,16 +164,15 @@ fun PokedexListFragment(
                         containerColor = MaterialTheme.colorScheme.primary,
                         titleContentColor = Color.White,
                     )
-
                 )
             }, content = { padding ->
                 Column() {
                     Box(modifier = modifier.padding(top = padding.calculateTopPadding()))
                     PokeListGrid(
                         modifier = modifier,
-                        pokemonList = pokemonListViewModel.pokemonListState.collectAsLazyPagingItems(),
+                        pokemonList = lazyPokemonList,
                         onClick = onClick
-                    ) { value -> pokemonListViewModel.setSearch(value) }
+                    )
                 }
             }
         )
@@ -149,10 +182,13 @@ fun PokedexListFragment(
 @Composable
 fun PokeListGrid(
     modifier: Modifier = Modifier,
-    pokemonList: LazyPagingItems<PokemonListGraphQlQuery.PokemonItem>,
-    onClick: (id: Int) -> Unit,
-    updateSearch: (text: String) -> Unit
+    pokemonList: LazyPagingItems<PokemonListGraphQlQuery.PokemonItem>?,
+    onClick: (id: Int) -> Unit
 ) {
+    if (pokemonList == null) return
+    if (pokemonList.itemCount > 0) {
+        position = pokemonList.itemSnapshotList.items.maxBy { it.id }.id
+    }
     LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 128.dp),
         contentPadding = PaddingValues(
             start = 12.dp,
@@ -165,16 +201,16 @@ fun PokeListGrid(
                 pokemonList[index]?.let { pk ->
                     PokemonCard(
                         id = pk.id,
-                        name = pk.name, //Safe since there's no pokemon with null "name" value
+                        name = pk.name,
                         picture = stringResource(id = R.string.pokemon_sprite_url, pk.id),
                         modifier = modifier
                             .clickable {
                                 onClick(pk.id)
                             },
-                        colorEnum = ColorEnum.fromInt(pk.pokemon_color_id)
+                        colorEnum = ColorEnum.fromInt(pk.pokemon_color_id),
+                        reloading = reloadingImages
                     )
                 }
-
             }
         })
 }

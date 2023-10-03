@@ -14,20 +14,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class PokemonListViewModel @Inject constructor(
     private val pokemonRepository: PokemonRepository
 ) : ViewModel() {
-    private val _search = MutableStateFlow("")
-
-    val search = _search.asStateFlow()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = "",
-        )
 
     private val _isSearchShowing = MutableStateFlow(false)
 
@@ -38,10 +31,20 @@ class PokemonListViewModel @Inject constructor(
             initialValue = false,
         )
 
-    val pokemonListState: Flow<PagingData<PokemonListGraphQlQuery.PokemonItem>> =
-        search.debounce(300).flatMapLatest { query ->
-            pokemonRepository.queryPokemonList(query).cachedIn(viewModelScope)
-        }
+    private val _search = MutableStateFlow("")
+
+    val search = _search.asStateFlow()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = "",
+        )
+
+
+    var pokemonListState: Flow<PagingData<PokemonListGraphQlQuery.PokemonItem>> =
+            search.debounce(300).flatMapLatest { query ->
+                pokemonRepository.queryPokemonList(query).cachedIn(viewModelScope)
+            }
 
     fun setSearch(query: String) {
         _search.value = query

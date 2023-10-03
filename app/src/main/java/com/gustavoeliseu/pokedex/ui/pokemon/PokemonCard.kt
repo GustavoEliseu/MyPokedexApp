@@ -2,6 +2,7 @@ package com.gustavoeliseu.pokedex.ui.pokemon
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -33,8 +34,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
 import androidx.palette.graphics.Palette
-import androidx.palette.graphics.Target
 import coil.compose.SubcomposeAsyncImage
+import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.gustavoeliseu.pokedex.R
 import com.gustavoeliseu.pokedex.utils.ColorEnum
@@ -51,6 +52,7 @@ fun PokemonCard(
     picture: String,
     colorEnum: ColorEnum,
     modifier: Modifier = Modifier,
+    reloading: Boolean = false
 ) {
     var boxBackground by remember {
         mutableStateOf(Color.White)
@@ -59,7 +61,7 @@ fun PokemonCard(
     var loading by remember { mutableStateOf(true) }
     if (picture.isEmpty()) loading = false
     val baseColor = colorEnum.tintColor
-
+    var retryHash by remember { mutableStateOf(0) }
     Box(
         modifier = modifier
             .padding(horizontal = 16.dp, vertical = 8.dp)
@@ -98,54 +100,18 @@ fun PokemonCard(
                 boxBackground = Color.Black
                 textsColor = Color.White
             } else {
-                SubcomposeAsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current).data(picture)
-                        .allowHardware(false).crossfade(true).build(),
-                    onSuccess = {
-                        val mBitmap = it.result.drawable.toBitmap()
-                        val range = 24
-                        Palette.from(mBitmap).setRegion(
-                            mBitmap.width / 2 - range,
-                            mBitmap.height / 2 - range,
-                            mBitmap.width / 2 + range,
-                            mBitmap.height / 2 + range
-                        ).clearFilters()
-                            .addFilter(Palette.Filter { color, hsl ->
-                                val comparison = Color(
-                                    color
-                                ).colorDistance(baseColor)
-                                hsl.notTooDarkNorTooBright() && (comparison <= .5f)
-                            }).generate { p ->
-                            p?.let {
-                                val domSwatch =
-                                    if (p.dominantSwatch != null) p.dominantSwatch else p.lightVibrantSwatch
-                                if (domSwatch != null) {
-                                    boxBackground = Color(domSwatch.rgb)
-                                    textsColor = Color(domSwatch.titleTextColor)
-                                    loading = false
-                                } else {
-                                    boxBackground = baseColor
-                                    textsColor =
-                                        if ((baseColor.toArgb()).isDarkColor()) Color.White else Color.Black
-                                    loading = false
-                                }
-                            }
-                        }
-                    },
-                    loading = {
-                        CircularProgressIndicator(
-                            modifier = Modifier
-                                .requiredHeight(40.dp)
-                                .requiredWidth(40.dp)
-                        )
-                    },
-                    error = { painterResource(R.drawable.missingno) },
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .height(120.dp)
-                        .width(120.dp),
-                    contentDescription = stringResource(R.string.pokemon_description, name)
-                )
+                PokemonImageLoader(name = name,
+                    reloading = reloading,
+                    picture = picture,
+                    baseColor = baseColor,
+                    retryHash = retryHash,
+                    updateColors = { backColor, textColor, isLoading ->
+                        boxBackground = backColor
+                        textsColor = textColor
+                        loading = isLoading
+                    }) {
+                    retryHash++
+                }
             }
         }
         if (!loading) {
@@ -162,6 +128,90 @@ fun PokemonCard(
         }
     }
 }
+
+@Composable
+fun PokemonImageLoader(
+    name: String,
+    reloading: Boolean,
+    picture: String,
+    baseColor: Color,
+    updateColors: (Color, Color, Boolean) -> Unit,
+    retryHash: Int,
+    updateRetryHash: () -> Unit
+) {
+    SubcomposeAsyncImage(
+        model =
+        ImageRequest.Builder(LocalContext.current).data(picture)
+            .memoryCachePolicy(CachePolicy.ENABLED)
+            .diskCachePolicy(CachePolicy.ENABLED)
+            .allowHardware(false).crossfade(true).setParameter("retry_hash", retryHash, null)
+            .build(),
+        onSuccess = {
+            val mBitmap = it.result.drawable.toBitmap()
+            val range = 24
+            Palette.from(mBitmap).setRegion(
+                mBitmap.width / 2 - range,
+                mBitmap.height / 2 - range,
+                mBitmap.width / 2 + range,
+                mBitmap.height / 2 + range
+            ).clearFilters()
+                .addFilter(Palette.Filter { color, hsl ->
+                    val comparison = Color(
+                        color
+                    ).colorDistance(baseColor)
+                    hsl.notTooDarkNorTooBright() && (comparison <= .5f)
+                }).generate { p ->
+                    p?.let {
+                        val domSwatch =
+                            if (p.dominantSwatch != null) p.dominantSwatch else p.lightVibrantSwatch
+                        if (domSwatch != null) {
+                            updateColors(
+                                Color(domSwatch.rgb),
+                                Color(domSwatch.titleTextColor), false
+                            )
+                        } else {
+                            updateColors(
+                                baseColor,
+                                if ((baseColor.toArgb()).isDarkColor()) Color.White else Color.Black,
+                                false
+                            )
+                        }
+                    }
+                }
+        },
+        loading = {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .requiredHeight(40.dp)
+                    .requiredWidth(40.dp)
+            )
+        },
+        error = {
+            Image(
+                painter = painterResource(R.drawable.missingno),
+                contentDescription = stringResource(
+                    id = R.string.missing_no, name
+                )
+            )
+            updateColors(
+                baseColor,
+                if ((baseColor.toArgb()).isDarkColor()) Color.White else Color.Black,
+                false
+            )
+        },
+        onError = {
+            if (reloading) {
+                updateRetryHash()
+            }
+        },
+        contentScale = ContentScale.Crop,
+        modifier = Modifier
+            .height(120.dp)
+            .width(120.dp),
+        contentDescription = stringResource(R.string.pokemon_description, name)
+    )
+}
+
 
 @Composable
 fun MissingNo(modifier: Modifier, name: String) {
@@ -182,6 +232,8 @@ fun PokemonCardPreview() {
         id = -1,
         name = "Missigno",
         picture = "",
-        ColorEnum.BLACK,
+        colorEnum = ColorEnum.BLACK,
+        modifier = Modifier.clickable {
+        }
     )
 }

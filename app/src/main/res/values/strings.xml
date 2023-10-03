@@ -3,6 +3,7 @@
     <string name="pokedex">Pokedex</string>
     <string name="pokemon_description">Image of the pokemon %s</string>
     <string name="missing_no">Image of missigno, due to not being able to load %s picture</string>
+    <string name="disable_no_connection">Disabled when there is no connection</string>
 
     <!--Sprite Url -->
     <string name="pokemon_sprite_url">"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/%s.png"</string>
