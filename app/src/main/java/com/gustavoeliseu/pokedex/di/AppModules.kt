@@ -1,6 +1,12 @@
 package com.gustavoeliseu.pokedex.di
 
 import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.cache.normalized.FetchPolicy
+import com.apollographql.apollo3.cache.normalized.api.MemoryCacheFactory
+import com.apollographql.apollo3.cache.normalized.logCacheMisses
+import com.apollographql.apollo3.cache.normalized.normalizedCache
+import com.apollographql.apollo3.cache.normalized.refetchPolicy
+import com.apollographql.apollo3.cache.normalized.sql.SqlNormalizedCacheFactory
 import com.apollographql.apollo3.network.okHttpClient
 import com.gustavoeliseu.pokedex.BuildConfig
 import com.gustavoeliseu.pokedex.BuildConfig.GRAPHQLAPI_URL
@@ -47,9 +53,21 @@ class AppModules {
     @Provides
     @Singleton
     fun provideApollo(client: OkHttpClient): ApolloClient {
+        val memCacheFactory = MemoryCacheFactory(maxSizeBytes = 10 * 1024 * 1024)
+
+        val sqlNormalizedCacheFactory = SqlNormalizedCacheFactory("apollo.db")
+
+        val inMemoryThenSqliteCache = memCacheFactory.chain(sqlNormalizedCacheFactory)
+
         return ApolloClient.Builder()
             .serverUrl(GRAPHQLAPI_URL)
-            .okHttpClient(client).build()
+            .logCacheMisses()
+            .normalizedCache(
+                normalizedCacheFactory = inMemoryThenSqliteCache,
+            )
+            .okHttpClient(client)
+            .refetchPolicy(FetchPolicy.CacheFirst)
+            .build()
     }
 
     class AuthInterceptor : Interceptor {
@@ -65,5 +83,4 @@ class AppModules {
         apolloClient: ApolloClient,
         @Named(PAGE_SIZE_TEXT) pageSize: Int,
     ): PokemonRepository = PokemonRepositoryImpl(apolloClient, pageSize)
-
 }

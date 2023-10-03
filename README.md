@@ -19,12 +19,12 @@ This is a personal android app project that utilizes Apollo with the GraphQL pok
   * MoveDetails Screen - **${\color{yellow}TODO}$** <br>
 * Add test libraries and start the testing - **${\color{yellow}TODO}$** (planning to use espresso and junit) <br>
 * Cleanup and improve git Readme layout - **${\color{yellow}TODO}$** <br>
+* Add and configure apolloCache - **${\color{green}DONE}$**<br> (Still needs to add local search, going to wait for the ROOM database)
 
 ## Part 2 - Offline first and improvements <br>
 * Adds error messages for communication errors - **${\color{yellow}TODO}$**<br>
 * Fixes Architecture flaws - **${\color{yellow}TODO}$**<br>
 * Add Room database - **${\color{yellow}TODO}$**<br>
-* Add and configure apolloCache - **${\color{yellow}TODO}$**<br>
 * if possible planning to add an option to download the data locally, with option to choose to download or not the images - **${\color{yellow}TODO}$**<br>
 * Check for accessibility, text-to-speak, manual tests with content readers, test colors for better contrast etc... - **${\color{yellow}TODO}$**<br>
 

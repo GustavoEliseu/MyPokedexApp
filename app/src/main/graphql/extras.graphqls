@@ -1,0 +1,3 @@
+extend type pokemon_v2_pokemonspecies @typePolicy(keyFields: "name")
+
+extend type pokemon_v2_pokemonspecies @fieldPolicy(forField: "name", keyArgs: "id")

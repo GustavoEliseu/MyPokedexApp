@@ -5,7 +5,7 @@ plugins {
     id 'com.google.firebase.crashlytics'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
-    id("com.apollographql.apollo3") version "3.8.2"
+    id("com.apollographql.apollo3") version "$apollo_ver"
 }
 
 android {
@@ -91,7 +91,7 @@ dependencies {
     implementation platform('androidx.compose:compose-bom:2022.10.00')
     implementation 'androidx.compose.ui:ui'
     implementation 'androidx.compose.ui:ui-graphics'
-    implementation 'androidx.compose.ui:ui-tooling-preview'
+    implementation 'androidx.compose.ui:ui-tooling-preview:1.5.2'
     implementation 'androidx.compose.material3:material3'
     implementation 'com.google.firebase:firebase-crashlytics-ktx:18.4.3'
     implementation 'com.google.firebase:firebase-analytics-ktx:21.3.0'
@@ -104,6 +104,9 @@ dependencies {
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
 
+    //Worker
+    implementation "androidx.work:work-runtime:2.8.1"
+
     // Navigation
     implementation "androidx.navigation:navigation-compose:$navigation_version"
 
@@ -113,8 +116,10 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_ver"
 
     // Network
-    implementation("com.apollographql.apollo3:apollo-runtime:3.8.2")
-    implementation("com.apollographql.apollo3:apollo-api:3.8.2")
+    implementation("com.apollographql.apollo3:apollo-runtime:$apollo_ver")
+    implementation("com.apollographql.apollo3:apollo-api:$apollo_ver")
+    implementation("com.apollographql.apollo3:apollo-normalized-cache:$apollo_ver")
+    implementation("com.apollographql.apollo3:apollo-normalized-cache-sqlite:$apollo_ver")
 
     implementation "com.squareup.okhttp3:okhttp:$okhttp3_ver"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp3_ver"
