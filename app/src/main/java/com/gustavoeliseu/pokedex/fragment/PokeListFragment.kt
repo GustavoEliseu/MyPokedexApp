@@ -57,6 +57,7 @@ import kotlinx.coroutines.runBlocking
 var connectionLost = true
 var position: Int? = null
 var reloadingImages: Boolean = false
+//TODO - FIND A BETTER PLACE TO STORE THIS VARIABLES... MAYBE USING MUTABLE STATE
 
 @Composable
 fun PokedexListFragment(
@@ -145,7 +146,7 @@ fun PokedexListFragment(
                                     } else {
                                         Toast.makeText(
                                             context,
-                                            "Disabled when there's no connection",
+                                            context.getString(R.string.disable_no_connection),
                                             Toast.LENGTH_SHORT
                                         ).show()
                                     }

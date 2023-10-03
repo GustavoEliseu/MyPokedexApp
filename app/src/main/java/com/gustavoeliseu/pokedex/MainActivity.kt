@@ -20,7 +20,6 @@ import com.gustavoeliseu.pokedex.utils.Const.POKEMON_ID
 import com.gustavoeliseu.pokedex.utils.Route
 import dagger.hilt.android.AndroidEntryPoint
 
-
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +42,7 @@ class MainActivity : ComponentActivity() {
 
                 //TODO - NEEDED FOR PART 2 - OFFLINE FIRST
                 //TODO - PART 2 - ADD OFFLINE FIRST AND USE-CASES
+                //TODO - PART 2 - CHECK GRAPHQL EXTRAS WHEN ADDING ROOM
                 //TODO - PART 2 - FIX IMPLEMENTATION ARCHITECTURE AND CLEAN, CHECK IF EVERYTHING IS ACCORDING TO THE SOLID PRINCIPLES
                 //TODO - PART 2 - REMOVE UNUSED CODES AND ADD BOTTOM NAVIGATION FOR PART3
 
@@ -77,7 +77,7 @@ class MainActivity : ComponentActivity() {
                 if (pokeId == null) {
                     Toast.makeText(
                         applicationContext,
-                        "Não foi possível identificar o mostro clicado",
+                        "It was not possible to detect the selected pokemon",
                         Toast.LENGTH_SHORT
                     ).show()
                     navController.navigate(Route.PokemonListRoute.route)
@@ -93,10 +93,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 
     @Preview(showBackground = true)

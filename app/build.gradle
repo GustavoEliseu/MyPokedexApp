@@ -104,9 +104,6 @@ dependencies {
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
 
-    //Worker
-    implementation "androidx.work:work-runtime:2.8.1"
-
     // Navigation
     implementation "androidx.navigation:navigation-compose:$navigation_version"
 
