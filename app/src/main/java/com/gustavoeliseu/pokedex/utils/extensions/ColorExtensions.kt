@@ -1,11 +1,11 @@
 package com.gustavoeliseu.pokedex.utils.extensions
 
 import android.graphics.Color
-import androidx.compose.ui.graphics.Color as ComposeColor
 import androidx.core.graphics.ColorUtils
 import androidx.palette.graphics.Palette
 import androidx.palette.graphics.Palette.Swatch
 import java.util.Collections
+import androidx.compose.ui.graphics.Color as ComposeColor
 
 
 fun Int.isDarkColor(): Boolean {
@@ -30,11 +30,11 @@ fun Int.notBlackNorWhite(): Boolean {
 }
 
 //TODO - CHECK IF STILL NEEDED WHEN POLISHING CARD LIST
-fun FloatArray.notTooDarkNorTooBright(): Boolean {
+fun FloatArray.notTooDarkNorTooBright(brightnessThreshold: Float = 0.7f): Boolean {
     val lightness = this[2]
     val saturation = this[1]
 
-    return !(saturation > 0.95 || saturation < 0.05) && !(lightness > 0.95 || lightness < 0.05)
+    return !(saturation > 0.8 || saturation < 0.1) && !(lightness > brightnessThreshold || lightness < (1 - brightnessThreshold))
 }
 
 fun Int.isCloseTo(compared: Int?): Boolean {

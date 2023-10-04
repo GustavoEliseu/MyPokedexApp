@@ -3,6 +3,7 @@ package com.gustavoeliseu.pokedex.ui.pokemon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -60,7 +61,6 @@ fun PokemonCard(
     var textsColor by remember { mutableStateOf(Color.White) }
     var loading by remember { mutableStateOf(true) }
     if (picture.isEmpty()) loading = false
-    val baseColor = colorEnum.tintColor
     var retryHash by remember { mutableStateOf(0) }
     Box(
         modifier = modifier
@@ -103,7 +103,7 @@ fun PokemonCard(
                 PokemonImageLoader(name = name,
                     reloading = reloading,
                     picture = picture,
-                    baseColor = baseColor,
+                    colorEnum = colorEnum,
                     retryHash = retryHash,
                     updateColors = { backColor, textColor, isLoading ->
                         boxBackground = backColor
@@ -134,11 +134,13 @@ fun PokemonImageLoader(
     name: String,
     reloading: Boolean,
     picture: String,
-    baseColor: Color,
+    colorEnum: ColorEnum,
     updateColors: (Color, Color, Boolean) -> Unit,
     retryHash: Int,
     updateRetryHash: () -> Unit
 ) {
+    val baseColor = colorEnum.tintColor
+    val isDarkTheme = isSystemInDarkTheme()
     SubcomposeAsyncImage(
         model =
         ImageRequest.Builder(LocalContext.current).data(picture)
@@ -154,16 +156,52 @@ fun PokemonImageLoader(
                 mBitmap.height / 2 - range,
                 mBitmap.width / 2 + range,
                 mBitmap.height / 2 + range
-            ).clearFilters()
-                .addFilter(Palette.Filter { color, hsl ->
-                    val comparison = Color(
-                        color
-                    ).colorDistance(baseColor)
-                    hsl.notTooDarkNorTooBright() && (comparison <= .5f)
+            ).clearFilters().addFilter(Palette.Filter { color, hsl ->
+                    compareColors(color, hsl, baseColor)
                 }).generate { p ->
                     p?.let {
-                        val domSwatch =
-                            if (p.dominantSwatch != null) p.dominantSwatch else p.lightVibrantSwatch
+                        var domSwatch = p.dominantSwatch
+                        domSwatch = when {
+                            p.vibrantSwatch != null -> {
+                                val comparison = Color(
+                                    p.vibrantSwatch!!.rgb
+                                ).colorDistance(baseColor)
+                                val population =
+                                    ((p.dominantSwatch?.population
+                                        ?: 0) - (p.vibrantSwatch?.population ?: 0))
+                                if (population in 1..79 && comparison >= .38f) {
+                                    p.vibrantSwatch
+                                } else p.dominantSwatch
+                            }
+
+                            p.lightVibrantSwatch != null && p.vibrantSwatch == null && isDarkTheme -> {
+                                val comparison = Color(
+                                    p.lightVibrantSwatch!!.rgb
+                                ).colorDistance(baseColor)
+                                val population =
+                                    ((p.lightVibrantSwatch?.population
+                                        ?: 0) - (p.vibrantSwatch?.population ?: 0))
+                                if (population < 80 && comparison < .38f) {
+                                    p.lightVibrantSwatch
+                                } else p.dominantSwatch
+                            }
+
+                            p.darkVibrantSwatch != null && p.vibrantSwatch == null && !isDarkTheme -> {
+                                val comparison = Color(
+                                    p.darkVibrantSwatch!!.rgb
+                                ).colorDistance(baseColor)
+                                val population =
+                                    ((p.darkVibrantSwatch?.population
+                                        ?: 0) - (p.vibrantSwatch?.population ?: 0))
+                                if (population < 80 && comparison < .38f) {
+                                    p.darkVibrantSwatch
+                                } else p.dominantSwatch
+                            }
+
+                            else -> {
+                                p.dominantSwatch
+                            }
+                        }
                         if (domSwatch != null) {
                             updateColors(
                                 Color(domSwatch.rgb),
@@ -210,6 +248,13 @@ fun PokemonImageLoader(
             .width(120.dp),
         contentDescription = stringResource(R.string.pokemon_description, name)
     )
+}
+
+fun compareColors(color1: Int, hsl: FloatArray, baseColor: Color): Boolean {
+    val comparison = Color(
+        color1
+    ).colorDistance(baseColor)
+    return  hsl.notTooDarkNorTooBright(0.7f) && (comparison < .38f)
 }
 
 

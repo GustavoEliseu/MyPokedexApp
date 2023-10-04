@@ -57,7 +57,7 @@ import kotlinx.coroutines.runBlocking
 var connectionLost = true
 var position: Int? = null
 var reloadingImages: Boolean = false
-//TODO - FIND A BETTER PLACE TO STORE THIS VARIABLES... MAYBE USING MUTABLE STATE
+//TODO - FIND A BETTER PLACE TO STORE THeS VARIABLES... MAYBE USING MUTABLE STATE
 
 @Composable
 fun PokedexListFragment(
