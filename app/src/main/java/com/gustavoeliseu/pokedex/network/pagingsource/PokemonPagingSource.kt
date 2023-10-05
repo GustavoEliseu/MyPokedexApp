@@ -42,10 +42,8 @@ class PokemonPagingSource(private val searchTerm: String,private val response: s
             offset = Optional.present(currentNextPage),
             pageSize = Optional.present(PAGE_SIZE)
         )
-        Log.e("testeee $isSearching", "$isSearching / $currentSearchTerm / $startsWith")
 
         val pokeList = response.invoke(query)?.pokemonItem ?: listOf()
-
         val prevKey = if (currentNextPage > 0) currentNextPage - PAGE_SIZE else null
         val nextKey = when{
             pokeList.size> PAGE_SIZE-1 ->{currentNextPage + PAGE_SIZE}
