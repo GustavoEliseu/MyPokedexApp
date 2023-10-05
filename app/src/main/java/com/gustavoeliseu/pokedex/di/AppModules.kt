@@ -1,5 +1,6 @@
 package com.gustavoeliseu.pokedex.di
 
+import android.util.Log
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.cache.normalized.FetchPolicy
 import com.apollographql.apollo3.cache.normalized.api.MemoryCacheFactory
@@ -47,6 +48,7 @@ class AppModules {
         return OkHttpClient.Builder()
             .addInterceptor(AuthInterceptor())
             .addInterceptor(logging)
+            .followRedirects(false)
             .build()
     }
 
@@ -73,6 +75,8 @@ class AppModules {
     class AuthInterceptor : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
             val request = chain.request().newBuilder()
+
+            Log.e("testeeee",chain.request().isHttps.toString()+" " + chain.request().url.encodedFragment)
 
             return chain.proceed(request.build())
         }
