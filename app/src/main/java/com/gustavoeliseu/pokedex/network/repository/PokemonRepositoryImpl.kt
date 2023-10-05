@@ -45,7 +45,7 @@ class PokemonRepositoryImpl @Inject constructor(
             try {
                 pokemonApi.query(
                     mQuery
-                ).refetchPolicy(FetchPolicy.CacheFirst).execute().data?.toSimplePokemonList()
+                ).refetchPolicy(FetchPolicy.CacheFirst).execute().data?.toSimplePokemonList() ?: PokemonSimpleList(listOf())
             } catch (exception: ApolloException) {
                 SafeCrashlyticsUtil.logException(exception)
                 PokemonSimpleList(listOf())

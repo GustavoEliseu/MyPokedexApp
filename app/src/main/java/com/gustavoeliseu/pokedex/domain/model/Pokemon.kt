@@ -23,18 +23,14 @@ data class PokemonSimpleList(
 ) {
     companion object {
         fun PokemonListGraphQlQuery.Data.toSimplePokemonList(): PokemonSimpleList {
-            val pokeList: MutableList<PokemonSimpleListItem> = mutableListOf()
-            this.pokemonItem.forEach {
-                pokeList.add(
+            return PokemonSimpleList(
+                this.pokemonItem.map {
                     PokemonSimpleListItem(
                         it.name,
                         it.id,
                         it.pokemon_color_id
                     )
-                )
-            }
-            val pokeData = PokemonSimpleList(pokeList)
-            return pokeData
+                })
         }
     }
 }
