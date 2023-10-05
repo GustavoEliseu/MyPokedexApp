@@ -47,6 +47,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.gustavoeliseu.pokedex.PokemonListGraphQlQuery
 import com.gustavoeliseu.pokedex.R
+import com.gustavoeliseu.pokedex.domain.model.PokemonSimpleListItem
 import com.gustavoeliseu.pokedex.network.connection.ConnectivityObserver
 import com.gustavoeliseu.pokedex.network.connection.NetworkConnectivityObserver
 import com.gustavoeliseu.pokedex.ui.pokemon.PokemonCard
@@ -182,7 +183,7 @@ fun PokedexListFragment(
 @Composable
 fun PokeListGrid(
     modifier: Modifier = Modifier,
-    pokemonList: LazyPagingItems<PokemonListGraphQlQuery.PokemonItem>?,
+    pokemonList: LazyPagingItems<PokemonSimpleListItem>?,
     onClick: (id: Int) -> Unit
 ) {
     if (pokemonList == null) return
@@ -200,14 +201,13 @@ fun PokeListGrid(
             items(pokemonList.itemCount) { index ->
                 pokemonList[index]?.let { pk ->
                     PokemonCard(
-                        id = pk.id,
-                        name = pk.name,
+                        pokemonItemSimple = pk,
                         picture = stringResource(id = R.string.pokemon_sprite_url, pk.id),
                         modifier = modifier
                             .clickable {
                                 onClick(pk.id)
                             },
-                        colorEnum = ColorEnum.fromInt(pk.pokemon_color_id),
+                        colorEnum = ColorEnum.fromInt(pk.pokemonColorId),
                         reloading = reloadingImages
                     )
                 }

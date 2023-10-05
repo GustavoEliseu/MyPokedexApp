@@ -1,14 +1,15 @@
 package com.gustavoeliseu.pokedex.network.pagingsource
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.apollographql.apollo3.api.Optional
 import com.gustavoeliseu.pokedex.PokemonListGraphQlQuery
+import com.gustavoeliseu.pokedex.domain.model.PokemonSimpleList
+import com.gustavoeliseu.pokedex.domain.model.PokemonSimpleListItem
 import com.gustavoeliseu.pokedex.utils.Const.PAGE_SIZE
 
-class PokemonPagingSource(private val searchTerm: String,private val response: suspend (PokemonListGraphQlQuery) -> PokemonListGraphQlQuery.Data?) :
-    PagingSource<Int, PokemonListGraphQlQuery.PokemonItem>() {
+class PokemonPagingSource(private val searchTerm: String,private val response: suspend (PokemonListGraphQlQuery) -> PokemonSimpleList?) :
+    PagingSource<Int, PokemonSimpleListItem>() {
 
     //TODO - CLEAN THIS CLASS SO IT CAN BE RE-UTILIZED FOR OTHER PURPOSES, SOLID
     //THIS CLASS IS TOO SPECIFIC, SHOULD BE MORE GENERIC SO IT CAN BE RE-UTILIZED FOR PART 3(tier search)
@@ -16,14 +17,14 @@ class PokemonPagingSource(private val searchTerm: String,private val response: s
     private var nextPage = 0
     private var currentSearchTerm: String? = null
 
-    override fun getRefreshKey(state: PagingState<Int, PokemonListGraphQlQuery.PokemonItem>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, PokemonSimpleListItem>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
                 ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
         }
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PokemonListGraphQlQuery.PokemonItem> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PokemonSimpleListItem> {
         val localSearchTerm = if (isSearching && searchTerm.isNotEmpty()) "%$searchTerm" else searchTerm
         val startsWith = if (isSearching && searchTerm.isNotEmpty()) searchTerm else ""
 
@@ -43,7 +44,7 @@ class PokemonPagingSource(private val searchTerm: String,private val response: s
             pageSize = Optional.present(PAGE_SIZE)
         )
 
-        val pokeList = response.invoke(query)?.pokemonItem ?: listOf()
+        val pokeList = response.invoke(query)?.pokemonItems ?: listOf()
         val prevKey = if (currentNextPage > 0) currentNextPage - PAGE_SIZE else null
         val nextKey = when{
             pokeList.size> PAGE_SIZE-1 ->{currentNextPage + PAGE_SIZE}

@@ -4,15 +4,15 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.apollographql.apollo3.ApolloClient
-import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.cache.normalized.FetchPolicy
 import com.apollographql.apollo3.cache.normalized.refetchPolicy
 import com.apollographql.apollo3.exception.ApolloException
-import com.gustavoeliseu.pokedex.PokemonListGraphQlQuery
 import com.gustavoeliseu.pokedex.domain.model.PokemonDetails
+import com.gustavoeliseu.pokedex.domain.model.PokemonSimpleList
+import com.gustavoeliseu.pokedex.domain.model.PokemonSimpleList.Companion.toSimplePokemonList
+import com.gustavoeliseu.pokedex.domain.model.PokemonSimpleListItem
 import com.gustavoeliseu.pokedex.domain.repository.PokemonRepository
 import com.gustavoeliseu.pokedex.network.pagingsource.PokemonPagingSource
-import com.gustavoeliseu.pokedex.utils.Const.PAGE_SIZE
 import com.gustavoeliseu.pokedex.utils.Response
 import com.gustavoeliseu.pokedex.utils.SafeCrashlyticsUtil
 import kotlinx.coroutines.flow.Flow
@@ -28,7 +28,7 @@ class PokemonRepositoryImpl @Inject constructor(
 
     override fun queryPokemonList(
         searchTyped: String
-    ): Flow<PagingData<PokemonListGraphQlQuery.PokemonItem>> {
+    ): Flow<PagingData<PokemonSimpleListItem>> {
         return Pager(
             config = PagingConfig(
                 pageSize = pageSize,
@@ -45,10 +45,10 @@ class PokemonRepositoryImpl @Inject constructor(
             try {
                 pokemonApi.query(
                     mQuery
-                ).refetchPolicy(FetchPolicy.CacheFirst).execute().data
+                ).refetchPolicy(FetchPolicy.CacheFirst).execute().data?.toSimplePokemonList()
             } catch (exception: ApolloException) {
                 SafeCrashlyticsUtil.logException(exception)
-                PokemonListGraphQlQuery.Data(listOf())
+                PokemonSimpleList(listOf())
             }
         }
     }

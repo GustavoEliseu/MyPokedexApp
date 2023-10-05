@@ -38,6 +38,7 @@ import coil.compose.SubcomposeAsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.gustavoeliseu.pokedex.R
+import com.gustavoeliseu.pokedex.domain.model.PokemonSimpleListItem
 import com.gustavoeliseu.pokedex.utils.ColorEnum
 import com.gustavoeliseu.pokedex.utils.extensions.colorDistance
 import com.gustavoeliseu.pokedex.utils.extensions.isDarkColor
@@ -47,10 +48,9 @@ import java.util.Locale
 
 @Composable
 fun PokemonCard(
-    id: Int,
-    name: String,
-    picture: String,
+    pokemonItemSimple : PokemonSimpleListItem,
     colorEnum: ColorEnum,
+    picture: String,
     modifier: Modifier = Modifier,
     reloading: Boolean = false
 ) {
@@ -71,7 +71,7 @@ fun PokemonCard(
     ) {
         if (!loading) {
             Text(
-                text = id.toString(),
+                text = pokemonItemSimple.id.toString(),
                 fontSize = 20.sp,
                 modifier = Modifier
                     .align(Alignment.TopStart)
@@ -96,11 +96,11 @@ fun PokemonCard(
                 .size(120.dp)
         ) {
             if (picture.isEmpty()) {
-                MissingNo(modifier.align(Alignment.Center), name)
+                MissingNo(modifier.align(Alignment.Center), pokemonItemSimple.name)
                 boxBackground = Color.Black
                 textsColor = Color.White
             } else {
-                PokemonImageLoader(name = name,
+                PokemonImageLoader(pokemonItemSimple = pokemonItemSimple,
                     reloading = reloading,
                     picture = picture,
                     baseColor = baseColor,
@@ -109,6 +109,8 @@ fun PokemonCard(
                         boxBackground = backColor
                         textsColor = textColor
                         loading = isLoading
+                        pokemonItemSimple.baseColor = backColor.toArgb()
+                        pokemonItemSimple.textColor = textColor.toArgb()
                     }) {
                     retryHash++
                 }
@@ -116,7 +118,7 @@ fun PokemonCard(
         }
         if (!loading) {
             Text(
-                text = name.uppercase(Locale.getDefault()),
+                text = pokemonItemSimple.name.uppercase(Locale.getDefault()),
                 fontSize = 15.sp,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
@@ -131,7 +133,7 @@ fun PokemonCard(
 
 @Composable
 fun PokemonImageLoader(
-    name: String,
+    pokemonItemSimple : PokemonSimpleListItem,
     reloading: Boolean,
     picture: String,
     baseColor: Color,
@@ -147,6 +149,7 @@ fun PokemonImageLoader(
             .allowHardware(false).crossfade(true).setParameter("retry_hash", retryHash, null)
             .build(),
         onSuccess = {
+            if(pokemonItemSimple.baseColor == null || pokemonItemSimple.textColor == null){
             val mBitmap = it.result.drawable.toBitmap()
             val range = 24
             Palette.from(mBitmap).setRegion(
@@ -178,6 +181,18 @@ fun PokemonImageLoader(
                         }
                     }
                 }
+            }else{
+                var mBaseColor = baseColor
+                var mTextColor = if ((baseColor.toArgb()).isDarkColor()) Color.White else Color.Black
+                pokemonItemSimple.baseColor?.let{
+                    mBaseColor= Color(it)
+                }
+                pokemonItemSimple.textColor?.let {
+                    mTextColor = Color(it)
+                }
+
+                updateColors(mBaseColor,mTextColor,false)
+            }
         },
         loading = {
             CircularProgressIndicator(
@@ -190,7 +205,7 @@ fun PokemonImageLoader(
             Image(
                 painter = painterResource(R.drawable.missingno),
                 contentDescription = stringResource(
-                    id = R.string.missing_no, name
+                    id = R.string.missing_no, pokemonItemSimple.name
                 )
             )
             updateColors(
@@ -208,7 +223,7 @@ fun PokemonImageLoader(
         modifier = Modifier
             .height(120.dp)
             .width(120.dp),
-        contentDescription = stringResource(R.string.pokemon_description, name)
+        contentDescription = stringResource(R.string.pokemon_description, pokemonItemSimple.name)
     )
 }
 
@@ -229,8 +244,11 @@ fun MissingNo(modifier: Modifier, name: String) {
 @Composable
 fun PokemonCardPreview() {
     PokemonCard(
-        id = -1,
-        name = "Missigno",
+        pokemonItemSimple = PokemonSimpleListItem(
+            id = -1,
+            name = "Missigno",
+            pokemonColorId = 1
+            ),
         picture = "",
         colorEnum = ColorEnum.BLACK,
         modifier = Modifier.clickable {
