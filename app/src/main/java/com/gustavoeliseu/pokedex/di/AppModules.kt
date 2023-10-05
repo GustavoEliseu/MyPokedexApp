@@ -75,9 +75,6 @@ class AppModules {
     class AuthInterceptor : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
             val request = chain.request().newBuilder()
-
-            Log.e("testeeee",chain.request().isHttps.toString()+" " + chain.request().url.encodedFragment)
-
             return chain.proceed(request.build())
         }
     }
