@@ -41,14 +41,10 @@ class PokemonRepositoryImpl @Inject constructor(
     private fun createPagingSource(
         searchTyped: String
     ): PokemonPagingSource {
-        return PokemonPagingSource { offset ->
+        return PokemonPagingSource(searchTerm = "$searchTyped%") { mQuery ->
             try {
                 pokemonApi.query(
-                    PokemonListGraphQlQuery(
-                        searchTerm = Optional.present(searchTyped),
-                        offset = Optional.present(offset),
-                        pageSize = Optional.present(PAGE_SIZE)
-                    )
+                    mQuery
                 ).refetchPolicy(FetchPolicy.CacheFirst).execute().data
             } catch (exception: ApolloException) {
                 SafeCrashlyticsUtil.logException(exception)
