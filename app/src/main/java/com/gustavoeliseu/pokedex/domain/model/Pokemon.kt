@@ -15,8 +15,7 @@ data class PokemonSimpleListItem(
     val pokemonColorId: Int?,
     var baseColor: Int? = null,  // Nullable mutable field
     var textColor: Int? = null
-) {
-}
+)
 
 data class PokemonSimpleList(
     val pokemonItems: List<PokemonSimpleListItem>

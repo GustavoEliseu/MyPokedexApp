@@ -227,7 +227,6 @@ fun PokemonImageLoader(
     )
 }
 
-
 @Composable
 fun MissingNo(modifier: Modifier, name: String) {
     Image(

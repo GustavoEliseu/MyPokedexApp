@@ -24,7 +24,6 @@ class PokemonListViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _isSearchShowing = MutableStateFlow(false)
-
     val isSearchShowing = _isSearchShowing.asStateFlow()
         .stateIn(
             scope = viewModelScope,
@@ -33,14 +32,12 @@ class PokemonListViewModel @Inject constructor(
         )
 
     private val _search = MutableStateFlow("")
-
     val search = _search.asStateFlow()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(),
             initialValue = "",
         )
-
 
     var pokemonListState: Flow<PagingData<PokemonSimpleListItem>> =
             search.debounce(300).flatMapLatest { query ->
