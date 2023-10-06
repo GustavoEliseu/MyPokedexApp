@@ -19,17 +19,10 @@ fun PokemonDetailsFragment(
     pokemonDetailsViewModel: PokemonDetailsViewModel = hiltViewModel(),
     onError: () -> Unit
 ) {
-
-    LaunchedEffect(Unit) {
-
-    }
     Surface(
         modifier = modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
-    ) {
-
-    }
-
+    ) {}
 }
 
 @Composable

@@ -8,8 +8,4 @@ import javax.inject.Inject
 @HiltViewModel
 class PokemonDetailsViewModel @Inject constructor(
     val pokemonRepository: PokemonRepository,
-) : ViewModel() {
-
-
-
-}
+) : ViewModel(){}

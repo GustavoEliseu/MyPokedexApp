@@ -59,8 +59,6 @@ import com.gustavoeliseu.pokedex.viewmodel.PokemonListViewModel
 import kotlinx.coroutines.runBlocking
 
 
-
-//TODO - FIND A BETTER PLACE TO STORE THIS VARIABLES... MAYBE USING MUTABLE STATE
 @Composable
 fun PokedexListFragment(
     modifier: Modifier = Modifier,
