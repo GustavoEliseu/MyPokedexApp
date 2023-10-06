@@ -34,14 +34,14 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField "String", "POKEAPI_URL", "\"https://pokeapi.co/api/v2/\""
-            buildConfigField "String", "GRAPHQLAPI_URL", "\"http://beta.pokeapi.co/graphql\""
+            buildConfigField "String", "GRAPHQLAPI_URL", "\"https://beta.pokeapi.co/graphql/v1beta\""
             buildConfigField "okhttp3.logging.HttpLoggingInterceptor.Level", "INTERCEPTOR_LEVEL", "okhttp3.logging.HttpLoggingInterceptor.Level.HEADERS"
         }
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField "String", "POKEAPI_URL", "\"https://pokeapi.co/api/v2/\""
-            buildConfigField "String", "GRAPHQLAPI_URL", "\"http://beta.pokeapi.co/graphql\""
+            buildConfigField "String", "GRAPHQLAPI_URL", "\"https://beta.pokeapi.co/graphql/v1beta\""
             buildConfigField "okhttp3.logging.HttpLoggingInterceptor.Level", "INTERCEPTOR_LEVEL", "okhttp3.logging.HttpLoggingInterceptor.Level.BODY"
         }
         localHost {

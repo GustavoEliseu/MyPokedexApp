@@ -7,13 +7,11 @@ import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.cache.normalized.FetchPolicy
 import com.apollographql.apollo3.cache.normalized.refetchPolicy
 import com.apollographql.apollo3.exception.ApolloException
-import com.gustavoeliseu.pokedex.domain.model.PokemonDetails
 import com.gustavoeliseu.pokedex.domain.model.PokemonSimpleList
 import com.gustavoeliseu.pokedex.domain.model.PokemonSimpleList.Companion.toSimplePokemonList
 import com.gustavoeliseu.pokedex.domain.model.PokemonSimpleListItem
 import com.gustavoeliseu.pokedex.domain.repository.PokemonRepository
 import com.gustavoeliseu.pokedex.network.pagingsource.PokemonPagingSource
-import com.gustavoeliseu.pokedex.utils.Response
 import com.gustavoeliseu.pokedex.utils.SafeCrashlyticsUtil
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -53,7 +51,7 @@ class PokemonRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getPokemonDetails(pokeId: Int): Flow<Response<PokemonDetails>> {
-        TODO("Not yet implemented")
-    }
+//    override fun getPokemonDetails(pokeId: Int): Flow<Response<PokemonDetails>> {
+//        TODO("Not yet implemented")
+//    }
 }

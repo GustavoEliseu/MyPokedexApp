@@ -5,6 +5,9 @@
     <string name="missing_no">Image of missigno, due to not being able to load %s picture</string>
     <string name="disable_no_connection">Disabled when there is no connection</string>
 
+    <string name="lost_connection">lost internet connection</string>
+    <string name="connection_is_back">internet connection has returned</string>
+
     <!--Sprite Url -->
     <string name="pokemon_sprite_url">"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/%s.png"</string>
 
