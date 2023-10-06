@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.gustavoeliseu.pokedex.PokemonListGraphQlQuery
+import com.gustavoeliseu.pokedex.domain.model.PokemonSimpleListItem
 import com.gustavoeliseu.pokedex.domain.repository.PokemonRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -23,7 +24,6 @@ class PokemonListViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _isSearchShowing = MutableStateFlow(false)
-
     val isSearchShowing = _isSearchShowing.asStateFlow()
         .stateIn(
             scope = viewModelScope,
@@ -32,7 +32,6 @@ class PokemonListViewModel @Inject constructor(
         )
 
     private val _search = MutableStateFlow("")
-
     val search = _search.asStateFlow()
         .stateIn(
             scope = viewModelScope,
@@ -40,8 +39,7 @@ class PokemonListViewModel @Inject constructor(
             initialValue = "",
         )
 
-
-    var pokemonListState: Flow<PagingData<PokemonListGraphQlQuery.PokemonItem>> =
+    var pokemonListState: Flow<PagingData<PokemonSimpleListItem>> =
             search.debounce(300).flatMapLatest { query ->
                 pokemonRepository.queryPokemonList(query).cachedIn(viewModelScope)
             }

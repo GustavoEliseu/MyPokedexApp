@@ -1,36 +1,39 @@
 package com.gustavoeliseu.pokedex.domain.model
 
+import androidx.palette.graphics.Palette
+import com.gustavoeliseu.pokedex.PokemonListGraphQlQuery
+
 //used for ANY data with name and URL only
 data class SimpleGenericPokemonData(
     val name: String?,
     val url: String
 )
 
-data class NewPokemonListResponse(
-    val pokemonList: List<NewPokemonListData>
-)
-
-data class NewPokemonListData(
+data class PokemonSimpleListItem(
     val name: String,
     val id: Int,
-    val colorId: Int
+    val pokemonColorId: Int?,
+    var baseColor: Int? = null,  // Nullable mutable field
+    var textColor: Int? = null
 )
 
-data class PokemonSpecieDetails(
+data class PokemonSimpleList(
+    val pokemonItems: List<PokemonSimpleListItem>
+) {
+    companion object {
+        fun PokemonListGraphQlQuery.Data.toSimplePokemonList(): PokemonSimpleList {
+            return PokemonSimpleList(
+                this.pokemonItem.map {
+                    PokemonSimpleListItem(
+                        it.name,
+                        it.id,
+                        it.pokemon_color_id
+                    )
+                })
+        }
+    }
+}
 
-    val baseHappiness: Int,
-    val captureRate: Int,
-    val eggGroup: SimpleGenericPokemonData?,
-    val evolutionChain: SimpleGenericPokemonData?,
-    val evolvesFromSpecie: SimpleGenericPokemonData?,
-    val isBaby: Boolean,
-    val isLegendary: Boolean,
-    val isMythical: Boolean,
-    val name: String,
-    val id: Int,
-    val hasGenderDifferences: Boolean,
-    val generation: SimpleGenericPokemonData
-)
 
 data class PokemonDetails(
     val abilities: List<Ability>,
