@@ -22,13 +22,13 @@ fun Modifier.shimmerEffect(): Modifier = composed {
 
     var size by remember { mutableStateOf(IntSize.Zero) }
 
-    val transition = rememberInfiniteTransition()
+    val transition = rememberInfiniteTransition(label = "infiniteT")
     val startOffsetX by transition.animateFloat(
         initialValue = -2 * size.width.toFloat(),
         targetValue = 2 * size.width.toFloat(),
         animationSpec = infiniteRepeatable(
             animation = tween(1000)
-        )
+        ), label = "shimmerAnimate"
     )
 
     background(
