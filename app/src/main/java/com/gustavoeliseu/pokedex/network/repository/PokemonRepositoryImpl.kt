@@ -4,16 +4,12 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.apollographql.apollo3.ApolloClient
-import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.cache.normalized.FetchPolicy
 import com.apollographql.apollo3.cache.normalized.refetchPolicy
 import com.apollographql.apollo3.exception.ApolloException
 import com.gustavoeliseu.pokedex.PokemonListGraphQlQuery
-import com.gustavoeliseu.pokedex.domain.model.PokemonDetails
 import com.gustavoeliseu.pokedex.domain.repository.PokemonRepository
 import com.gustavoeliseu.pokedex.network.pagingsource.PokemonPagingSource
-import com.gustavoeliseu.pokedex.utils.Const.PAGE_SIZE
-import com.gustavoeliseu.pokedex.utils.Response
 import com.gustavoeliseu.pokedex.utils.SafeCrashlyticsUtil
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -43,9 +39,7 @@ class PokemonRepositoryImpl @Inject constructor(
     ): PokemonPagingSource {
         return PokemonPagingSource(searchTerm = "$searchTyped%") { mQuery ->
             try {
-                pokemonApi.query(
-                    mQuery
-                ).refetchPolicy(FetchPolicy.CacheFirst).execute().data
+                pokemonApi.query(mQuery).refetchPolicy(FetchPolicy.CacheFirst).execute().data
             } catch (exception: ApolloException) {
                 SafeCrashlyticsUtil.logException(exception)
                 PokemonListGraphQlQuery.Data(listOf())
@@ -53,7 +47,7 @@ class PokemonRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getPokemonDetails(pokeId: Int): Flow<Response<PokemonDetails>> {
-        TODO("Not yet implemented")
-    }
+//    override fun getPokemonDetails(pokeId: Int): Flow<Response<PokemonDetails>> {
+//        TODO("Not yet implemented")
+//    }
 }
