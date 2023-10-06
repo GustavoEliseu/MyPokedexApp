@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavType
@@ -20,6 +21,7 @@ import com.gustavoeliseu.pokedex.network.connection.ConnectivityObserver
 import com.gustavoeliseu.pokedex.network.connection.NetworkConnectivityObserver
 import com.gustavoeliseu.pokedex.ui.fragment.PokedexListFragment
 import com.gustavoeliseu.pokedex.ui.fragment.PokemonDetailsFragment
+import com.gustavoeliseu.pokedex.ui.network_compose.NetworkComposableObserver
 import com.gustavoeliseu.pokedex.ui.theme.MyPokedexTheme
 import com.gustavoeliseu.pokedex.utils.Const.POKEMON_ID
 import com.gustavoeliseu.pokedex.utils.Route
@@ -48,7 +50,7 @@ class MainActivity : ComponentActivity() {
     //TODO - PART 2 - TRY to add format validation(for pvp teams) (Maybe try the smogon api)
     //TODO - PART 2 - Other option is the api https://graphqlpokemon.favware.tech/v7 using 89 offset to ignore custom monsters
 
-    var currentConnection = ConnectivityObserver.Status.Available
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val imageLoader = ImageLoader.Builder(this)
@@ -58,18 +60,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyPokedexTheme {
                 PokemonAppScreen()
-                val isConnectedStatus by NetworkConnectivityObserver(this).observe().collectAsState(
-                    initial = ConnectivityObserver.Status.Available
-                )
-                if(currentConnection != isConnectedStatus){
-                    val message =  if(isConnectedStatus != ConnectivityObserver.Status.Available) stringResource(
-                        id = R.string.lost_connection
-                    ) else stringResource(
-                        id = R.string.connection_is_back
-                    )
-                    Toast.makeText(this,message,Toast.LENGTH_SHORT).show()
-                    currentConnection = isConnectedStatus
-                }
+                NetworkComposableObserver()
             }
         }
     }
