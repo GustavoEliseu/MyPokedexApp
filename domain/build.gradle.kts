@@ -2,6 +2,8 @@
 plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
+    alias(libs.plugins.apollo3)
+    id ("kotlin-kapt")
 }
 
 android {
@@ -17,13 +19,31 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.3.1"
     }
+
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            buildFeatures.buildConfig= true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            buildConfigField( "String", "POKEAPI_URL", "\"https://pokeapi.co/api/v2/\"")
+            buildConfigField("String", "GRAPHQLAPI_URL", "\"https://beta.pokeapi.co/graphql/v1beta\"")
+            buildConfigField("okhttp3.logging.HttpLoggingInterceptor.Level", "INTERCEPTOR_LEVEL", "okhttp3.logging.HttpLoggingInterceptor.Level.HEADERS")
+        }
+        debug {
+            isMinifyEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            buildFeatures.buildConfig= true
+            buildConfigField("String", "POKEAPI_URL", "\"https://pokeapi.co/api/v2/\"")
+            buildConfigField("String", "GRAPHQLAPI_URL", "\"https://beta.pokeapi.co/graphql/v1beta\"")
+            buildConfigField("okhttp3.logging.HttpLoggingInterceptor.Level", "INTERCEPTOR_LEVEL", "okhttp3.logging.HttpLoggingInterceptor.Level.BODY")
+        }
+        create("localHost") {
+            isMinifyEnabled = false
+            buildFeatures.buildConfig= true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            buildConfigField("String", "POKEAPI_URL", "\"https://10.0.2.2:8080/api/v2/\"")
+            buildConfigField("String", "GRAPHQLAPI_URL", "\"http://10.0.2.2:8080/v1/graphql\"")
+            buildConfigField("okhttp3.logging.HttpLoggingInterceptor.Level", "INTERCEPTOR_LEVEL", "okhttp3.logging.HttpLoggingInterceptor.Level.BODY")
         }
     }
     compileOptions {
@@ -32,6 +52,15 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+}
+
+apollo {
+    service("service") {
+        packageName.set("com.gustavoeliseu.pokedex")
+        srcDir("src/main/graphql")
+        // instruct the compiler to generate Kotlin models
+        generateKotlinModels.set(true)
     }
 }
 
@@ -59,4 +88,22 @@ dependencies {
     implementation (libs.androidx.lifecycle.viewmodel.compose)
     implementation (libs.androidx.lifecycle.livedata.ktx)
     implementation (libs.androidx.lifecycle.runtime.compose)
+
+
+    // Dagger Hilt
+    implementation(libs.hilt)
+    kapt(libs.hilt.compiler)
+    implementation(libs.hilt.navigation)
+
+    // Network
+    implementation(libs.apollo.runtime)
+    implementation(libs.apollo.api)
+    implementation(libs.apollo.cache)
+    implementation(libs.apollo.cache.sqlite)
+
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
+
+    // Paging
+    implementation(libs.androidx.paging.compose)
 }

@@ -38,7 +38,7 @@ import coil.compose.SubcomposeAsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.gustavoeliseu.pokedex.R
-import com.gustavoeliseu.pokedex.domain.model.PokemonSimpleListItem
+import com.gustavoeliseu.domain.entity.PokemonSimpleListItem
 import com.gustavoeliseu.pokedex.utils.ColorEnum
 import com.gustavoeliseu.pokedex.utils.extensions.colorDistance
 import com.gustavoeliseu.pokedex.utils.extensions.isDarkColor

@@ -1,6 +1,5 @@
-package com.gustavoeliseu.pokedex.di
+package com.gustavoeliseu.domain.di
 
-import android.util.Log
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.cache.normalized.FetchPolicy
 import com.apollographql.apollo3.cache.normalized.api.MemoryCacheFactory
@@ -9,13 +8,13 @@ import com.apollographql.apollo3.cache.normalized.normalizedCache
 import com.apollographql.apollo3.cache.normalized.refetchPolicy
 import com.apollographql.apollo3.cache.normalized.sql.SqlNormalizedCacheFactory
 import com.apollographql.apollo3.network.okHttpClient
-import com.gustavoeliseu.pokedex.BuildConfig
-import com.gustavoeliseu.pokedex.BuildConfig.GRAPHQLAPI_URL
-import com.gustavoeliseu.pokedex.domain.repository.PokemonRepository
-import com.gustavoeliseu.pokedex.network.repository.PokemonRepositoryImpl
-import com.gustavoeliseu.pokedex.utils.Const.PAGE_SIZE
-import com.gustavoeliseu.pokedex.utils.Const.PAGE_SIZE_TEXT
-import com.gustavoeliseu.pokedex.utils.Const.WEB_API
+import com.gustavoeliseu.domain.BuildConfig
+import com.gustavoeliseu.domain.BuildConfig.GRAPHQLAPI_URL
+import com.gustavoeliseu.domain.repository.PokemonRepository
+import com.gustavoeliseu.domain.repository.PokemonRepositoryImpl
+import com.gustavoeliseu.domain.utils.Const.PAGE_SIZE
+import com.gustavoeliseu.domain.utils.Const.PAGE_SIZE_TEXT
+import com.gustavoeliseu.domain.utils.Const.WEB_API
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,7 +29,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class AppModules {
+class NetworkModules {
 
     @Provides
     @Named(WEB_API)

@@ -1,7 +1,7 @@
-package com.gustavoeliseu.pokedex.domain.repository
+package com.gustavoeliseu.domain.repository
 
 import androidx.paging.PagingData
-import com.gustavoeliseu.pokedex.domain.model.PokemonSimpleListItem
+import com.gustavoeliseu.domain.entity.PokemonSimpleListItem
 import kotlinx.coroutines.flow.Flow
 
 interface PokemonRepository {

@@ -1,4 +1,4 @@
-package com.gustavoeliseu.pokedex.network.repository
+package com.gustavoeliseu.domain.repository
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -7,11 +7,10 @@ import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.cache.normalized.FetchPolicy
 import com.apollographql.apollo3.cache.normalized.refetchPolicy
 import com.apollographql.apollo3.exception.ApolloException
-import com.gustavoeliseu.pokedex.domain.model.PokemonSimpleList
-import com.gustavoeliseu.pokedex.domain.model.PokemonSimpleList.Companion.toSimplePokemonList
-import com.gustavoeliseu.pokedex.domain.model.PokemonSimpleListItem
-import com.gustavoeliseu.pokedex.domain.repository.PokemonRepository
-import com.gustavoeliseu.pokedex.network.pagingsource.PokemonPagingSource
+import com.gustavoeliseu.domain.PokemonPagingSource
+import com.gustavoeliseu.domain.entity.PokemonSimpleList
+import com.gustavoeliseu.domain.entity.PokemonSimpleList.Companion.toSimplePokemonList
+import com.gustavoeliseu.domain.entity.PokemonSimpleListItem
 import com.gustavoeliseu.pokedex.utils.SafeCrashlyticsUtil
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -50,8 +49,4 @@ class PokemonRepositoryImpl @Inject constructor(
             }
         }
     }
-
-//    override fun getPokemonDetails(pokeId: Int): Flow<Response<PokemonDetails>> {
-//        TODO("Not yet implemented")
-//    }
 }

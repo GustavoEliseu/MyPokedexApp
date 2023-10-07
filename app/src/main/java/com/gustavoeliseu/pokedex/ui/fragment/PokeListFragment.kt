@@ -32,7 +32,6 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -49,9 +48,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.gustavoeliseu.pokedex.PokemonListGraphQlQuery
 import com.gustavoeliseu.pokedex.R
-import com.gustavoeliseu.pokedex.domain.model.PokemonSimpleListItem
+import com.gustavoeliseu.domain.entity.PokemonSimpleListItem
 import com.gustavoeliseu.pokedex.network.connection.ConnectivityObserver
 import com.gustavoeliseu.pokedex.network.connection.NetworkConnectivityObserver
 import com.gustavoeliseu.pokedex.ui.pokemon.PokemonCard

@@ -1,12 +1,12 @@
-package com.gustavoeliseu.pokedex.network.pagingsource
+package com.gustavoeliseu.domain
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.apollographql.apollo3.api.Optional
+import com.gustavoeliseu.domain.entity.PokemonSimpleList
+import com.gustavoeliseu.domain.entity.PokemonSimpleListItem
+import com.gustavoeliseu.domain.utils.Const.PAGE_SIZE
 import com.gustavoeliseu.pokedex.PokemonListGraphQlQuery
-import com.gustavoeliseu.pokedex.domain.model.PokemonSimpleList
-import com.gustavoeliseu.pokedex.domain.model.PokemonSimpleListItem
-import com.gustavoeliseu.pokedex.utils.Const.PAGE_SIZE
 
 class PokemonPagingSource(private val searchTerm: String,private val response: suspend (PokemonListGraphQlQuery) -> PokemonSimpleList?) :
     PagingSource<Int, PokemonSimpleListItem>() {
