@@ -108,7 +108,7 @@ fun PokedexListFragment(
                                 TextField(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(end = 25.dp)
+                                        .padding(end = 30.dp)
                                         .align(Alignment.CenterStart)
                                         .height(56.dp),
                                     value = textSearch,
@@ -130,9 +130,11 @@ fun PokedexListFragment(
                                         },
                                     ),
                                     shape = RoundedCornerShape(5.dp),
-                                    colors = TextFieldDefaults.textFieldColors(
-                                        containerColor = Color.Transparent,
-                                        textColor = Color.White,
+                                    colors = TextFieldDefaults.colors(
+                                        unfocusedContainerColor = Color.Transparent,
+                                        focusedContainerColor = Color.Transparent,
+                                        focusedTextColor = Color.White,
+                                        unfocusedTextColor = Color.White,
                                         cursorColor = Color.White
                                     )
                                 )

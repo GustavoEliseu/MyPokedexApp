@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Domain</string>
+
+
+    <string name="lost_connection">lost internet connection</string>
+    <string name="connection_is_back">internet connection has returned</string>
+</resources>
