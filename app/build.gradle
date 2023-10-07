@@ -15,6 +15,14 @@ android {
         buildConfig true
     }
 
+    buildTypes{
+        create("localHost") {
+            minifyEnabled false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig signingConfigs.debug
+       }
+    }
+
     defaultConfig {
         applicationId "com.gustavoeliseu.pokedex"
         minSdk 24
@@ -50,6 +58,8 @@ android {
 
 dependencies {
     implementation(project(":domain"))
+    implementation(project(":pokedexlist"))
+    implementation(project(":commonui"))
     implementation(libs.androidx.ktx)
     implementation platform(libs.kotlin.bom)
     implementation libs.androidx.lifecycle.runtime.ktx
@@ -79,11 +89,12 @@ dependencies {
     implementation libs.androidx.lifecycle.runtime.compose
 
     // Network
+    //apollo
     implementation(libs.apollo.runtime)
     implementation(libs.apollo.api)
     implementation(libs.apollo.cache)
     implementation(libs.apollo.cache.sqlite)
-
+    //okhttp
     implementation libs.okhttp
     implementation libs.logging.interceptor
 

@@ -89,7 +89,6 @@ dependencies {
     implementation (libs.androidx.lifecycle.livedata.ktx)
     implementation (libs.androidx.lifecycle.runtime.compose)
 
-
     // Dagger Hilt
     implementation(libs.hilt)
     kapt(libs.hilt.compiler)
