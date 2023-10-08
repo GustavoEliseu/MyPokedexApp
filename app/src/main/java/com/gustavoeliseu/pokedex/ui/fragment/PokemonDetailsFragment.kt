@@ -5,10 +5,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.gustavoeliseu.pokedex.domain.model.PokemonDetails
+import com.gustavoeliseu.domain.entity.PokemonDetails
 import com.gustavoeliseu.pokedex.viewmodel.PokemonDetailsViewModel
 
 @Composable

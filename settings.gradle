@@ -14,3 +14,6 @@ dependencyResolutionManagement {
 }
 rootProject.name = "My pokedex"
 include ':app'
+include ':domain'
+include ':pokedexlist'
+include ':commonui'

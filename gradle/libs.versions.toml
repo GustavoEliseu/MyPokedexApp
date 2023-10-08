@@ -1,0 +1,92 @@
+[versions]
+activityCompose = "1.8.0"
+coilCompose = "2.4.0"
+espressoCore = "3.5.1"
+firebaseAnalyticsKtx = "21.3.0"
+firebaseCrashlytics = "18.4.3"
+firebaseCrashlyticsGradle = "2.9.9"
+googleServices = "4.4.0"
+gradle = "8.0.2"
+junit = "4.13.2"
+junitVersion = "1.1.5"
+kotlinxCoroutinesPlayServices = "1.7.3"
+lifecycle_ver = "2.6.2"
+lifecycleLivedataKtx = "2.6.2"
+lifecycleRuntimeCompose = "2.6.2"
+lifecycleRuntimeKtx = "2.6.2"
+lifecycleViewmodelCompose = "2.6.2"
+loggingInterceptor = "4.11.0"
+navigationCompose = "2.7.4"
+paging_ver = "3.2.1"
+okhttp3_ver = "4.11.0"
+coild_ver = "2.4.0"
+pagingCompose = "3.2.1"
+palette_ver = "1.0.0"
+navigation_version = "2.7.3"
+firebase_ver = "18.4.3"
+hilt = "2.44"
+hilt_navigation = "1.0.0"
+apollo_ver = "3.8.2"
+androidGradlePlugion = "8.1.2"
+kotlin_coreKtx_version = "1.12.0"
+uiToolingPreview = "1.5.3"
+org-jetbrains-kotlin-android = "1.7.10"
+kotlin-bom = "1.7.10"
+appcompat = "1.6.1"
+material3 = "1.1.2"
+compose-bom = "2022.10.00"
+compose-ui = "1.5.3"
+material = "1.10.0"
+
+[libraries]
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
+androidx-junit = { module = "androidx.test.ext:junit", version.ref = "junitVersion" }
+androidx-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "kotlin_coreKtx_version" }
+androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }
+androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntimeCompose" }
+androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingCompose" }
+androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "uiToolingPreview" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx", version.ref = "firebaseAnalyticsKtx" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebaseCrashlytics" }
+firebase-crashlytics-gradle = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsGradle" }
+firebase-crashlytics-ktx = { module = "com.google.firebase:firebase-crashlytics-ktx", version.ref = "firebaseCrashlytics" }
+google-services = { module = "com.google.gms:google-services", version.ref = "googleServices" }
+gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
+hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt_navigation" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
+hilt-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
+junit = { module = "junit:junit", version.ref = "junit" }
+kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinxCoroutinesPlayServices" }
+logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptor" }
+apollo-runtime = {group = "com.apollographql.apollo3",name ="apollo-runtime", version.ref = "apollo_ver"}
+apollo-api = {group = "com.apollographql.apollo3",name ="apollo-api", version.ref = "apollo_ver"}
+apollo-cache = {group = "com.apollographql.apollo3",name ="apollo-normalized-cache", version.ref = "apollo_ver"}
+apollo-cache-sqlite = {group = "com.apollographql.apollo3",name ="apollo-normalized-cache-sqlite", version.ref = "apollo_ver"}
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "loggingInterceptor" }
+palette = {group = "androidx.palette",name = "palette", version.ref = "palette_ver"}
+dagger = {group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "hilt"}
+kotlin-bom = { group = "org.jetbrains.kotlin", name = "kotlin-bom", version.ref = "kotlin-bom" }
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material3 = {group = "androidx.compose.material3", name = "material3" , version.ref ="material3"}
+compose-bom = {group = "androidx.compose", name = "compose-bom", version.ref="compose-bom"}
+compose-ui = {group = "androidx.compose.ui", name = "ui", version.ref = "compose-ui"}
+compose-graphics = {group = "androidx.compose.ui", name = "ui-graphics", version.ref = "compose-ui"}
+compose-junit = {group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "compose-ui"}
+compose-tooling = {group = "androidx.compose.ui", name = "ui-tooling", version.ref = "compose-ui"}
+compose-test = {group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "compose-ui"}
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+
+
+[plugins]
+com-android-application = { id = "com.android.application", version.ref = "androidGradlePlugion" }
+com-android-library = { id = "com.android.library", version.ref = "androidGradlePlugion" }
+org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin-android" }
+apollo3 = {id="com.apollographql.apollo3", version.ref = "apollo_ver"}
+hilt = {id = "com.google.dagger.hilt.android" , version.ref= "hilt"}

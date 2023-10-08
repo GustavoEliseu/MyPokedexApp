@@ -1,11 +1,10 @@
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
+    alias(libs.plugins.com.android.application)
+    alias(libs.plugins.org.jetbrains.kotlin.android)
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
-    id("com.apollographql.apollo3") version "$apollo_ver"
 }
 
 android {
@@ -14,6 +13,14 @@ android {
 
     buildFeatures {
         buildConfig true
+    }
+
+    buildTypes{
+        create("localHost") {
+            minifyEnabled false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig signingConfigs.debug
+       }
     }
 
     defaultConfig {
@@ -26,31 +33,6 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary true
-        }
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "POKEAPI_URL", "\"https://pokeapi.co/api/v2/\""
-            buildConfigField "String", "GRAPHQLAPI_URL", "\"https://beta.pokeapi.co/graphql/v1beta\""
-            buildConfigField "okhttp3.logging.HttpLoggingInterceptor.Level", "INTERCEPTOR_LEVEL", "okhttp3.logging.HttpLoggingInterceptor.Level.HEADERS"
-        }
-        debug {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "POKEAPI_URL", "\"https://pokeapi.co/api/v2/\""
-            buildConfigField "String", "GRAPHQLAPI_URL", "\"https://beta.pokeapi.co/graphql/v1beta\""
-            buildConfigField "okhttp3.logging.HttpLoggingInterceptor.Level", "INTERCEPTOR_LEVEL", "okhttp3.logging.HttpLoggingInterceptor.Level.BODY"
-        }
-        localHost {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "POKEAPI_URL", "\"https://10.0.2.2:8080/api/v2/\""
-            buildConfigField "String", "GRAPHQLAPI_URL", "\"http://10.0.2.2:8080/v1/graphql\""
-            buildConfigField "okhttp3.logging.HttpLoggingInterceptor.Level", "INTERCEPTOR_LEVEL", "okhttp3.logging.HttpLoggingInterceptor.Level.BODY"
-            signingConfig signingConfigs.debug
         }
     }
 
@@ -74,71 +56,47 @@ android {
     }
 }
 
-apollo {
-    service("service") {
-        packageName.set("com.gustavoeliseu.pokedex")
-        srcDir("src/main/graphql")
-        // instruct the compiler to generate Kotlin models
-        generateKotlinModels.set(true)
-    }
-}
-
 dependencies {
-    implementation 'androidx.core:core-ktx:1.12.0'
-    implementation platform('org.jetbrains.kotlin:kotlin-bom:1.8.0')
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
-    implementation 'androidx.activity:activity-compose:1.7.2'
-    implementation platform('androidx.compose:compose-bom:2022.10.00')
-    implementation 'androidx.compose.ui:ui'
-    implementation 'androidx.compose.ui:ui-graphics'
-    implementation 'androidx.compose.ui:ui-tooling-preview:1.5.2'
-    implementation 'androidx.compose.material3:material3'
-    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.4.3'
-    implementation 'com.google.firebase:firebase-analytics-ktx:21.3.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.1'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    androidTestImplementation platform('androidx.compose:compose-bom:2022.10.00')
-    androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
-    debugImplementation 'androidx.compose.ui:ui-tooling'
-    debugImplementation 'androidx.compose.ui:ui-test-manifest'
+    implementation(project(":domain"))
+    implementation(project(":pokedexlist"))
+    implementation(project(":commonui"))
+    //Android and Ktx
+    implementation(libs.androidx.ktx)
+    implementation platform(libs.kotlin.bom)
+    implementation libs.androidx.lifecycle.runtime.ktx
+    implementation libs.kotlinx.coroutines.play.services
+
+
+    //Compose and material
+    implementation libs.androidx.activity.compose
+    implementation platform(libs.compose.bom)
+    implementation (libs.compose.ui)
+    implementation (libs.compose.graphics)
+    implementation libs.androidx.ui.tooling.preview
+    implementation(libs.material3)
+
+    //test
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espresso.core
+    androidTestImplementation platform(libs.compose.bom)
+    androidTestImplementation (libs.compose.junit)
+    debugImplementation(libs.compose.tooling)
+    debugImplementation(libs.compose.test)
 
     // Navigation
-    implementation "androidx.navigation:navigation-compose:$navigation_version"
+    implementation libs.androidx.navigation.compose
 
     // AndroidX Lifecycle
-    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_ver"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_ver"
-    implementation "androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_ver"
-
-    // Network
-    implementation("com.apollographql.apollo3:apollo-runtime:$apollo_ver")
-    implementation("com.apollographql.apollo3:apollo-api:$apollo_ver")
-    implementation("com.apollographql.apollo3:apollo-normalized-cache:$apollo_ver")
-    implementation("com.apollographql.apollo3:apollo-normalized-cache-sqlite:$apollo_ver")
-
-    implementation "com.squareup.okhttp3:okhttp:$okhttp3_ver"
-    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp3_ver"
-
-    // Paging
-    implementation "androidx.paging:paging-compose:$paging_ver"
+    implementation libs.androidx.lifecycle.viewmodel.compose
+    implementation libs.androidx.lifecycle.livedata.ktx
+    implementation libs.androidx.lifecycle.runtime.compose
 
     // Coil
-    implementation("io.coil-kt:coil-compose:$coild_ver")
-
-    // Palette
-    implementation "androidx.palette:palette:$palette_ver"
-
-    //Firebase Crashlytics &firebase_ver
-    implementation "com.google.firebase:firebase-crashlytics:18.4.3"
+    implementation(libs.coil.compose)
 
     // Dagger Hilt
-    implementation "com.google.dagger:hilt-android:$dagger_version"
-    kapt "com.google.dagger:hilt-android-compiler:$dagger_version"
-    implementation "androidx.hilt:hilt-navigation-compose:$hilt_version"
-}
-
-kapt {
-    correctErrorTypes true
+    implementation(libs.hilt)
+    kapt(libs.hilt.compiler)
+    implementation(libs.hilt.navigation)
 }

@@ -4,29 +4,4 @@
     <string name="pokemon_description">Image of the pokemon %s</string>
     <string name="missing_no">Image of missigno, due to not being able to load %s picture</string>
     <string name="disable_no_connection">Disabled when there is no connection</string>
-
-    <string name="lost_connection">lost internet connection</string>
-    <string name="connection_is_back">internet connection has returned</string>
-
-    <!--Sprite Url -->
-    <string name="pokemon_sprite_url">"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/%s.png"</string>
-
-    <!--Search-->
-    <string name="search">Search</string>
-    <string name="close_search">Close Search</string>
-    <string name="search_placeholder">Search here...</string>
-    <string name="search_icon_desc">Search icon</string>
-
-    <!--Colors-->
-    <string name="dark_gray">darkGray</string>
-    <string name="black">black</string>
-    <string name="blue">blue</string>
-    <string name="brown">brown</string>
-    <string name="gray">gray</string>
-    <string name="green">green</string>
-    <string name="pink">pink</string>
-    <string name="purple">purple</string>
-    <string name="red">red</string>
-    <string name="white">white</string>
-    <string name="yellow">yellow</string>
 </resources>
