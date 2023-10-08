@@ -50,7 +50,6 @@ dependencies {
     implementation(libs.androidx.ktx)
     implementation(platform(libs.kotlin.bom))
     implementation(libs.appcompat)
-    implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
