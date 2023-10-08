@@ -68,21 +68,22 @@ dependencies {
     implementation(libs.androidx.ktx)
     implementation(platform(libs.kotlin.bom))
     implementation(libs.appcompat)
-    implementation(libs.material3)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    //Compose
     implementation (libs.compose.ui)
     implementation (libs.compose.graphics)
-
     implementation(platform(libs.compose.bom))
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.material3)
 
     //Firebase Crashlytics &firebase_ver
     implementation(libs.firebase.crashlytics)
 
     // Navigation
     implementation (libs.androidx.navigation.compose)
-    implementation(libs.androidx.activity.compose)
 
     // AndroidX Lifecycle
     implementation (libs.androidx.lifecycle.viewmodel.compose)
@@ -95,11 +96,12 @@ dependencies {
     implementation(libs.hilt.navigation)
 
     // Network
+    //apollo
     implementation(libs.apollo.runtime)
     implementation(libs.apollo.api)
     implementation(libs.apollo.cache)
     implementation(libs.apollo.cache.sqlite)
-
+    //okhttp
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
 

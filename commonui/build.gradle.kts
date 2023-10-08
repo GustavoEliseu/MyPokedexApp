@@ -46,7 +46,6 @@ dependencies {
     implementation(libs.androidx.ktx)
     implementation(platform(libs.kotlin.bom))
     implementation(libs.appcompat)
-    implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -56,7 +55,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.runtime.compose)
 
-    //Compose
+    //Compose and material
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.ui.tooling.preview)

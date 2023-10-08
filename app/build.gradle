@@ -60,18 +60,22 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":pokedexlist"))
     implementation(project(":commonui"))
+    //Android and Ktx
     implementation(libs.androidx.ktx)
     implementation platform(libs.kotlin.bom)
     implementation libs.androidx.lifecycle.runtime.ktx
+    implementation libs.kotlinx.coroutines.play.services
+
+
+    //Compose and material
     implementation libs.androidx.activity.compose
     implementation platform(libs.compose.bom)
     implementation (libs.compose.ui)
     implementation (libs.compose.graphics)
     implementation libs.androidx.ui.tooling.preview
     implementation(libs.material3)
-    implementation libs.firebase.crashlytics.ktx
-    implementation libs.firebase.analytics.ktx
-    implementation libs.kotlinx.coroutines.play.services
+
+    //test
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit
     androidTestImplementation libs.androidx.espresso.core
@@ -88,24 +92,8 @@ dependencies {
     implementation libs.androidx.lifecycle.livedata.ktx
     implementation libs.androidx.lifecycle.runtime.compose
 
-    // Network
-    //apollo
-    implementation(libs.apollo.runtime)
-    implementation(libs.apollo.api)
-    implementation(libs.apollo.cache)
-    implementation(libs.apollo.cache.sqlite)
-    //okhttp
-    implementation libs.okhttp
-    implementation libs.logging.interceptor
-
-    // Paging
-    implementation libs.androidx.paging.compose
-
     // Coil
     implementation(libs.coil.compose)
-
-    // Palette
-    implementation(libs.palette)
 
     // Dagger Hilt
     implementation(libs.hilt)
