@@ -42,7 +42,7 @@ import com.gustavoeliseu.commonui.utils.extensions.colorDistance
 import com.gustavoeliseu.commonui.utils.extensions.isDarkColor
 import com.gustavoeliseu.commonui.utils.extensions.notTooDarkNorTooBright
 import com.gustavoeliseu.commonui.utils.extensions.shimmerEffect
-import com.gustavoeliseu.pokedexlist.ColorEnum
+import com.gustavoeliseu.domain.utils.ColorEnum
 import com.gustavoeliseu.pokedexlist.R
 import java.util.Locale
 

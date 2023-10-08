@@ -14,16 +14,4 @@
     <string name="search_placeholder">Search here...</string>
     <string name="search_icon_desc">Search icon</string>
 
-    <!--Colors-->
-    <string name="dark_gray">darkGray</string>
-    <string name="black">black</string>
-    <string name="blue">blue</string>
-    <string name="brown">brown</string>
-    <string name="gray">gray</string>
-    <string name="green">green</string>
-    <string name="pink">pink</string>
-    <string name="purple">purple</string>
-    <string name="red">red</string>
-    <string name="white">white</string>
-    <string name="yellow">yellow</string>
 </resources>

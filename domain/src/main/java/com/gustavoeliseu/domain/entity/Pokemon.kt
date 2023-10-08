@@ -2,7 +2,6 @@ package com.gustavoeliseu.domain.entity
 
 import com.gustavoeliseu.pokedex.PokemonListGraphQlQuery
 
-
 //used for ANY data with name and URL only
 data class SimpleGenericPokemonData(
     val name: String?,

@@ -51,7 +51,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.gustavoeliseu.domain.entity.PokemonSimpleListItem
 import com.gustavoeliseu.pokedex.network.connection.ConnectivityObserver
 import com.gustavoeliseu.pokedex.network.connection.NetworkConnectivityObserver
-import com.gustavoeliseu.pokedexlist.ColorEnum
+import com.gustavoeliseu.domain.utils.ColorEnum
 import com.gustavoeliseu.pokedexlist.R
 import com.gustavoeliseu.pokedexlist.viewmodel.PokemonListViewModel
 import kotlinx.coroutines.runBlocking

@@ -1,6 +1,7 @@
-package com.gustavoeliseu.pokedexlist
+package com.gustavoeliseu.domain.utils
 
 import androidx.compose.ui.graphics.Color
+import com.gustavoeliseu.domain.R
 
 
 interface DefaultEnum {

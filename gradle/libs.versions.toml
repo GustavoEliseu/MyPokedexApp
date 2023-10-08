@@ -89,3 +89,4 @@ com-android-application = { id = "com.android.application", version.ref = "andro
 com-android-library = { id = "com.android.library", version.ref = "androidGradlePlugion" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin-android" }
 apollo3 = {id="com.apollographql.apollo3", version.ref = "apollo_ver"}
+hilt = {id = "com.google.dagger.hilt.android" , version.ref= "hilt"}
