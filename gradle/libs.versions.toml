@@ -1,5 +1,6 @@
 [versions]
 activityCompose = "1.8.0"
+android-espressoCore = "3.0.2"
 coilCompose = "2.4.0"
 espressoCore = "3.5.1"
 firebaseAnalyticsKtx = "21.3.0"
@@ -16,6 +17,10 @@ lifecycleRuntimeCompose = "2.6.2"
 lifecycleRuntimeKtx = "2.6.2"
 lifecycleViewmodelCompose = "2.6.2"
 loggingInterceptor = "4.11.0"
+mockitoAndroid = "2.28.2"
+mockitoCore = "4.5.1"
+mockitoInline = "4.1.0"
+mockitoKotlin = "4.1.0"
 navigationCompose = "2.7.4"
 paging_ver = "3.2.1"
 okhttp3_ver = "4.11.0"
@@ -24,14 +29,16 @@ pagingCompose = "3.2.1"
 palette_ver = "1.0.0"
 navigation_version = "2.7.3"
 firebase_ver = "18.4.3"
-hilt = "2.44"
+hilt = "2.48"
 hilt_navigation = "1.0.0"
 apollo_ver = "3.8.2"
 androidGradlePlugion = "8.1.2"
 kotlin_coreKtx_version = "1.12.0"
+runner = "1.0.2"
+shot = "6.0.0"
 uiToolingPreview = "1.5.3"
-org-jetbrains-kotlin-android = "1.7.10"
-kotlin-bom = "1.7.10"
+org-jetbrains-kotlin-android = "1.8.21"
+kotlin-bom = "1.8.21"
 appcompat = "1.6.1"
 material3 = "1.1.2"
 compose-bom = "2022.10.00"
@@ -51,13 +58,14 @@ androidx-navigation-compose = { module = "androidx.navigation:navigation-compose
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingCompose" }
 androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "uiToolingPreview" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+coil-test = { module = "io.coil-kt:coil-test", version.ref = "coilCompose" }
 firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx", version.ref = "firebaseAnalyticsKtx" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebaseCrashlytics" }
 firebase-crashlytics-gradle = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsGradle" }
 firebase-crashlytics-ktx = { module = "com.google.firebase:firebase-crashlytics-ktx", version.ref = "firebaseCrashlytics" }
 google-services = { module = "com.google.gms:google-services", version.ref = "googleServices" }
 gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hilt-core = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt_navigation" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 hilt-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
@@ -68,6 +76,9 @@ apollo-runtime = {group = "com.apollographql.apollo3",name ="apollo-runtime", ve
 apollo-api = {group = "com.apollographql.apollo3",name ="apollo-api", version.ref = "apollo_ver"}
 apollo-cache = {group = "com.apollographql.apollo3",name ="apollo-normalized-cache", version.ref = "apollo_ver"}
 apollo-cache-sqlite = {group = "com.apollographql.apollo3",name ="apollo-normalized-cache-sqlite", version.ref = "apollo_ver"}
+mockito-android = { module = "org.mockito:mockito-android", version.ref = "mockitoAndroid" }
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
+mockito-inline = { module = "org.mockito:mockito-inline", version.ref = "mockitoInline" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "loggingInterceptor" }
 palette = {group = "androidx.palette",name = "palette", version.ref = "palette_ver"}
 dagger = {group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "hilt"}
@@ -81,8 +92,8 @@ compose-junit = {group = "androidx.compose.ui", name = "ui-test-junit4", version
 compose-tooling = {group = "androidx.compose.ui", name = "ui-tooling", version.ref = "compose-ui"}
 compose-test = {group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "compose-ui"}
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-
-
+androidx-palette-ktx = { group = "androidx.palette", name = "palette-ktx", version = "1.0.0" }
+shot = { module = "com.karumi:shot", version.ref = "shot" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "androidGradlePlugion" }

@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 
 package com.gustavoeliseu.pokedexlist.ui
 
@@ -44,16 +44,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.gustavoeliseu.domain.entity.PokemonSimpleList
 import com.gustavoeliseu.domain.entity.PokemonSimpleListItem
 import com.gustavoeliseu.pokedex.network.connection.ConnectivityObserver
 import com.gustavoeliseu.pokedex.network.connection.NetworkConnectivityObserver
 import com.gustavoeliseu.domain.utils.ColorEnum
 import com.gustavoeliseu.pokedexlist.R
 import com.gustavoeliseu.pokedexlist.viewmodel.PokemonListViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
 
 @Composable
@@ -69,10 +73,10 @@ fun PokedexListFragment(
     var connectionLost by remember {
         mutableStateOf(true)
     }
-    var position : Int? by remember {
+    var position: Int? by remember {
         mutableStateOf(null)
     }
-    var reloadingImages by remember{ mutableStateOf(false)}
+    var reloadingImages by remember { mutableStateOf(false) }
     val isSearching by pokemonListViewModel.isSearchShowing.collectAsState()
     val textSearch by pokemonListViewModel.search.collectAsState()
     val lazyPokemonList = pokemonListViewModel.pokemonListState.collectAsLazyPagingItems()
@@ -177,7 +181,7 @@ fun PokedexListFragment(
                         modifier = modifier,
                         pokemonList = lazyPokemonList,
                         reloadingImages = reloadingImages,
-                        updatePosition = {updateId->
+                        updatePosition = { updateId ->
                             position = updateId
                         },
                         onClick = onClick
@@ -191,8 +195,8 @@ fun PokedexListFragment(
 @Composable
 fun PokeListGrid(
     modifier: Modifier = Modifier,
-    reloadingImages:Boolean,
-    updatePosition: (id:Int) -> Unit,
+    reloadingImages: Boolean,
+    updatePosition: (id: Int) -> Unit,
     pokemonList: LazyPagingItems<PokemonSimpleListItem>?,
     onClick: (id: Int) -> Unit
 ) {
@@ -212,7 +216,6 @@ fun PokeListGrid(
                 pokemonList[index]?.let { pk ->
                     PokemonCard(
                         pokemonItemSimple = pk,
-                        picture = stringResource(id = R.string.pokemon_sprite_url, pk.id),
                         modifier = modifier
                             .clickable {
                                 onClick(pk.id)
@@ -221,6 +224,54 @@ fun PokeListGrid(
                         reloading = reloadingImages
                     )
                 }
+            }
+        })
+}
+
+@Preview
+@Composable
+fun PokedexListFragmentPreview() {
+    val modifier = Modifier
+    val data = PokemonSimpleList.getSimpleListExample()
+    val flow = MutableStateFlow(PagingData.from(data))
+    val lazyPagingItems = flow.collectAsLazyPagingItems()
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            modifier = Modifier.align(Alignment.CenterStart),
+                            text = stringResource(id = R.string.pokedex)
+                        )
+                        IconButton(
+                            modifier = Modifier
+                                .size(48.dp)
+                                .align(Alignment.CenterEnd), onClick = {}) {
+                            Icon(
+                                Icons.Filled.Search,
+                                stringResource(id = R.string.search)
+                            )
+                        }
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = Color.White,
+                ))
+        }, content = { padding ->
+            Column() {
+                Box(modifier = modifier.padding(top = padding.calculateTopPadding()))
+                PokeListGrid(
+                    modifier = modifier,
+                    pokemonList = lazyPagingItems,
+                    reloadingImages = false,
+                    updatePosition = {},
+                    onClick = {}
+                )
             }
         })
 }

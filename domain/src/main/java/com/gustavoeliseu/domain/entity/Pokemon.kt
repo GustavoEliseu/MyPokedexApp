@@ -30,6 +30,20 @@ data class PokemonSimpleList(
                     )
                 })
         }
+
+        fun getSimpleListExample(): List<PokemonSimpleListItem>{
+            val pokeList = mutableListOf<PokemonSimpleListItem>()
+            for (i in 1..10){
+                pokeList.add(
+                    PokemonSimpleListItem(
+                        id = -1,
+                        name = "Missigno",
+                        pokemonColorId = 1
+                    )
+                )
+            }
+            return pokeList
+        }
     }
 }
 

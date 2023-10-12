@@ -24,7 +24,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-
     //TODO - NEEDED TO FINISH PART 1 - PokeApi, simple pokedex with search function
     // GOING TO FIX MVVM/CLEAN ON PART 2, since i'm using part 1 as a playground to test new libraries and technologies
 
