@@ -3,7 +3,6 @@ package com.gustavoeliseu.pokedexlist.ui
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.os.Handler
 import androidx.compose.foundation.clickable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -100,7 +99,7 @@ class PokemonCardScreenshotTest : ScreenshotTest {
             PokemonCardTest(
                 id = 10,
                 name = "Caterpie",
-                pokemonColorId = 1
+                pokemonColorId = 5
             )
         }
         compareScreenshot(composeRule)
