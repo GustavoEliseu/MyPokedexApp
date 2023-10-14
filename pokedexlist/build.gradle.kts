@@ -53,10 +53,6 @@ android {
     buildFeatures {
         compose = true
     }
-    packaging {
-        resources.excludes.add("/META-INF/{AL2.0,LGPL2.1,DEPENDENCIES,LICENSE.md,NOTICE.md}")
-        resources.excludes.add("xsd/catalog.xml")
-    }
 }
 
 dependencies {

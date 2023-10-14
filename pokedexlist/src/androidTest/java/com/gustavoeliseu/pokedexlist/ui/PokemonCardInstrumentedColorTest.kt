@@ -84,7 +84,7 @@ class PokemonCardInstrumentedColorTest {
             PokemonCardTest(
                 id = 132,
                 name = ditto,
-                pokemonColorId = 6
+                pokemonColorId = 7
             )
         }
         val arrayDitto = IntArray(20)
@@ -92,7 +92,7 @@ class PokemonCardInstrumentedColorTest {
             .readPixels(arrayDitto, startY = 45, startX = 50, width = 5, height = 4)
 
         arrayDitto.forEach { color ->
-            assert(Color(color).colorDistance(ColorEnum.PINK.tintColor) < .5f)
+            assert(Color(color).colorDistance(ColorEnum.PURPLE.tintColor) < .5f)
         }
     }
 

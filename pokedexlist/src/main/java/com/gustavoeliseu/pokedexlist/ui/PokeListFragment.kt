@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.gustavoeliseu.pokedexlist.ui
 
@@ -42,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -52,9 +53,9 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.gustavoeliseu.domain.entity.PokemonSimpleList
 import com.gustavoeliseu.domain.entity.PokemonSimpleListItem
+import com.gustavoeliseu.domain.utils.ColorEnum
 import com.gustavoeliseu.pokedex.network.connection.ConnectivityObserver
 import com.gustavoeliseu.pokedex.network.connection.NetworkConnectivityObserver
-import com.gustavoeliseu.domain.utils.ColorEnum
 import com.gustavoeliseu.pokedexlist.R
 import com.gustavoeliseu.pokedexlist.viewmodel.PokemonListViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -65,6 +66,61 @@ fun PokedexListFragment(
     modifier: Modifier = Modifier,
     onClick: (id: Int) -> Unit = {},
     pokemonListViewModel: PokemonListViewModel = hiltViewModel()
+) {
+
+    val lazyPokemonList = pokemonListViewModel.pokemonListState.collectAsLazyPagingItems()
+    val isSearching by pokemonListViewModel.isSearchShowing.collectAsState()
+    val textSearch by pokemonListViewModel.search.collectAsState()
+    PokedexListScreen(modifier, lazyPokemonList, onClick, isSearching, textSearch, {
+        pokemonListViewModel.setSearch(it)
+    }, { pokemonListViewModel.toggleIsSearchShowing() })
+}
+
+@Composable
+fun PokeListGrid(
+    modifier: Modifier = Modifier,
+    reloadingImages: Boolean,
+    updatePosition: (id: Int) -> Unit,
+    pokemonList: LazyPagingItems<PokemonSimpleListItem>?,
+    onClick: (id: Int) -> Unit
+) {
+    if (pokemonList == null) return
+    if (pokemonList.itemCount > 0) {
+        updatePosition(pokemonList.itemSnapshotList.items.maxBy { it.id }.id)
+    }
+    LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 128.dp),
+        contentPadding = PaddingValues(
+            start = 12.dp,
+            top = 16.dp,
+            end = 12.dp,
+            bottom = 16.dp
+        ),
+        content = {
+            items(pokemonList.itemCount) { index ->
+                pokemonList[index]?.let { pk ->
+                    PokemonCard(
+                        pokemonItemSimple = pk,
+                        modifier = modifier
+                            .clickable {
+                                onClick(pk.id)
+                            },
+                        colorEnum = ColorEnum.fromInt(pk.pokemonColorId),
+                        reloading = reloadingImages
+                    )
+                }
+            }
+        })
+}
+
+@Composable
+fun PokedexListScreen(
+    modifier: Modifier,
+    lazyPokemonList: LazyPagingItems<PokemonSimpleListItem>,
+    onClick: (id: Int) -> Unit = {},
+    isSearching: Boolean,
+    textSearch: String,
+    setSearch: (String) -> Unit,
+    toggleIsSearchShowing: () -> Unit
 ) {
     val context = LocalContext.current
     val isConnectedStatus by NetworkConnectivityObserver(context).observe().collectAsState(
@@ -77,10 +133,6 @@ fun PokedexListFragment(
         mutableStateOf(null)
     }
     var reloadingImages by remember { mutableStateOf(false) }
-    val isSearching by pokemonListViewModel.isSearchShowing.collectAsState()
-    val textSearch by pokemonListViewModel.search.collectAsState()
-    val lazyPokemonList = pokemonListViewModel.pokemonListState.collectAsLazyPagingItems()
-
     Surface(
         modifier = modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -113,7 +165,7 @@ fun PokedexListFragment(
                                         .height(56.dp),
                                     value = textSearch,
                                     onValueChange = { query ->
-                                        pokemonListViewModel.setSearch(query)
+                                        setSearch(query)
                                     },
                                     placeholder = {
                                         Text(
@@ -126,7 +178,7 @@ fun PokedexListFragment(
                                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                                     keyboardActions = KeyboardActions(
                                         onSearch = {
-                                            pokemonListViewModel.setSearch(textSearch)
+                                            setSearch(textSearch)
                                         },
                                     ),
                                     shape = RoundedCornerShape(5.dp),
@@ -150,8 +202,8 @@ fun PokedexListFragment(
                                     .align(Alignment.CenterEnd),
                                 onClick = {
                                     if (isConnectedStatus == ConnectivityObserver.Status.Available) {
-                                        if (isSearching) pokemonListViewModel.setSearch("")
-                                        pokemonListViewModel.toggleIsSearchShowing()
+                                        if (isSearching) setSearch("")
+                                        toggleIsSearchShowing()
                                     } else {
                                         Toast.makeText(
                                             context,
@@ -192,86 +244,11 @@ fun PokedexListFragment(
     }
 }
 
-@Composable
-fun PokeListGrid(
-    modifier: Modifier = Modifier,
-    reloadingImages: Boolean,
-    updatePosition: (id: Int) -> Unit,
-    pokemonList: LazyPagingItems<PokemonSimpleListItem>?,
-    onClick: (id: Int) -> Unit
-) {
-    if (pokemonList == null) return
-    if (pokemonList.itemCount > 0) {
-        updatePosition(pokemonList.itemSnapshotList.items.maxBy { it.id }.id)
-    }
-    LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 128.dp),
-        contentPadding = PaddingValues(
-            start = 12.dp,
-            top = 16.dp,
-            end = 12.dp,
-            bottom = 16.dp
-        ),
-        content = {
-            items(pokemonList.itemCount) { index ->
-                pokemonList[index]?.let { pk ->
-                    PokemonCard(
-                        pokemonItemSimple = pk,
-                        modifier = modifier
-                            .clickable {
-                                onClick(pk.id)
-                            },
-                        colorEnum = ColorEnum.fromInt(pk.pokemonColorId),
-                        reloading = reloadingImages
-                    )
-                }
-            }
-        })
-}
-
 @Preview
 @Composable
 fun PokedexListFragmentPreview() {
-    val modifier = Modifier
-    val data = PokemonSimpleList.getSimpleListExample()
+    val data = PokemonSimpleList.getSimpleListExample(LocalInspectionMode.current)
     val flow = MutableStateFlow(PagingData.from(data))
     val lazyPagingItems = flow.collectAsLazyPagingItems()
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            modifier = Modifier.align(Alignment.CenterStart),
-                            text = stringResource(id = R.string.pokedex)
-                        )
-                        IconButton(
-                            modifier = Modifier
-                                .size(48.dp)
-                                .align(Alignment.CenterEnd), onClick = {}) {
-                            Icon(
-                                Icons.Filled.Search,
-                                stringResource(id = R.string.search)
-                            )
-                        }
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = Color.White,
-                ))
-        }, content = { padding ->
-            Column() {
-                Box(modifier = modifier.padding(top = padding.calculateTopPadding()))
-                PokeListGrid(
-                    modifier = modifier,
-                    pokemonList = lazyPagingItems,
-                    reloadingImages = false,
-                    updatePosition = {},
-                    onClick = {}
-                )
-            }
-        })
+    PokedexListScreen(Modifier, lazyPagingItems, {}, false, "", {}, {})
 }

@@ -17,16 +17,16 @@ fun FloatArray.notTooDarkNorTooBright(): Boolean {
 }
 
 //TODO Test colors with this function from stack users pgras,blueraja and alp
-fun ColourDistance(c1: Color, c2: Color): Double {
-    val rmean: Float = (c1.red + c2.red) / 2
-    val r: Float = c1.red - c2.red
-    val g: Float = c1.green - c2.green
-    val b: Float = c1.blue - c2.blue
-    val weightR = 2 + rmean / 256
-    val weightG = 4.0
-    val weightB = 2 + (255 - rmean) / 256
-    return Math.sqrt(weightR * r * r + weightG * g * g + weightB * b * b)
-}
+//fun ComposeColor.colorDistance(c1: Color, c2: Color): Double {
+//    val rmean: Float = (c1.red + c2.red) / 2
+//    val r: Float = c1.red - c2.red
+//    val g: Float = c1.green - c2.green
+//    val b: Float = c1.blue - c2.blue
+//    val weightR = 2 + rmean / 256
+//    val weightG = 4.0
+//    val weightB = 2 + (255 - rmean) / 256
+//    return Math.sqrt(weightR * r * r + weightG * g * g + weightB * b * b)
+//}
 
 fun ComposeColor.colorDistance(color2: ComposeColor): Double {
     val deltaRed = (color2.red - this.red).toDouble()

@@ -83,7 +83,7 @@ class PokemonCardInstrumentedContentDescriptionTest {
     fun verify_if_correct_content_description_exists() {
         var testDescription = ""
         composeRule.setContent {
-            PokemonCardTest(132, "Ditto", 6)
+            PokemonCardTest(132, "Ditto", 7)
             testDescription = stringResource(
                 id = R.string.pokemon_description, "Ditto"
             )
@@ -96,7 +96,7 @@ class PokemonCardInstrumentedContentDescriptionTest {
     fun verify_if_error_content_description_not_exists() {
         var testDescriptionNot = ""
         composeRule.setContent {
-            PokemonCardTest(132, "Ditto", 6)
+            PokemonCardTest(132, "Ditto", 7)
             testDescriptionNot = stringResource(
                 id = R.string.missing_no, "Ditto"
             )

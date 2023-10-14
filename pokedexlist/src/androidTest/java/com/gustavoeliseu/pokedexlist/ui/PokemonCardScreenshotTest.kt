@@ -33,21 +33,31 @@ class PokemonCardScreenshotTest : ScreenshotTest {
     fun setup() {
         mMockContext = InstrumentationRegistry.getInstrumentation().context
         mMockContext?.let { context ->
-            val dittoDrawable = context.getDrawable(R.drawable.ditto_test)
-            val caterpieDrawable = context.getDrawable(R.drawable.caterpie_test)
             val engine = FakeImageLoaderEngine.Builder()
                 .addInterceptor { chain ->
                     val data = chain.request.data
-                    if (data is String && data.endsWith("132.png")) {
-                        dittoDrawable?.let {
+                    if (data is String) {
+                        val drawableId = when {
+                            data.endsWith("132.png") ->{
+                                R.drawable.ditto_test
+                            }
+                            data.endsWith("10.png") ->{
+                                R.drawable.caterpie_test
+                            }
+                            else->{
+                                0
+                            }
+                        }
+                        val drawable = context.getDrawable(drawableId)
+                        drawable?.let {
                             SuccessResult(
                                 drawable = it,
                                 request = chain.request,
                                 dataSource = DataSource.MEMORY,
                             )
                         }
-                    } else if (data is String && data.endsWith("10.png")) {
-                        caterpieDrawable?.let {
+
+                        drawable?.let {
                             SuccessResult(
                                 drawable = it,
                                 request = chain.request,
@@ -64,7 +74,6 @@ class PokemonCardScreenshotTest : ScreenshotTest {
                 .components { add(engine) }
                 .build()
             Coil.setImageLoader(imageLoader)
-
         }
     }
 
@@ -87,7 +96,7 @@ class PokemonCardScreenshotTest : ScreenshotTest {
             PokemonCardTest(
                 id = 132,
                 name = "Ditto",
-                pokemonColorId = 6
+                pokemonColorId = 7
             )
         }
         compareScreenshot(composeRule)
