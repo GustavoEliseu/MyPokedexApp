@@ -35,7 +35,7 @@ data class PokemonSimpleList(
                 })
         }
 
-        fun getSimpleListExample(isPreview: Boolean): List<PokemonSimpleListItem> {
+        fun getSimpleListExample(isPreview: Boolean): MutableList<PokemonSimpleListItem> {
             val pokeList = mutableListOf<PokemonSimpleListItem>()
             if(isPreview){
                 for (i in 1..10) {
