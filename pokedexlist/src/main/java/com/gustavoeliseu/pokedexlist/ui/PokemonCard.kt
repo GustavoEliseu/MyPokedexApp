@@ -37,11 +37,11 @@ import androidx.palette.graphics.Palette
 import coil.compose.SubcomposeAsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
-import com.gustavoeliseu.domain.entity.PokemonSimpleListItem
 import com.gustavoeliseu.commonui.utils.extensions.colorDistance
 import com.gustavoeliseu.commonui.utils.extensions.isDarkColor
 import com.gustavoeliseu.commonui.utils.extensions.notTooDarkNorTooBright
 import com.gustavoeliseu.commonui.utils.extensions.shimmerEffect
+import com.gustavoeliseu.domain.models.PokemonSimpleListItem
 import com.gustavoeliseu.domain.utils.ColorEnum
 import com.gustavoeliseu.pokedexlist.R
 import java.util.Locale
@@ -247,7 +247,7 @@ fun PokemonCardPreview() {
             id = -1,
             name = "Missigno",
             pokemonColorId = 1
-            ),
+        ),
         picture = "",
         colorEnum = ColorEnum.BLACK,
         modifier = Modifier.clickable {

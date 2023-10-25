@@ -48,10 +48,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.gustavoeliseu.domain.entity.PokemonSimpleListItem
+import com.gustavoeliseu.domain.models.PokemonSimpleListItem
 import com.gustavoeliseu.pokedex.network.connection.ConnectivityObserver
 import com.gustavoeliseu.pokedex.network.connection.NetworkConnectivityObserver
 import com.gustavoeliseu.domain.utils.ColorEnum
+import com.gustavoeliseu.pokedexdata.models.GenericPokemonData
 import com.gustavoeliseu.pokedexlist.R
 import com.gustavoeliseu.pokedexlist.viewmodel.PokemonListViewModel
 import kotlinx.coroutines.runBlocking
@@ -193,7 +194,7 @@ fun PokeListGrid(
     modifier: Modifier = Modifier,
     reloadingImages:Boolean,
     updatePosition: (id:Int) -> Unit,
-    pokemonList: LazyPagingItems<PokemonSimpleListItem>?,
+    pokemonList: LazyPagingItems<GenericPokemonData>?,
     onClick: (id: Int) -> Unit
 ) {
     if (pokemonList == null) return
@@ -210,14 +211,15 @@ fun PokeListGrid(
         content = {
             items(pokemonList.itemCount) { index ->
                 pokemonList[index]?.let { pk ->
+                    val pokemonData = pk as PokemonSimpleListItem
                     PokemonCard(
-                        pokemonItemSimple = pk,
+                        pokemonItemSimple = pokemonData,
                         picture = stringResource(id = R.string.pokemon_sprite_url, pk.id),
                         modifier = modifier
                             .clickable {
-                                onClick(pk.id)
+                                onClick(pokemonData.id)
                             },
-                        colorEnum = ColorEnum.fromInt(pk.pokemonColorId),
+                        colorEnum = ColorEnum.fromInt(pokemonData.pokemonColorId),
                         reloading = reloadingImages
                     )
                 }

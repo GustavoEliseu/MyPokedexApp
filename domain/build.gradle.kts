@@ -68,8 +68,12 @@ dependencies {
     implementation(libs.androidx.ktx)
     implementation(platform(libs.kotlin.bom))
     implementation(libs.appcompat)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
+    implementation(project(mapOf("path" to ":data")))
+    implementation(libs.androidx.runner)
+    // Tests
+    androidTestImplementation(libs.truth)
+    testImplementation(libs.androidx.junit.ktx)
+    androidTestImplementation (libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
     //Compose
@@ -95,6 +99,9 @@ dependencies {
     kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation)
 
+    implementation(libs.androidx.room.runtime)
+    kapt(libs.androidx.room.compiler)
+
     // Network
     //apollo
     implementation(libs.apollo.runtime)
@@ -104,6 +111,8 @@ dependencies {
     //okhttp
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
+
+    implementation(libs.gson)
 
     // Paging
     implementation(libs.androidx.paging.compose)

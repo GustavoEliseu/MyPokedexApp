@@ -51,6 +51,7 @@ dependencies {
     implementation(platform(libs.kotlin.bom))
     implementation(libs.appcompat)
     implementation(libs.material)
+    implementation(project(mapOf("path" to ":data")))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
