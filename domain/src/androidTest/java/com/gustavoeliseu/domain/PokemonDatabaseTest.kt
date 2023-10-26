@@ -1,3 +1,5 @@
+@file:Suppress("SpellCheckingInspection")
+
 package com.gustavoeliseu.domain
 
 import android.content.Context
@@ -18,17 +20,14 @@ import org.junit.runner.RunWith
 import java.io.IOException
 
 
-/**
- * Instrumented test, which will execute on an Android device.
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
 @RunWith(AndroidJUnit4::class)
 class PokemonDatabaseTest {
 
+    //TODO ADD ASYNC TO DATABASE AND TESTS
+
     private lateinit var pokemonDao: PokemonDao
     private lateinit var db: PokemonDatabase
-    val testPokemonArray = arrayOf(
+    private val testPokemonArray = arrayOf(
         "Bulbasaur", "Ivysaur", "Venusaur", "Charmander", "Charmeleon",
         "Charizard", "Squirtle", "Wartortle", "Blastoise", "Caterpie",
         "Metapod", "Butterfree", "Weedle", "Kakuna", "Beedrill",
@@ -54,7 +53,6 @@ class PokemonDatabaseTest {
         pokemonDao.addAllPokemon(pokemon)
     }
 
-
     @After
     @Throws(IOException::class)
     fun closeDb() {
@@ -65,18 +63,17 @@ class PokemonDatabaseTest {
     @Throws(Exception::class)
     fun save_SimplePokemonList_And_Load_All() {
         db.clearAllTables()
-        var resultPokemon: List<PokemonSimpleListItem>? = null
-        val pokemon = mutableListOf<PokemonDetails>()
+        val pokemonList = mutableListOf<PokemonDetails>()
         for (i in 1..20) {
-            pokemon.add(
+            pokemonList.add(
                 PokemonDetails(
                     name = testPokemonArray[i - 1], id = i
                 )
             )
         }
 
-        pokemonDao.addAllPokemon(pokemon)
-        resultPokemon = pokemonDao.getAllSimpleDataPokemon()
+        pokemonDao.addAllPokemon(pokemonList)
+        val resultPokemon = pokemonDao.getAllSimpleDataPokemon()
 
         Truth.assertThat(resultPokemon).isNotNull()
         Truth.assertThat(resultPokemon.size).isGreaterThan(0)
@@ -92,17 +89,19 @@ class PokemonDatabaseTest {
 
     @Test
     fun get_pokemonList_from_5_to_10() {
-        var resultPokemon: List<PokemonSimpleListItem>? = null
+        val pageStart = 5
+        val pageSize = 5
 
-        resultPokemon = pokemonDao.getAllDataPokemonPaginatedSearch("%", "",5, 5)
+        val resultPokemon = pokemonDao.getAllDataPokemonPaginatedSearch("%", "",pageStart, pageSize)
 
         Truth.assertThat(resultPokemon).isNotNull()
         Truth.assertThat(resultPokemon.size).isGreaterThan(0)
+        Truth.assertThat(resultPokemon.size).isEqualTo(pageSize)
         resultPokemon.forEachIndexed { index, pokemon ->
             Truth.assertThat(pokemon).isEqualTo(
                 PokemonSimpleListItem(
-                    testPokemonArray[4 + index],
-                    index + 5
+                    testPokemonArray[pageStart + index -1],
+                    pageStart + index
                 )
             )
         }
@@ -116,15 +115,14 @@ class PokemonDatabaseTest {
             PokemonSimpleListItem(name = "Pidgeotto", id = 17),
             PokemonSimpleListItem(name = "Pidgeot", id = 18),
         )
-        var resultPokemon: List<PokemonSimpleListItem>? = null
 
-        resultPokemon = pokemonDao.getAllDataPokemonPaginatedSearch(searchTerm, "",0, 5)
+        val resultPokemon = pokemonDao.getAllDataPokemonPaginatedSearch(searchTerm, "",0, 5)
 
         Truth.assertThat(resultPokemon).isNotNull()
         Truth.assertThat(resultPokemon.size).isGreaterThan(0)
         resultPokemon.forEachIndexed { index, pokemon ->
             Truth.assertThat(pokemon).isEqualTo(
-                expetedResult.get(index)
+                expetedResult[index]
             )
         }
     }
@@ -135,9 +133,8 @@ class PokemonDatabaseTest {
         val expetedResult = listOf(
             PokemonSimpleListItem(name = "Caterpie", id = 10),
         )
-        var resultPokemon: List<PokemonSimpleListItem>? = null
 
-        resultPokemon = pokemonDao.getAllDataPokemonPaginatedSearch(
+        val resultPokemon = pokemonDao.getAllDataPokemonPaginatedSearch(
             "%$searchTerm",
             searchTerm,
             0,
@@ -148,7 +145,7 @@ class PokemonDatabaseTest {
         Truth.assertThat(resultPokemon.size).isGreaterThan(0)
         resultPokemon.forEachIndexed { index, pokemon ->
             Truth.assertThat(pokemon).isEqualTo(
-                expetedResult.get(index)
+                expetedResult[index]
             )
         }
     }
@@ -162,9 +159,8 @@ class PokemonDatabaseTest {
             PokemonSimpleListItem(name = "Pidgeot", id = 18),
             PokemonSimpleListItem(name = "Caterpie", id = 10),
         )
-        var resultPokemon: MutableList<PokemonSimpleListItem>? = null
 
-        resultPokemon =
+        val resultPokemon =
             pokemonDao.getAllDataPokemonPaginatedSearch(searchTerm, "",0, 5).toMutableList()
         resultPokemon.addAll(
             pokemonDao.getAllDataPokemonPaginatedSearch(
@@ -179,7 +175,7 @@ class PokemonDatabaseTest {
         Truth.assertThat(resultPokemon.size).isGreaterThan(0)
         resultPokemon.forEachIndexed { index, pokemon ->
             Truth.assertThat(pokemon).isEqualTo(
-                expetedResult.get(index)
+                expetedResult[index]
             )
         }
     }
@@ -188,13 +184,12 @@ class PokemonDatabaseTest {
     fun update_pokemonDetails_then_get_the_updated_value() {
         val expetedResult =
             PokemonDetails(name = "Pidgey", id = 16, height = 10, weight = 15, hasDetails = true)
-        var resultPokemon: PokemonDetails? = null
 
         val beforeChangePokemon = pokemonDao.getPokemonDetails(16)
         pokemonDao.updatePokemon(
             PokemonDetails(name = "Pidgey", id = 16, height = 10, weight = 15, hasDetails = true)
         )
-        resultPokemon = pokemonDao.getPokemonDetails(16)
+        val resultPokemon = pokemonDao.getPokemonDetails(16)
 
         Truth.assertThat(resultPokemon).isNotNull()
         Truth.assertThat(resultPokemon).isNotEqualTo(beforeChangePokemon)
@@ -203,10 +198,7 @@ class PokemonDatabaseTest {
 
     @Test
     fun check_if_pokemon_details_exists() {
-        var resultPokemon: PokemonDetails? = null
-
-        resultPokemon = pokemonDao.getPokemonDetails(16)
-
+        val resultPokemon = pokemonDao.getPokemonDetails(16)
         Truth.assertThat(resultPokemon).isNotNull()
     }
     @Test

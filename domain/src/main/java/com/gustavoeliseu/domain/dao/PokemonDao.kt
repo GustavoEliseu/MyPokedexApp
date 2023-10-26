@@ -12,8 +12,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface PokemonDao {
 
-//    @Query("SELECT * FROM pokemon")
-//    fun getAllDataPokemon(): List<T>
+    //No need for a delete function on this table
 
     @Query("SELECT name,id,pokemonColorId, baseColor, textColor FROM pokemon")
     fun getAllSimpleDataPokemon(): List<PokemonSimpleListItem>

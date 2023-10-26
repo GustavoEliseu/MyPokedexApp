@@ -2,11 +2,7 @@ package com.gustavoeliseu.domain
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.apollographql.apollo3.api.Optional
-import com.gustavoeliseu.domain.models.PokemonSimpleList
-import com.gustavoeliseu.domain.models.PokemonSimpleListItem
 import com.gustavoeliseu.domain.utils.Const.PAGE_SIZE
-import com.gustavoeliseu.pokedex.PokemonListGraphQlQuery
 import com.gustavoeliseu.pokedexdata.models.GenericPokemonData
 import com.gustavoeliseu.pokedexdata.models.GenericPokemonDataList
 
@@ -42,8 +38,8 @@ class PokemonPagingSource(private val searchTerm: String,private val response: s
         val pokeList = response.invoke(currentSearchTerm,startsWith,currentNextPage)?.pokemonItems ?: listOf()
         val prevKey = if (currentNextPage > 0) currentNextPage - PAGE_SIZE else null
         val nextKey = when{
-            pokeList.size> PAGE_SIZE-1 ->{currentNextPage + PAGE_SIZE}
-            pokeList.size < PAGE_SIZE-1 && searchTerm.isNotEmpty() &&!isSearching->{0}
+            pokeList.size>= PAGE_SIZE ->{currentNextPage + PAGE_SIZE}
+            pokeList.size < PAGE_SIZE && searchTerm.isNotEmpty() &&!isSearching->{0}
             else-> null
         }
 

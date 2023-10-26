@@ -26,10 +26,7 @@ class MainActivity : ComponentActivity() {
 
 
     //TODO - NEEDED TO FINISH PART 1 - PokeApi, simple pokedex with search function
-    // GOING TO FIX MVVM/CLEAN ON PART 2, since i'm using part 1 as a playground to test new libraries and technologies
-
     //TODO - PART 1 - FINISH the POKEDEX LAYOUT with links to other pokemon, skills and moves
-    //TODO - PART 1 - ADD ESPRESSO AND JUNIT AND DO 100% TESTING
     //TODO - PART 1 - ADD SCREENS FOR ABILITIES AND MOVES DETAILS
 
     //TODO - NEEDED FOR PART 2 - OFFLINE FIRST
