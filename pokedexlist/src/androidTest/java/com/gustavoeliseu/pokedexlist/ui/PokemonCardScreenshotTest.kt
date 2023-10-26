@@ -25,6 +25,7 @@ import org.junit.Test
 @Suppress("TestFunctionName")
 @ExperimentalCoilApi
 class PokemonCardScreenshotTest : ScreenshotTest {
+    //Run with pixel 3a api34 1080x2220  dp393x808
     @get:Rule
     var composeRule = createComposeRule()
     var mMockContext: Context? = null
