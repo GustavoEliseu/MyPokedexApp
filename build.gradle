@@ -3,12 +3,14 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        mavenLocal()
     }
     dependencies {
         classpath libs.gradle
         classpath libs.google.services
         classpath libs.firebase.crashlytics.gradle
         classpath libs.dagger
+        classpath libs.shot
     }
 }
 

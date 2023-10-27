@@ -18,31 +18,31 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntSize
 
 //Testing shimmer effect from Philipp Lackner
-fun Modifier.shimmerEffect(): Modifier = composed {
-
-    var size by remember { mutableStateOf(IntSize.Zero) }
-
-    val transition = rememberInfiniteTransition(label = "infiniteT")
-    val startOffsetX by transition.animateFloat(
-        initialValue = -2 * size.width.toFloat(),
-        targetValue = 2 * size.width.toFloat(),
-        animationSpec = infiniteRepeatable(
-            animation = tween(1000)
-        ), label = "shimmerAnimate"
-    )
-
-    background(
-        brush = Brush.linearGradient(
-            colors = listOf(
-                Color(0xFFB8B5B5),
-                Color(0xFF8F8B8B),
-                Color(0xFFB8B5B5),
-            ),
-            start = Offset(startOffsetX, 0f),
-            end = Offset(startOffsetX + size.width.toFloat(), size.height.toFloat())
+fun Modifier.shimmerEffect(): Modifier {
+    return composed {
+        var size by remember { mutableStateOf(IntSize.Zero) }
+        val transition = rememberInfiniteTransition(label = "infiniteT")
+        val startOffsetX by transition.animateFloat(
+            initialValue = -2 * size.width.toFloat(),
+            targetValue = 2 * size.width.toFloat(),
+            animationSpec = infiniteRepeatable(
+                animation = tween(1000)
+            ), label = "shimmerAnimate"
         )
-    )
-        .onGloballyPositioned {
-            size = it.size
-        }
+
+        background(
+            brush = Brush.linearGradient(
+                colors = listOf(
+                    Color(0xFFB8B5B5),
+                    Color(0xFF8F8B8B),
+                    Color(0xFFB8B5B5),
+                ),
+                start = Offset(startOffsetX, 0f),
+                end = Offset(startOffsetX + size.width.toFloat(), size.height.toFloat())
+            )
+        )
+            .onGloballyPositioned {
+                size = it.size
+            }
+    }
 }

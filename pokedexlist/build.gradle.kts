@@ -2,23 +2,28 @@
 plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
-    id ("kotlin-kapt")
+    id("kotlin-kapt")
+    id("shot")
 }
 
 android {
     namespace = "com.gustavoeliseu.pokedexlist"
     compileSdk = 34
 
+    shot {
+        applicationId = "ge.pokedexlist"
+    }
     defaultConfig {
-        minSdk = 24
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testApplicationId = "ge.pokedexlist"
+        minSdk = 26
+        testInstrumentationRunner = "com.karumi.shot.ShotTestRunner"
     }
 
     buildFeatures {
-        compose =true
+        compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.3.1"
+        kotlinCompilerExtensionVersion = "1.4.7"
     }
 
     buildTypes {
@@ -31,16 +36,22 @@ android {
         }
         create("localHost") {
             isMinifyEnabled = false
-            buildFeatures.buildConfig= true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-         }
+            buildFeatures.buildConfig = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
+    }
+    buildFeatures {
+        compose = true
     }
 }
 
@@ -49,11 +60,6 @@ dependencies {
     implementation(project(":commonui"))
     implementation(libs.androidx.ktx)
     implementation(platform(libs.kotlin.bom))
-    implementation(libs.appcompat)
-    implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.material3)
 
     //Compose
@@ -71,10 +77,22 @@ dependencies {
     implementation(libs.palette)
 
     // Dagger Hilt
-    implementation(libs.hilt)
+    implementation(libs.hilt.core)
     kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation)
 
     // Paging
     implementation(libs.androidx.paging.compose)
+
+
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.compose.junit)
+    androidTestImplementation(libs.compose.test)
+    debugImplementation(libs.compose.test)
+    androidTestImplementation(libs.mockito.android)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.inline)
+    androidTestImplementation(libs.coil.test)
 }

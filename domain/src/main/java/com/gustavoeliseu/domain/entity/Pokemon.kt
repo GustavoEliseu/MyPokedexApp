@@ -1,6 +1,9 @@
 package com.gustavoeliseu.domain.entity
 
+import android.graphics.drawable.Drawable
+import androidx.compose.ui.platform.LocalInspectionMode
 import com.gustavoeliseu.pokedex.PokemonListGraphQlQuery
+import java.lang.ref.SoftReference
 
 //used for ANY data with name and URL only
 data class SimpleGenericPokemonData(
@@ -13,7 +16,8 @@ data class PokemonSimpleListItem(
     val id: Int,
     val pokemonColorId: Int?,
     var baseColor: Int? = null,  // Nullable mutable field
-    var textColor: Int? = null
+    var textColor: Int? = null,
+    var drawable: SoftReference<Drawable>? = null
 )
 
 data class PokemonSimpleList(
@@ -29,6 +33,66 @@ data class PokemonSimpleList(
                         it.pokemon_color_id
                     )
                 })
+        }
+
+        fun getSimpleListExample(isPreview: Boolean): MutableList<PokemonSimpleListItem> {
+            val pokeList = mutableListOf<PokemonSimpleListItem>()
+            if(isPreview){
+                for (i in 1..10) {
+                    pokeList.add(
+                        PokemonSimpleListItem(
+                            id = -1,
+                            name = "Missingno",
+                            pokemonColorId = 0
+                        )
+                    )
+                }
+            }
+            for (i in 1..2) {
+                pokeList.add(
+                    PokemonSimpleListItem(
+                        id = 132,
+                        name = "Ditto",
+                        pokemonColorId = 7
+                    )
+                )
+                pokeList.add(
+                    PokemonSimpleListItem(
+                        id = 10,
+                        name = "Caterpie",
+                        pokemonColorId = 5
+                    )
+                )
+                pokeList.add(
+                    PokemonSimpleListItem(
+                        id = 18,
+                        name = "Pidgeot",
+                        pokemonColorId = 3
+                    )
+                )
+                pokeList.add(
+                    PokemonSimpleListItem(
+                        id = 6,
+                        name = "Charizard",
+                        pokemonColorId = 8
+                    )
+                )
+                pokeList.add(
+                    PokemonSimpleListItem(
+                        id = 43,
+                        name = "Oddish",
+                        pokemonColorId = 2
+                    )
+                )
+                pokeList.add(
+                    PokemonSimpleListItem(
+                        id = 82,
+                        name = "Magneton",
+                        pokemonColorId = 4
+                    )
+                )
+            }
+            return pokeList
         }
     }
 }
