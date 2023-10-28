@@ -13,6 +13,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import coil.Coil
 import coil.ImageLoader
+import com.gustavoeliseu.domain.database.PokemonDatabase
+import com.gustavoeliseu.domain.database.PokemonDatabase_Impl
 import com.gustavoeliseu.pokedexlist.ui.PokedexListFragment
 import com.gustavoeliseu.pokedex.ui.fragment.PokemonDetailsFragment
 import com.gustavoeliseu.pokedex.ui.network_compose.NetworkComposableObserver
@@ -24,23 +26,18 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-
     //TODO - NEEDED TO FINISH PART 1 - PokeApi, simple pokedex with search function
     //TODO - PART 1 - FINISH the POKEDEX LAYOUT with links to other pokemon, skills and moves
     //TODO - PART 1 - ADD SCREENS FOR ABILITIES AND MOVES DETAILS
 
     //TODO - NEEDED FOR PART 2 - OFFLINE FIRST
-
     //TODO - PART 2 - ADD OFFLINE FIRST AND USE-CASES
-    //TODO - PART 2 - CHECK GRAPHQL EXTRAS WHEN ADDING ROOM
     //TODO - PART 2 - FIX IMPLEMENTATION ARCHITECTURE AND CLEAN, CHECK IF EVERYTHING IS ACCORDING TO THE SOLID PRINCIPLES
-    //TODO - PART 2 - REMOVE UNUSED CODES AND ADD BOTTOM NAVIGATION FOR PART3
 
     //TODO - NEEDED FOR PART 3 - (Smogon or another api, custom app with search and option to save teams)
-
     //TODO - PART 2 - add the option to mount your own team and save on local database(room or pure sqlite)
     //TODO - PART 2 - add Move e type coverage
-    //TODO - PART 2 - TRY to add format validation(for pvp teams) (Maybe try the smogon api)
+    //TODO - PART 2 - TRY to add format validation(for pvp teams) (Maybe try checking if smogon has an api)
     //TODO - PART 2 - Other option is the api https://graphqlpokemon.favware.tech/v7 using 89 offset to ignore custom monsters
 
 
@@ -56,6 +53,11 @@ class MainActivity : ComponentActivity() {
                 NetworkComposableObserver()
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        PokemonDatabase.destroyInstance()
     }
 
     @Composable

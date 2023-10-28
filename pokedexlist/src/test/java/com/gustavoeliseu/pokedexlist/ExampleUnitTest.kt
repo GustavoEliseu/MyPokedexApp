@@ -3,6 +3,7 @@ package com.gustavoeliseu.pokedexlist
 import org.junit.Test
 
 import org.junit.Assert.*
+import java.util.Locale
 
 /**
  * Example local unit test, which will execute on the development machine (host).

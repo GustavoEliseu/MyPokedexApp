@@ -10,14 +10,14 @@ android {
     namespace = "com.gustavoeliseu.domain"
     compileSdk = 34
     defaultConfig {
-        minSdk = 24
+        minSdk = 26
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     buildFeatures {
         compose =true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.3.1"
+        kotlinCompilerExtensionVersion = "1.4.7"
     }
 
     buildTypes {
@@ -40,6 +40,7 @@ android {
         create("localHost") {
             isMinifyEnabled = false
             buildFeatures.buildConfig= true
+            initWith(getByName("debug"))
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             buildConfigField("String", "POKEAPI_URL", "\"https://10.0.2.2:8080/api/v2/\"")
             buildConfigField("String", "GRAPHQLAPI_URL", "\"http://10.0.2.2:8080/v1/graphql\"")
@@ -47,11 +48,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 }
 
@@ -67,6 +68,8 @@ apollo {
 dependencies {
     implementation(libs.androidx.ktx)
     implementation(platform(libs.kotlin.bom))
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
     implementation(libs.appcompat)
     implementation(project(mapOf("path" to ":data")))
     implementation(libs.androidx.runner)
@@ -95,11 +98,12 @@ dependencies {
     implementation (libs.androidx.lifecycle.runtime.compose)
 
     // Dagger Hilt
-    implementation(libs.hilt)
+    implementation(libs.hilt.core)
     kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation)
 
     implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
     kapt(libs.androidx.room.compiler)
 
     // Network

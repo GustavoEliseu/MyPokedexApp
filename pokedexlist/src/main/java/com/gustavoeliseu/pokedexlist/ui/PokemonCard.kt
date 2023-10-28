@@ -1,5 +1,6 @@
 package com.gustavoeliseu.pokedexlist.ui
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -37,9 +39,9 @@ import androidx.palette.graphics.Palette
 import coil.compose.SubcomposeAsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
-import com.gustavoeliseu.commonui.utils.extensions.colorDistance
+import com.gustavoeliseu.commonui.utils.extensions.chooseBestPalette
+import com.gustavoeliseu.commonui.utils.extensions.getPaletteFilterFromColor
 import com.gustavoeliseu.commonui.utils.extensions.isDarkColor
-import com.gustavoeliseu.commonui.utils.extensions.notTooDarkNorTooBright
 import com.gustavoeliseu.commonui.utils.extensions.shimmerEffect
 import com.gustavoeliseu.domain.models.PokemonSimpleListItem
 import com.gustavoeliseu.domain.utils.ColorEnum
@@ -48,17 +50,20 @@ import java.util.Locale
 
 @Composable
 fun PokemonCard(
-    pokemonItemSimple : PokemonSimpleListItem,
+    pokemonItemSimple: PokemonSimpleListItem,
     colorEnum: ColorEnum,
-    picture: String,
     modifier: Modifier = Modifier,
     reloading: Boolean = false
 ) {
     var boxBackground by remember {
-        mutableStateOf(Color.White)
+        mutableStateOf(Color.Black)
     }
     var textsColor by remember { mutableStateOf(Color.White) }
     var loading by remember { mutableStateOf(true) }
+    val picture = if (pokemonItemSimple.id > 0) stringResource(
+        id = R.string.pokemon_sprite_url,
+        pokemonItemSimple.id
+    ) else ""
     if (picture.isEmpty()) loading = false
     val baseColor = colorEnum.tintColor
     var retryHash by remember { mutableStateOf(0) }
@@ -68,6 +73,7 @@ fun PokemonCard(
             .clip(RoundedCornerShape(8.dp))
             .size(170.dp)
             .background(boxBackground)
+            .testTag("PokemonCardBox")
     ) {
         if (!loading) {
             Text(
@@ -133,7 +139,7 @@ fun PokemonCard(
 
 @Composable
 fun PokemonImageLoader(
-    pokemonItemSimple : PokemonSimpleListItem,
+    pokemonItemSimple: PokemonSimpleListItem,
     reloading: Boolean,
     picture: String,
     baseColor: Color,
@@ -149,49 +155,33 @@ fun PokemonImageLoader(
             .allowHardware(false).crossfade(true).setParameter("retry_hash", retryHash, null)
             .build(),
         onSuccess = {
-            if(pokemonItemSimple.baseColor == null || pokemonItemSimple.textColor == null){
-            val mBitmap = it.result.drawable.toBitmap()
-            val range = 24
-            Palette.from(mBitmap).setRegion(
-                mBitmap.width / 2 - range,
-                mBitmap.height / 2 - range,
-                mBitmap.width / 2 + range,
-                mBitmap.height / 2 + range
-            ).clearFilters()
-                .addFilter(Palette.Filter { color, hsl ->
-                    val comparison = Color(
-                        color
-                    ).colorDistance(baseColor)
-                    hsl.notTooDarkNorTooBright() && (comparison <= .5f)
-                }).generate { p ->
-                    p?.let {
-                        val domSwatch =
-                            if (p.dominantSwatch != null) p.dominantSwatch else p.lightVibrantSwatch
-                        if (domSwatch != null) {
-                            updateColors(
-                                Color(domSwatch.rgb),
-                                Color(domSwatch.titleTextColor), false
-                            )
-                        } else {
-                            updateColors(
-                                baseColor,
-                                if ((baseColor.toArgb()).isDarkColor()) Color.White else Color.Black,
-                                false
-                            )
+            if (pokemonItemSimple.baseColor == null || pokemonItemSimple.textColor == null) {
+                Palette.from(it.result.drawable.toBitmap()).clearFilters()
+                    .addFilter { color, hsl ->
+                        hsl.getPaletteFilterFromColor(color, baseColor)
+                    }.generate { p ->
+                        p?.let {
+                            p.chooseBestPalette(baseColor) { bColor, tColor, isLoading ->
+                                updateColors(
+                                    bColor ?: baseColor,
+                                    tColor
+                                        ?: if ((baseColor.toArgb()).isDarkColor()) Color.White else Color.Black,
+                                    isLoading
+                                )
+                            }
                         }
                     }
-                }
-            }else{
-                var mBaseColor = baseColor
-                var mTextColor = if ((baseColor.toArgb()).isDarkColor()) Color.White else Color.Black
-                pokemonItemSimple.baseColor?.let{
-                    mBaseColor= Color(it)
-                }
-                pokemonItemSimple.textColor?.let {
-                    mTextColor = Color(it)
-                }
+            } else {
+                val mPokemonBaseColor = pokemonItemSimple.baseColor
+                val mPokemonTextColor = pokemonItemSimple.textColor
+                val textColor =
+                    if (mPokemonTextColor != null) Color(mPokemonTextColor) else if ((baseColor.toArgb()).isDarkColor()) Color.White else Color.Black
 
-                updateColors(mBaseColor,mTextColor,false)
+                updateColors(
+                    if (mPokemonBaseColor != null) Color(mPokemonBaseColor) else baseColor,
+                    textColor,
+                    false
+                )
             }
         },
         loading = {
@@ -248,7 +238,6 @@ fun PokemonCardPreview() {
             name = "Missigno",
             pokemonColorId = 1
         ),
-        picture = "",
         colorEnum = ColorEnum.BLACK,
         modifier = Modifier.clickable {
         }

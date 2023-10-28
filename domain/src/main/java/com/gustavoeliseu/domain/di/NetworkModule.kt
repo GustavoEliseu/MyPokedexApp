@@ -10,6 +10,7 @@ import com.apollographql.apollo3.cache.normalized.sql.SqlNormalizedCacheFactory
 import com.apollographql.apollo3.network.okHttpClient
 import com.gustavoeliseu.domain.BuildConfig
 import com.gustavoeliseu.domain.BuildConfig.GRAPHQLAPI_URL
+import com.gustavoeliseu.domain.database.PokemonDatabase
 import com.gustavoeliseu.domain.repository.GenericPokemonListRepositoryImpl
 import com.gustavoeliseu.domain.utils.Const.PAGE_SIZE
 import com.gustavoeliseu.domain.utils.Const.PAGE_SIZE_TEXT
@@ -81,5 +82,6 @@ class NetworkModules {
     fun providePokemonRepository(
         apolloClient: ApolloClient,
         @Named(PAGE_SIZE_TEXT) pageSize: Int,
-    ): com.gustavoeliseu.pokedexdata.repository.GenericPokemonListRepository = GenericPokemonListRepositoryImpl(apolloClient, pageSize)
+        pokemonDatabase: PokemonDatabase
+    ): com.gustavoeliseu.pokedexdata.repository.GenericPokemonListRepository = GenericPokemonListRepositoryImpl(apolloClient,pokemonDatabase, pageSize)
 }
