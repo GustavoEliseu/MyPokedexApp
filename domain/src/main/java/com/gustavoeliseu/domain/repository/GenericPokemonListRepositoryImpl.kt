@@ -11,9 +11,12 @@ import com.apollographql.apollo3.exception.ApolloException
 import com.gustavoeliseu.domain.PokemonPagingSource
 import com.gustavoeliseu.domain.dao.PokemonDao
 import com.gustavoeliseu.domain.database.PokemonDatabase
+import com.gustavoeliseu.domain.models.PokemonDetails
+import com.gustavoeliseu.domain.models.PokemonDetails.Companion.toPokemonDetails
 import com.gustavoeliseu.domain.models.PokemonSimpleList
 import com.gustavoeliseu.domain.models.PokemonSimpleList.Companion.toSimplePokemonList
 import com.gustavoeliseu.domain.utils.Const.PAGE_SIZE
+import com.gustavoeliseu.pokedex.GetPokemonDetailsQuery
 import com.gustavoeliseu.pokedex.PokemonListGraphQlQuery
 import com.gustavoeliseu.pokedex.utils.SafeCrashlyticsUtil
 import com.gustavoeliseu.pokedexdata.models.GenericPokemonData
@@ -21,6 +24,7 @@ import com.gustavoeliseu.pokedexdata.repository.GenericPokemonListRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -44,6 +48,10 @@ class GenericPokemonListRepositoryImpl @Inject constructor(
             ),
             pagingSourceFactory = { createPagingSource(searchTyped) }
         ).flow
+    }
+
+    override suspend fun getPokemonDetails(pokeId: Int): GenericPokemonData? {
+        return  getQueryDetailsFromApollo(pokeId) as? GenericPokemonData
     }
 
     private fun createPagingSource(
@@ -107,5 +115,15 @@ class GenericPokemonListRepositoryImpl @Inject constructor(
             ?: PokemonSimpleList(
                 listOf()
             )
+    }
+
+    suspend fun getQueryDetailsFromApollo(pokeId:Int):PokemonDetails?{
+        return apolloClient.query(
+            GetPokemonDetailsQuery(
+                id = Optional.present(pokeId),
+                offset = Optional.present(0),
+                pageSize = Optional.present(1)
+            )
+        ).refetchPolicy(FetchPolicy.CacheFirst).execute().data?.pokemonItem?.firstOrNull()?.toPokemonDetails()
     }
 }

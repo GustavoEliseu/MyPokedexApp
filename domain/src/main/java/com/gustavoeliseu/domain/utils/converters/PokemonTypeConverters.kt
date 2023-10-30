@@ -8,6 +8,7 @@ import com.gustavoeliseu.domain.models.HeldItems
 import com.gustavoeliseu.domain.models.Moves
 import com.gustavoeliseu.domain.models.PokemonDetails
 import com.gustavoeliseu.domain.models.PokemonSimpleListItem
+import com.gustavoeliseu.domain.models.PokemonSpecy
 import com.gustavoeliseu.domain.models.Stats
 import com.gustavoeliseu.domain.models.Type
 import com.gustavoeliseu.pokedexdata.models.UrlGenericPokemonData
@@ -114,7 +115,7 @@ class PokemonTypeConverters {
 
     //Generic data
     @TypeConverter
-    fun fromUrlGenericPokemonDataString(value:String): UrlGenericPokemonData {
+    fun fromUrlGenericPokemonDataString(value: String): UrlGenericPokemonData {
         val listType = object : TypeToken<UrlGenericPokemonData>() {
 
         }.type
@@ -122,13 +123,13 @@ class PokemonTypeConverters {
     }
 
     @TypeConverter
-    fun fromUrlGenericPokemonData(data : UrlGenericPokemonData): String{
+    fun fromUrlGenericPokemonData(data: UrlGenericPokemonData): String {
         val gson = Gson()
         return gson.toJson(data)
     }
 
     @TypeConverter
-    fun fromUrlGenericPokemonDataListString(value:String): List<UrlGenericPokemonData> {
+    fun fromUrlGenericPokemonDataListString(value: String): List<UrlGenericPokemonData> {
         val listType = object : TypeToken<List<UrlGenericPokemonData>>() {
 
         }.type
@@ -136,7 +137,33 @@ class PokemonTypeConverters {
     }
 
     @TypeConverter
-    fun fromUrlGenericPokemonDataList(data : List<UrlGenericPokemonData>): String{
+    fun fromUrlGenericPokemonDataList(data: List<UrlGenericPokemonData>): String {
+        val gson = Gson()
+        return gson.toJson(data)
+    }
+
+    @TypeConverter
+    fun fromStringToPokemonSpecyList(value: String): List<PokemonSpecy> {
+        val listType = object : TypeToken<List<PokemonSpecy>>() {
+        }.type
+        return Gson().fromJson(value, listType)
+    }
+
+    @TypeConverter
+    fun fromPokemonSpecyListToString(data: List<PokemonSpecy>): String {
+        val gson = Gson()
+        return gson.toJson(data)
+    }
+
+    @TypeConverter
+    fun fromStringToPokemonSpecy(value: String?): PokemonSpecy? {
+        val listType = object : TypeToken<PokemonSpecy?>() {
+        }.type
+        return Gson().fromJson(value, listType)
+    }
+
+    @TypeConverter
+    fun fromPokemonSpecyToString(data: PokemonSpecy?): String? {
         val gson = Gson()
         return gson.toJson(data)
     }

@@ -11,10 +11,11 @@ import com.gustavoeliseu.domain.dao.PokemonDao
 import com.gustavoeliseu.domain.database.PokemonDatabase
 import com.gustavoeliseu.domain.models.PokemonDetails
 import com.gustavoeliseu.domain.models.PokemonSimpleListItem
-import junit.framework.TestCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okhttp3.internal.notify
+import okhttp3.internal.wait
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
@@ -26,8 +27,6 @@ import java.io.IOException
 @RunWith(AndroidJUnit4::class)
 class PokemonDatabaseTest {
 
-    //TODO ADD ASYNC TO DATABASE AND TESTS
-
     private lateinit var pokemonDao: PokemonDao
     private lateinit var db: PokemonDatabase
     private val testPokemonArray = arrayOf(
@@ -35,6 +34,12 @@ class PokemonDatabaseTest {
         "Charizard", "Squirtle", "Wartortle", "Blastoise", "Caterpie",
         "Metapod", "Butterfree", "Weedle", "Kakuna", "Beedrill",
         "Pidgey", "Pidgeotto", "Pidgeot", "Rattata", "Raticate"
+    )
+    private val testPokemonArray2 = arrayOf(
+        "Bulbasaur2", "Ivysaur2", "Venusaur2", "Charmander2", "Charmeleon2",
+        "Charizard2", "Squirtle2", "Wartortle2", "Blastoise2", "Caterpie2",
+        "Metapod2", "Butterfree2", "Weedle2", "Kakuna2", "Beedrill2",
+        "Pidgey2", "Pidgeotto2", "Pidgeot2", "Rattata2", "Raticate2"
     )
 
     @Before
@@ -76,6 +81,7 @@ class PokemonDatabaseTest {
                 )
             )
         }
+        val syncObject = Any()
         CoroutineScope(Dispatchers.IO).launch {
             pokemonDao.addAllPokemon(pokemonList)
             val resultPokemon = pokemonDao.getAllSimpleDataPokemon()
@@ -89,6 +95,12 @@ class PokemonDatabaseTest {
                     )
                 )
             }
+            synchronized (syncObject){
+                syncObject.notify();
+            }
+        }
+        synchronized (syncObject){
+            syncObject.wait();
         }
     }
 
@@ -96,6 +108,7 @@ class PokemonDatabaseTest {
     fun get_pokemonList_from_5_to_10() {
         val pageStart = 5
         val pageSize = 5
+        val syncObject = Any()
         CoroutineScope(Dispatchers.IO).launch {
             val resultPokemon =
                 pokemonDao.getAllDataPokemonPaginatedSearch("%", "", pageStart, pageSize)
@@ -111,6 +124,12 @@ class PokemonDatabaseTest {
                     )
                 )
             }
+            synchronized (syncObject){
+                syncObject.notify();
+            }
+        }
+        synchronized (syncObject){
+            syncObject.wait();
         }
     }
 
@@ -122,6 +141,7 @@ class PokemonDatabaseTest {
             PokemonSimpleListItem(name = "Pidgeotto", id = 17),
             PokemonSimpleListItem(name = "Pidgeot", id = 18),
         )
+        val syncObject = Any()
         CoroutineScope(Dispatchers.IO).launch {
             val resultPokemon = pokemonDao.getAllDataPokemonPaginatedSearch(searchTerm, "", 0, 5)
 
@@ -132,6 +152,12 @@ class PokemonDatabaseTest {
                     expetedResult[index]
                 )
             }
+            synchronized (syncObject){
+                syncObject.notify();
+            }
+        }
+        synchronized (syncObject){
+            syncObject.wait();
         }
     }
 
@@ -141,6 +167,7 @@ class PokemonDatabaseTest {
         val expetedResult = listOf(
             PokemonSimpleListItem(name = "Caterpie", id = 10),
         )
+        val syncObject= Any()
         CoroutineScope(Dispatchers.IO).launch {
             val resultPokemon = pokemonDao.getAllDataPokemonPaginatedSearch(
                 "%$searchTerm",
@@ -156,6 +183,12 @@ class PokemonDatabaseTest {
                     expetedResult[index]
                 )
             }
+            synchronized (syncObject){
+                syncObject.notify();
+            }
+        }
+        synchronized (syncObject){
+            syncObject.wait();
         }
     }
 
@@ -168,6 +201,7 @@ class PokemonDatabaseTest {
             PokemonSimpleListItem(name = "Pidgeot", id = 18),
             PokemonSimpleListItem(name = "Caterpie", id = 10),
         )
+        val syncObject = Any()
         CoroutineScope(Dispatchers.IO).launch {
             val resultPokemon =
                 pokemonDao.getAllDataPokemonPaginatedSearch(searchTerm, "", 0, 5).toMutableList()
@@ -187,11 +221,18 @@ class PokemonDatabaseTest {
                     expetedResult[index]
                 )
             }
+            synchronized (syncObject){
+                syncObject.notify();
+            }
+        }
+        synchronized (syncObject){
+            syncObject.wait();
         }
     }
 
     @Test
     fun update_pokemonDetails_then_get_the_updated_value() {
+        val syncObject = Any()
         CoroutineScope(Dispatchers.IO).launch {
             val expetedResult =
                 PokemonDetails(
@@ -217,6 +258,57 @@ class PokemonDatabaseTest {
             Truth.assertThat(resultPokemon).isNotNull()
             Truth.assertThat(resultPokemon).isNotEqualTo(beforeChangePokemon)
             Truth.assertThat(resultPokemon).isEqualTo(expetedResult)
+            synchronized (syncObject){
+                syncObject.notify();
+            }
+        }
+        synchronized (syncObject){
+            syncObject.wait();
+        }
+    }
+
+    @Test
+    fun check_if_pagination_works_correctly() {
+        val pokemon = mutableListOf<PokemonDetails>()
+        for (i in 1..20) {
+            pokemon.add(
+                PokemonDetails(
+                    name = testPokemonArray2[i-1], id = i+testPokemonArray.size
+                )
+            )
+        }
+        val syncObject = Any()
+
+        CoroutineScope(Dispatchers.IO).launch {
+                pokemonDao.addAllPokemon(pokemon)
+
+                var pageStart = 1
+                val pageSize = 5
+                while (pageStart < testPokemonArray.size + testPokemonArray2.size) {
+                    val resultPokemon =
+                        pokemonDao.getAllDataPokemonPaginatedSearch("%", "", pageStart, pageSize)
+
+                    Truth.assertThat(resultPokemon).isNotNull()
+                    Truth.assertThat(resultPokemon.size).isGreaterThan(0)
+                    Truth.assertThat(resultPokemon.size).isEqualTo(pageSize)
+                    resultPokemon.forEachIndexed { index, pokemon ->
+                        Truth.assertThat(pokemon).isEqualTo(
+                            PokemonSimpleListItem(
+                                if (pageStart + index <= testPokemonArray.size)
+                                    testPokemonArray[pageStart + index-1]
+                                else testPokemonArray2[pageStart + index -1 - testPokemonArray.size],
+                                pageStart + index
+                            )
+                        )
+                    }
+                    pageStart += pageSize
+                }
+            synchronized (syncObject){
+                syncObject.notify();
+            }
+        }
+        synchronized(syncObject){
+            syncObject.wait()
         }
     }
 

@@ -8,4 +8,8 @@ interface GenericPokemonListRepository {
     fun queryPokemonList(
         searchTyped: String
     ): Flow<PagingData<GenericPokemonData>>
+
+    suspend fun getPokemonDetails(
+        pokeId:Int
+    ):GenericPokemonData?
 }

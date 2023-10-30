@@ -77,41 +77,6 @@ fun PokedexListFragment(
     }, { pokemonListViewModel.toggleIsSearchShowing() })
 }
 
-//@Composable
-//fun PokeListGrid(
-//    modifier: Modifier = Modifier,
-//    reloadingImages: Boolean,
-//    updatePosition: (id: Int) -> Unit,
-//    pokemonList: LazyPagingItems<PokemonSimpleListItem>?,
-//    onClick: (id: Int) -> Unit
-//) {
-//    if (pokemonList == null) return
-//    if (pokemonList.itemCount > 0) {
-//        updatePosition(pokemonList.itemSnapshotList.items.maxBy { it.id }.id)
-//    }
-//    LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 128.dp),
-//        contentPadding = PaddingValues(
-//            start = 12.dp,
-//            top = 16.dp,
-//            end = 12.dp,
-//            bottom = 16.dp
-//        ),
-//        content = {
-//            items(pokemonList.itemCount) { index ->
-//                pokemonList[index]?.let { pk ->
-//                    PokemonCard(
-//                        pokemonItemSimple = pk,
-//                        modifier = modifier
-//                            .clickable {
-//                                onClick(pk.id)
-//                            },
-//                        colorEnum = ColorEnum.fromInt(pk.pokemonColorId),
-//                        reloading = reloadingImages
-//                    )
-//                }
-//            }
-//        })
-//}
 
 @Composable
 fun PokedexListScreen(
@@ -256,7 +221,9 @@ fun PokeListGrid(
 ) {
     if (pokemonList == null) return
     if (pokemonList.itemCount > 0) {
-        updatePosition(pokemonList.itemSnapshotList.items.maxBy { it.id }.id)
+        pokemonList.itemSnapshotList.items.mapNotNull { it.id }.maxBy { it }.let{id->
+            updatePosition(id)
+        }
     }
     LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 128.dp),
         contentPadding = PaddingValues(
