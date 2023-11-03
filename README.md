@@ -1,6 +1,6 @@
 # Complete Pokemon Pokedex <br>
 
-This is a personal android app project that utilizes Apollo with the GraphQL pokeApi to fill a pokedex with Palette to get the pokemon colors. I'm dividing this project in 3 parts:
+This is a personal android app project that utilizes Apollo with the GraphQL pokeApi to fill a pokedex with Palette to get the pokemon colors. Due to severe back pain the progress in this project is going to be slow.
 
 <p align="center">
   <img src="https://github.com/GustavoEliseu/MyPokedexApp/assets/30469845/47b093bf-3540-46af-8b8f-3d0af269cefd"/><br>
