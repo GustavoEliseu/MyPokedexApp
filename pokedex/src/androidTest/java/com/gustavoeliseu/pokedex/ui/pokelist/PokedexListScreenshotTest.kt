@@ -15,10 +15,11 @@ import coil.annotation.ExperimentalCoilApi
 import coil.decode.DataSource
 import coil.request.SuccessResult
 import coil.test.FakeImageLoaderEngine
-import com.gustavoeliseu.domain.entity.PokemonSimpleList
-import com.gustavoeliseu.pokedex.R
+import com.gustavoeliseu.domain.models.PokemonSimpleList
+import com.gustavoeliseu.myapplication.R as commonResources
 import com.karumi.shot.ScreenshotTest
 import com.gustavoeliseu.pokedex.ui.PokedexListScreen
+import com.gustavoeliseu.pokedexdata.models.GenericPokemonData
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Before
 import org.junit.Rule
@@ -26,7 +27,7 @@ import org.junit.Test
 
 @Suppress("TestFunctionName")
 @ExperimentalCoilApi
-class PokedexListScreenshotTest: ScreenshotTest {
+class PokedexListScreenshotTest : ScreenshotTest {
     @get:Rule
     var composeRule = createComposeRule()
     var mMockContext: Context? = null
@@ -38,26 +39,32 @@ class PokedexListScreenshotTest: ScreenshotTest {
             val engine = FakeImageLoaderEngine.Builder()
                 .addInterceptor { chain ->
                     val data = chain.request.data
-                    if (data is String ) {
-                        val drawableId =when{
-                            data.endsWith("132.png")->{
-                                 R.drawable.ditto_test
+                    if (data is String) {
+                        val drawableId = when {
+                            data.endsWith("132.png") -> {
+                                commonResources.drawable.ditto_test
                             }
-                            data.endsWith("10.png")->{
-                                 R.drawable.caterpie_test
+
+                            data.endsWith("10.png") -> {
+                                commonResources.drawable.caterpie_test
                             }
-                            data.endsWith("18.png")->{
-                                 R.drawable.pidgeot_test
+
+                            data.endsWith("18.png") -> {
+                                commonResources.drawable.pidgeot_test
                             }
-                            data.endsWith("6.png")->{
-                                R.drawable.charizard_test
+
+                            data.endsWith("6.png") -> {
+                                commonResources.drawable.charizard_test
                             }
-                            data.endsWith("43.png")->{
-                                 R.drawable.oddish_test
+
+                            data.endsWith("43.png") -> {
+                                commonResources.drawable.oddish_test
                             }
-                            data.endsWith("82.png")->{
-                                 R.drawable.magneton_test
+
+                            data.endsWith("82.png") -> {
+                                commonResources.drawable.magneton_test
                             }
+
                             else -> 0
                         }
                         val drawable = context.getDrawable(drawableId)
@@ -68,7 +75,7 @@ class PokedexListScreenshotTest: ScreenshotTest {
                                 dataSource = DataSource.MEMORY,
                             )
                         }
-                    }  else {
+                    } else {
                         null
                     }
                 }
@@ -82,7 +89,7 @@ class PokedexListScreenshotTest: ScreenshotTest {
     }
 
     @Test
-    fun ScreenShotTestList(){
+    fun ScreenShotTestList() {
         composeRule.setContent {
             PokedexListFragmentPreview()
         }
@@ -92,9 +99,9 @@ class PokedexListScreenshotTest: ScreenshotTest {
 
     @Composable
     fun PokedexListFragmentPreview() {
-        val data = PokemonSimpleList.getSimpleListExample(false)
+        val data = PokemonSimpleList.getSimpleListExample(false).map { it as GenericPokemonData }
         val flow = MutableStateFlow(PagingData.from(data))
         val lazyPagingItems = flow.collectAsLazyPagingItems()
-        PokedexListScreen(Modifier, lazyPagingItems, {}, false, "", {}, {})
+        PokedexListScreen(Modifier, lazyPagingItems, {}, false, "", {}, {}, {})
     }
 }

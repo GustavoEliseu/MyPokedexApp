@@ -16,7 +16,8 @@ import coil.request.SuccessResult
 import coil.test.FakeImageLoaderEngine
 import com.gustavoeliseu.domain.models.PokemonSimpleListItem
 import com.gustavoeliseu.domain.utils.ColorEnum
-import com.gustavoeliseu.pokedex.R
+import com.gustavoeliseu.domain.utils.GenderEnum
+import com.gustavoeliseu.myapplication.R as commonResources
 import com.karumi.shot.ScreenshotTest
 import org.junit.Before
 import org.junit.Rule
@@ -40,10 +41,10 @@ class PokemonCardScreenshotTest : ScreenshotTest {
                     if (data is String) {
                         val drawableId = when {
                             data.endsWith("132.png") ->{
-                                R.drawable.ditto_test
+                                commonResources.drawable.ditto_test
                             }
                             data.endsWith("10.png") ->{
-                                R.drawable.caterpie_test
+                                commonResources.drawable.caterpie_test
                             }
                             else->{
                                 0
@@ -115,17 +116,60 @@ class PokemonCardScreenshotTest : ScreenshotTest {
         compareScreenshot(composeRule)
     }
 
+    @Test
+    fun verify_pokemon_ditto_simple_card_snapshot() {
+        composeRule.setContent {
+            PokemonCardTest(
+                id = 132,
+                name = "Ditto",
+                pokemonColorId = 7,
+                simple = true
+            )
+        }
+        compareScreenshot(composeRule)
+    }
+
+    @Test
+    fun verify_pokemon_simple_female_caterpie_card_snapshot() {
+        composeRule.setContent {
+            PokemonCardTest(
+                id = 10,
+                name = "Caterpie",
+                pokemonColorId = 5,
+                simple = true,
+                genderEnum = GenderEnum.FEMALE
+            )
+        }
+        compareScreenshot(composeRule)
+    }
+
+    @Test
+    fun verify_pokemon_simple_male_caterpie_card_snapshot() {
+        composeRule.setContent {
+            PokemonCardTest(
+                id = 10,
+                name = "Caterpie",
+                pokemonColorId = 5,
+                simple = true,
+                genderEnum = GenderEnum.MALE
+            )
+        }
+        compareScreenshot(composeRule)
+    }
+
     @Composable
-    fun PokemonCardTest(id: Int, name: String, pokemonColorId: Int) {
+    fun PokemonCardTest(id: Int, name: String, pokemonColorId: Int, simple:Boolean = false, genderEnum: GenderEnum = GenderEnum.INVALID) {
         PokemonCard(
             pokemonItemSimple = PokemonSimpleListItem(
                 id = id,
                 name = name,
-                pokemonColorId = pokemonColorId
+                pokemonColorId = pokemonColorId,
+                gender = genderEnum
             ),
             colorEnum = ColorEnum.fromInt(pokemonColorId),
             modifier = Modifier.clickable {
-            }
+            },
+            simpleCard = simple
         )
     }
 }
