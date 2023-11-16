@@ -37,6 +37,7 @@ android {
         create("localHost") {
             isMinifyEnabled = false
             buildFeatures.buildConfig = true
+            initWith(getByName("debug"))
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -60,6 +61,12 @@ dependencies {
     implementation(project(":commonui"))
     implementation(libs.androidx.ktx)
     implementation(platform(libs.kotlin.bom))
+    implementation(libs.appcompat)
+    implementation(libs.material)
+    implementation(project(mapOf("path" to ":data")))
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.material3)
 
     //Compose

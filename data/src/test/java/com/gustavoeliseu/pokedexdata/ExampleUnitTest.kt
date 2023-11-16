@@ -1,4 +1,4 @@
-package com.gustavoeliseu.domain
+package com.gustavoeliseu.pokedexdata
 
 import org.junit.Test
 

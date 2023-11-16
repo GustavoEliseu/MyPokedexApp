@@ -22,6 +22,7 @@ android {
         }
         create("localHost") {
             isMinifyEnabled = false
+            initWith(getByName("debug"))
             buildFeatures.buildConfig= true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
       }

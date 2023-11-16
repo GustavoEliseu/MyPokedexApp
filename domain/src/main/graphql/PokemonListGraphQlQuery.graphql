@@ -5,3 +5,69 @@ query PokemonListGraphQlQuery($searchTerm :String,$notStartsWith: String, $offse
         pokemon_color_id
     }
 }
+
+query getPokemonDetails($id: Int, $offset: Int, $pageSize: Int) {
+    pokemonItem: pokemon_v2_pokemon(where: {id: {_eq: $id}}, offset: $offset, limit: $pageSize, order_by: {id: asc}) {
+        base_experience
+        name
+        height
+        weight
+        id
+        is_default
+        pokemon_v2_pokemontypes {
+            id
+            pokemon_v2_type {
+                name
+                id
+            }
+            slot
+        }
+        pokemon_v2_pokemonstats {
+            pokemon_v2_stat {
+                name
+                id
+            }
+            effort
+            base_stat
+            id
+        }
+        pokemon_v2_pokemonspecy {
+            evolves_from_species_id
+            is_legendary
+            is_mythical
+            is_baby
+            id
+            pokemon_v2_evolutionchain {
+                pokemon_v2_pokemonspecies {
+                    id
+                    name
+                    evolves_from_species_id
+                    is_baby
+                    forms_switchable
+                    is_legendary
+                    is_mythical
+                    pokemon_color_id
+                }
+            }
+        }
+        pokemon_v2_pokemonabilities {
+            slot
+            id
+            pokemon_v2_ability {
+                name
+                id
+            }
+            is_hidden
+        }
+        pokemon_v2_pokemonitems {
+            pokemon_v2_item {
+                name
+                id
+            }
+            pokemon_v2_version {
+                name
+                id
+            }
+        }
+    }
+}

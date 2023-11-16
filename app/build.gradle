@@ -31,6 +31,9 @@ android {
     buildTypes{
         create("localHost") {
             minifyEnabled false
+            debuggable = true
+            initWith(getByName("debug"))
+            buildFeatures.buildConfig = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             signingConfig signingConfigs.debug
        }
@@ -76,6 +79,7 @@ dependencies {
     implementation (libs.compose.graphics)
     implementation libs.androidx.ui.tooling.preview
     implementation(libs.material3)
+    implementation project(path: ':data')
 
     //test
     testImplementation libs.junit

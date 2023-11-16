@@ -51,11 +51,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.gustavoeliseu.domain.entity.PokemonSimpleList
-import com.gustavoeliseu.domain.entity.PokemonSimpleListItem
+import com.gustavoeliseu.domain.models.PokemonSimpleList
 import com.gustavoeliseu.domain.utils.ColorEnum
+import com.gustavoeliseu.domain.models.PokemonSimpleListItem
 import com.gustavoeliseu.pokedex.network.connection.ConnectivityObserver
 import com.gustavoeliseu.pokedex.network.connection.NetworkConnectivityObserver
+import com.gustavoeliseu.pokedexdata.models.GenericPokemonData
 import com.gustavoeliseu.pokedexlist.R
 import com.gustavoeliseu.pokedexlist.viewmodel.PokemonListViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -76,46 +77,11 @@ fun PokedexListFragment(
     }, { pokemonListViewModel.toggleIsSearchShowing() })
 }
 
-@Composable
-fun PokeListGrid(
-    modifier: Modifier = Modifier,
-    reloadingImages: Boolean,
-    updatePosition: (id: Int) -> Unit,
-    pokemonList: LazyPagingItems<PokemonSimpleListItem>?,
-    onClick: (id: Int) -> Unit
-) {
-    if (pokemonList == null) return
-    if (pokemonList.itemCount > 0) {
-        updatePosition(pokemonList.itemSnapshotList.items.maxBy { it.id }.id)
-    }
-    LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 128.dp),
-        contentPadding = PaddingValues(
-            start = 12.dp,
-            top = 16.dp,
-            end = 12.dp,
-            bottom = 16.dp
-        ),
-        content = {
-            items(pokemonList.itemCount) { index ->
-                pokemonList[index]?.let { pk ->
-                    PokemonCard(
-                        pokemonItemSimple = pk,
-                        modifier = modifier
-                            .clickable {
-                                onClick(pk.id)
-                            },
-                        colorEnum = ColorEnum.fromInt(pk.pokemonColorId),
-                        reloading = reloadingImages
-                    )
-                }
-            }
-        })
-}
 
 @Composable
 fun PokedexListScreen(
     modifier: Modifier,
-    lazyPokemonList: LazyPagingItems<PokemonSimpleListItem>,
+    lazyPokemonList: LazyPagingItems<GenericPokemonData>,
     onClick: (id: Int) -> Unit = {},
     isSearching: Boolean,
     textSearch: String,
@@ -227,7 +193,7 @@ fun PokedexListScreen(
                     )
                 )
             }, content = { padding ->
-                Column() {
+                Column {
                     Box(modifier = modifier.padding(top = padding.calculateTopPadding()))
                     PokeListGrid(
                         modifier = modifier,
@@ -244,10 +210,51 @@ fun PokedexListScreen(
     }
 }
 
+
+@Composable
+fun PokeListGrid(
+    modifier: Modifier = Modifier,
+    reloadingImages: Boolean,
+    updatePosition: (id: Int) -> Unit,
+    pokemonList: LazyPagingItems<GenericPokemonData>?,
+    onClick: (id: Int) -> Unit
+) {
+    if (pokemonList == null) return
+    if (pokemonList.itemCount > 0) {
+        pokemonList.itemSnapshotList.items.mapNotNull { it.id }.maxBy { it }.let{id->
+            updatePosition(id)
+        }
+    }
+    LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 128.dp),
+        contentPadding = PaddingValues(
+            start = 12.dp,
+            top = 16.dp,
+            end = 12.dp,
+            bottom = 16.dp
+        ),
+        content = {
+            items(pokemonList.itemCount) { index ->
+                pokemonList[index]?.let { pk ->
+                    val pokemonData = pk as PokemonSimpleListItem
+                    PokemonCard(
+                        pokemonItemSimple = pokemonData,
+                        modifier = modifier
+                            .clickable {
+                                onClick(pokemonData.id)
+                            },
+                        colorEnum = ColorEnum.fromInt(pokemonData.pokemonColorId),
+                        reloading = reloadingImages
+                    )
+                }
+            }
+        })
+}
+
+@Suppress("USELESS_CAST")
 @Preview
 @Composable
 fun PokedexListFragmentPreview() {
-    val data = PokemonSimpleList.getSimpleListExample(LocalInspectionMode.current)
+    val data = PokemonSimpleList.getSimpleListExample(LocalInspectionMode.current).map { it as GenericPokemonData }
     val flow = MutableStateFlow(PagingData.from(data))
     val lazyPagingItems = flow.collectAsLazyPagingItems()
     PokedexListScreen(Modifier, lazyPagingItems, {}, false, "", {}, {})
