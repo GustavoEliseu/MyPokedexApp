@@ -16,6 +16,9 @@ interface PokemonDao {
     @Query("SELECT name,id,pokemonColorId, baseColor, textColor,hasDetails FROM pokemon")
     suspend fun getAllSimpleDataPokemon(): List<PokemonSimpleListItem>
 
+    @Query("SELECT name,id,pokemonColorId, baseColor, textColor,hasDetails FROM pokemon WHERE id= :id LIMIT 1")
+    suspend fun getSingleSimpleDataPokemonFromId(id:Int): PokemonSimpleListItem
+
     @Query("SELECT * FROM pokemon")
     suspend fun getAllFullDataPokemon(): List<PokemonDetails>
 
@@ -37,5 +40,5 @@ interface PokemonDao {
     suspend fun addPokemon(list: List<PokemonDetails>)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun updatePokemon(pokemon: PokemonDetails)
+    suspend fun updatePokemon(pokemon: PokemonDetails):Int
 }

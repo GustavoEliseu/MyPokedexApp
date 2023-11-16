@@ -313,6 +313,27 @@ class PokemonDatabaseTest {
     }
 
     @Test
+    fun get_single_simple_pokemon_from_id() {
+        val syncObject = Any()
+        val searchId = 3
+        val expectedResult =PokemonSimpleListItem(testPokemonArray[searchId-1], searchId)
+        CoroutineScope(Dispatchers.IO).launch {
+            val resultPokemon =
+                pokemonDao.getSingleSimpleDataPokemonFromId(searchId)
+
+
+            Truth.assertThat(resultPokemon).isNotNull()
+            Truth.assertThat(resultPokemon.id).isEqualTo(expectedResult.id)
+            synchronized (syncObject){
+                syncObject.notify();
+            }
+        }
+        synchronized(syncObject){
+            syncObject.wait()
+        }
+    }
+
+    @Test
     fun check_if_pokemon_details_exists() {
         CoroutineScope(Dispatchers.IO).launch {
             val resultPokemon = pokemonDao.getPokemonDetails(16)

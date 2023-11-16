@@ -71,7 +71,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     implementation(libs.appcompat)
-    implementation(project(mapOf("path" to ":data")))
+    implementation(project(":data"))
+    implementation(project(path= ":commonui"))
     implementation(libs.androidx.runner)
     // Tests
     androidTestImplementation(libs.truth)

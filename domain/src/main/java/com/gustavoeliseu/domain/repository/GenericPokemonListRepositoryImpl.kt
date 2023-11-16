@@ -18,13 +18,12 @@ import com.gustavoeliseu.domain.models.PokemonSimpleList.Companion.toSimplePokem
 import com.gustavoeliseu.domain.utils.Const.PAGE_SIZE
 import com.gustavoeliseu.pokedex.GetPokemonDetailsQuery
 import com.gustavoeliseu.pokedex.PokemonListGraphQlQuery
-import com.gustavoeliseu.pokedex.utils.SafeCrashlyticsUtil
+import com.gustavoeliseu.domain.utils.SafeCrashlyticsUtil
 import com.gustavoeliseu.pokedexdata.models.GenericPokemonData
 import com.gustavoeliseu.pokedexdata.repository.GenericPokemonListRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -38,7 +37,8 @@ class GenericPokemonListRepositoryImpl @Inject constructor(
 ) : GenericPokemonListRepository {
     private lateinit var pokemonDao: PokemonDao;
     override fun queryPokemonList(
-        searchTyped: String
+        searchTyped: String,
+        offline:Boolean
     ): Flow<PagingData<GenericPokemonData>> {
         pokemonDao = pokemonDatabase.pokemonDao()
         return Pager(
@@ -46,26 +46,32 @@ class GenericPokemonListRepositoryImpl @Inject constructor(
                 pageSize = pageSize,
                 enablePlaceholders = false
             ),
-            pagingSourceFactory = { createPagingSource(searchTyped) }
+            pagingSourceFactory = { createPagingSource(searchTyped,
+                offline) }
         ).flow
     }
 
     override suspend fun getPokemonDetails(pokeId: Int): GenericPokemonData? {
-        return  getQueryDetailsFromApollo(pokeId) as? GenericPokemonData
+        val details = pokemonDatabase.pokemonDao().getPokemonDetails(pokeId)
+        var result :PokemonDetails? = details
+        if(!details.hasDetails){
+            result = getQueryDetailsFromApollo(pokeId)
+            result?.addColors(details.toPokemonSimple())
+
+            result?.let {
+            pokemonDatabase.pokemonDao().updatePokemon(it)
+            }
+        }
+        return  result as? GenericPokemonData
     }
 
     private fun createPagingSource(
         searchTyped: String,
+        offline:Boolean
     ): PokemonPagingSource {
         return PokemonPagingSource(searchTerm = "$searchTyped%") { currentSearchTerm, startsWith, currentNextPage ->
             try {
-                if (pokemonDao.getSearchPaginatedPokemonListCount(
-                        currentSearchTerm,
-                        startsWith,
-                        currentNextPage,
-                        PAGE_SIZE
-                    ) > 0
-                ) {
+                if (offline) {
                     val pokeSimpleList = PokemonSimpleList(
                         pokemonDao.getAllDataPokemonPaginatedSearch(
                             currentSearchTerm,
@@ -78,7 +84,7 @@ class GenericPokemonListRepositoryImpl @Inject constructor(
                     val pokeList = getQueryFromApollo(currentSearchTerm,startsWith+pokeSimpleList.pokemonItems.size,currentNextPage,
                         PAGE_SIZE-pokeSimpleList.pokemonItems.size)
                         val pokeListResult = pokeSimpleList.pokemonItems.toMutableList()
-                        pokeListResult.addAll((pokeList.pokemonItems))
+                        pokeListResult.addAll((pokeList.pokemonItems.filter {poke-> !pokeSimpleList.pokemonItems.map { it.id }.contains(poke.id) }))
                         val resultPokeList = PokemonSimpleList(pokeListResult)
                         CoroutineScope(Dispatchers.IO).launch {
                             pokemonDao.addAllPokemonSimple(pokeList.pokemonItems.map { it.toPokemonDetails() })

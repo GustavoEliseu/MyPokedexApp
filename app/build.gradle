@@ -63,7 +63,7 @@ android {
 
 dependencies {
     implementation(project(":domain"))
-    implementation(project(":pokedexlist"))
+    implementation implementation(project(':pokedex',))
     implementation(project(":commonui"))
     //Android and Ktx
     implementation(libs.androidx.ktx)

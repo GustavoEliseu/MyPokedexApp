@@ -6,7 +6,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface GenericPokemonListRepository {
     fun queryPokemonList(
-        searchTyped: String
+        searchTyped: String,
+        offline:Boolean
     ): Flow<PagingData<GenericPokemonData>>
 
     suspend fun getPokemonDetails(

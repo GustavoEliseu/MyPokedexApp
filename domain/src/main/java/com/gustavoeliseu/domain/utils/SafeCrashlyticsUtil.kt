@@ -1,4 +1,4 @@
-package com.gustavoeliseu.pokedex.utils
+package com.gustavoeliseu.domain.utils
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import java.net.ConnectException

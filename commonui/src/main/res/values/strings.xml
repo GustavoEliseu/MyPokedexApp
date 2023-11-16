@@ -1,3 +1,124 @@
 <resources>
     <string name="app_name">CommonUi</string>
+
+    <string name="pokemon_description">Image of the pokemon %s</string>
+    <string name="missing_no">Image of missigno, due to not being able to load %s picture</string>
+
+
+    <string name="male">male</string>
+    <string name="female">female</string>
+    <!--Colors-->
+    <string name="dark_gray">darkGray</string>
+    <string name="black">black</string>
+    <string name="blue">blue</string>
+    <string name="brown">brown</string>
+    <string name="gray">gray</string>
+    <string name="green">green</string>
+    <string name="pink">pink</string>
+    <string name="purple">purple</string>
+    <string name="red">red</string>
+    <string name="white">white</string>
+    <string name="yellow">yellow</string>
+
+    <!-- Pokemon Types -->
+    <string name="invalid">invalid</string>
+    <string name="fighting">fighting</string>
+    <string name="normal">normal</string>
+    <string name="poison">poison</string>
+    <string name="flying">flying</string>
+    <string name="ground">ground</string>
+    <string name="rock">rock</string>
+    <string name="bug">bug</string>
+    <string name="ghost">ghost</string>
+    <string name="steel">steel</string>
+    <string name="fire">fire</string>
+    <string name="water">water</string>
+    <string name="grass">grass</string>
+    <string name="electric">electric</string>
+    <string name="psychic">psychic</string>
+    <string name="ice">ice</string>
+    <string name="dragon">dragon</string>
+    <string name="dark">dark</string>
+    <string name="fairy">fairy</string>
+    <string name="unknown">unknown</string>
+    <string name="shadow">shadow</string>
+
+    <!-- Evolution Types-->
+    <string name="invalid_evolution_type">INVALID EVOLUTION TYPE</string>
+    <string name="level_up">level-up</string>
+    <string name="trade">trade</string>
+    <string name="use_item">use-item</string>
+    <string name="shed">shed</string>
+    <string name="spin">spin</string>
+    <string name="tower_of_darkness">tower-of-darkness</string>
+    <string name="tower_of_waters">tower-of-waters</string>
+    <string name="three_critical_hits">three-critical-hits</string>
+    <string name="take_damage">take-damage</string>
+    <string name="other">other</string>
+    <string name="agile_style_move">agile-style-move</string>
+    <string name="strong_style_move">strong-style-move</string>
+    <string name="recoil_damage">recoil-damage</string>
+
+    <!-- Data Types -->
+    <string name="pokemon">pokemon</string>
+    <string name="ability">ability</string>
+    <string name="move">move</string>
+    <string name="egg_type">egg type</string>
+    <string name="type">type</string>
+
+    <!-- Evolution requirements-->
+    <string name="friendship">friendship</string>
+    <string name="affection">affection</string>
+    <string name="day">day</string>
+    <string name="night">night</string>
+    <string name="beauty">beauty</string>
+
+    <!-- evolution items-->
+    <string name="sun_stone">sun stone</string>
+    <string name="moon_stone">moon stone</string>
+    <string name="fire_stone">fire stone</string>
+    <string name="thunder_stone">thunder stone</string>
+    <string name="water_stone">water stone</string>
+    <string name="leaf_stone">leaf stone</string>
+    <string name="shiny_stone">shiny stone</string>
+    <string name="dusk_stone">dusk stone</string>
+    <string name="dawn_stone">dawn stone</string>
+    <string name="oval_stone">oval stone</string>
+    <string name="dragon_scale">dragon scale</string>
+    <string name="up_grade">up grade</string>
+    <string name="protector">protector</string>
+    <string name="electirizer">electirizer</string>
+    <string name="magmarizer">magmarizer</string>
+    <string name="dubious_disc">dubious disc</string>
+    <string name="reaper_cloth">reaper cloth</string>
+    <string name="prism_scale">prism scale</string>
+    <string name="whipped_dream">whipped dream</string>
+    <string name="sachet">sachet</string>
+    <string name="ice_stone">ice stone</string>
+    <string name="strawberry_sweet">strawberry sweet</string>
+    <string name="love_sweet">love sweet</string>
+    <string name="berry_sweet">berry sweet</string>
+    <string name="clover_sweet">clover sweet</string>
+    <string name="flower_sweet">flower sweet</string>
+    <string name="star_sweet">star sweet</string>
+    <string name="ribbon_sweet">ribbon sweet</string>
+    <string name="sweet_apple">sweet apple</string>
+    <string name="tart_apple">tart apple</string>
+    <string name="cracked_pot">cracked pot</string>
+    <string name="chipped_pot">chipped pot</string>
+    <string name="malicious_armor">malicious armor</string>
+    <string name="syrupy_apple">syrupy apple</string>
+    <string name="unremarkable_teacup">unremarkable teacup</string>
+    <string name="masterpiece_teacup">masterpiece teacup</string>
+    <string name="black_augurite">black augurite</string>
+    <string name="peat_block">peat block</string>
+    <string name="kings_rock">kings-rock</string>
+    <string name="deep_sea_tooth">deep-sea-tooth</string>
+    <string name="deep_sea_scale">deep-sea-scale</string>
+    <string name="metal_coat">metal-coat</string>
+    <string name="upgrade">up-grade</string>
+    <string name="razor_claw">razor-claw</string>
+    <string name="razor_fang">razor-fang</string>
+    <string name="galarica_cuff">galarica cuff</string>
+    <string name="galarica_wreath">galarica wreath</string>
 </resources>

@@ -15,7 +15,7 @@
             <option value="$PROJECT_DIR$/commonui" />
             <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/domain" />
-            <option value="$PROJECT_DIR$/pokedexlist" />
+            <option value="$PROJECT_DIR$/pokedex" />
           </set>
         </option>
       </GradleProjectSettings>

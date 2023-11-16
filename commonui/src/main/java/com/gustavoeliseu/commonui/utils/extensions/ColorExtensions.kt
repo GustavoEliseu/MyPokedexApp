@@ -3,6 +3,7 @@ package com.gustavoeliseu.commonui.utils.extensions
 import androidx.compose.ui.graphics.Color
 import androidx.core.graphics.ColorUtils
 import androidx.palette.graphics.Palette
+import com.gustavoeliseu.myapplication.R
 import androidx.compose.ui.graphics.Color as ComposeColor
 
 
@@ -13,6 +14,7 @@ fun Int.isDarkColor(): Boolean {
 fun FloatArray.notTooDarkNorTooBright(): Boolean {
     val lightness = this[2]
     val saturation = this[1]
+    R.drawable.caterpie_test
     return !(saturation > 0.95 || saturation < 0.05) && !(lightness > 0.95 || lightness < 0.05)
 }
 

@@ -10,8 +10,10 @@ import kotlinx.coroutines.flow.Flow
 
 class GetSimplePokemonListUseCase @Inject constructor(private val genericPokemonListRepository: GenericPokemonListRepository) {
     fun getList(
-        query:String
+        query:String,
+        offline:Boolean
     ): Flow<PagingData<GenericPokemonData>> {
-       return genericPokemonListRepository.queryPokemonList(query)
+       return genericPokemonListRepository.queryPokemonList(query,
+           offline)
     }
 }

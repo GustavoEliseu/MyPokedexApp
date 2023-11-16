@@ -1,22 +1,23 @@
 package com.gustavoeliseu.domain.models
 
-import android.graphics.drawable.Drawable
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.gustavoeliseu.domain.models.Ability.Companion.toAbility
 import com.gustavoeliseu.domain.models.HeldItems.Companion.toHeldItem
+import com.gustavoeliseu.domain.models.PokemonSpeciesEvolution.Companion.toPokemonSpeciesEvolutionList
 import com.gustavoeliseu.domain.models.PokemonSpecy.Companion.toSpecy
 import com.gustavoeliseu.domain.models.Stats.Companion.toStats
 import com.gustavoeliseu.domain.models.Type.Companion.toType
 import com.gustavoeliseu.domain.utils.Const.PokemonData.POKEMON_TABLE_NAME
+import com.gustavoeliseu.domain.utils.EvolutionTypeEnum
+import com.gustavoeliseu.domain.utils.GenderEnum
+import com.gustavoeliseu.domain.utils.TypeEnum
 import com.gustavoeliseu.pokedex.GetPokemonDetailsQuery
 import com.gustavoeliseu.pokedex.PokemonListGraphQlQuery
 import com.gustavoeliseu.pokedexdata.models.GenericPokemonData
 import com.gustavoeliseu.pokedexdata.models.GenericPokemonDataList
 import com.gustavoeliseu.pokedexdata.models.UrlGenericPokemonData
-import java.io.Serializable
-import java.lang.ref.SoftReference
 
 
 data class PokemonSimpleListItem(
@@ -26,9 +27,13 @@ data class PokemonSimpleListItem(
     val pokemonColorId: Int? = null,
     var baseColor: Int? = null,
     var textColor: Int? = null,
+    var hasDetails: Boolean = false,
     @Ignore
-    var drawable: SoftReference<Drawable>? = null,
-    var hasDetails: Boolean = false
+    var drawableId: Int? = null,
+    @Ignore
+    var description: String? = null,
+    @Ignore
+    var gender: GenderEnum = GenderEnum.INVALID
 ) : GenericPokemonData(name, id) {
     constructor(
         name: String,
@@ -36,7 +41,7 @@ data class PokemonSimpleListItem(
         pokemonColorId: Int?,
         baseColor: Int?,
         textColor: Int?
-    ) : this(name, id, pokemonColorId, baseColor, textColor, null)
+    ) : this(name, id, pokemonColorId, baseColor, textColor, false)
 
     fun toPokemonDetails(): PokemonDetails {
         return PokemonDetails(
@@ -46,6 +51,12 @@ data class PokemonSimpleListItem(
             baseColor = baseColor,
             textColor = textColor
         )
+    }
+
+    companion object {
+        fun fromDetails(details: PokemonDetails): PokemonSimpleListItem {
+            return details.toPokemonSimple()
+        }
     }
 }
 
@@ -127,40 +138,39 @@ data class PokemonSimpleList(
 }
 
 @Entity(tableName = POKEMON_TABLE_NAME)
-data class PokemonDetails @JvmOverloads constructor(
-    val abilities: List<Ability> = listOf(),
-    val baseExperience: Int? = null,
-    override val name: String,
-    val height: Int? = null,
-    val weight: Int? = null,
+data class PokemonDetails(
+    var abilities: List<Ability> = listOf(),
+    var baseExperience: Int? = null,
+    override var name: String,
+    var height: Int? = null,
+    var weight: Int? = null,
     @PrimaryKey
-    override val id: Int,
-    val heldItems: List<HeldItems> = listOf(),
-    val isDefault: Boolean = false,
-    val stats: List<Stats> = listOf(),
-    val types: List<Type> = listOf(),
-    val specy: PokemonSpecy? = null,
-    val pokemonColorId: Int? = null,
+    override var id: Int,
+    var heldItems: List<HeldItems> = listOf(),
+    var isDefault: Boolean = false,
+    var stats: List<Stats> = listOf(),
+    var types: List<Type> = listOf(),
+    var specy: PokemonSpecy? = null,
+    var pokemonColorId: Int? = null,
     var baseColor: Int? = null,
     var textColor: Int? = null,
-    var hasDetails: Boolean = false
-) : Serializable, GenericPokemonData(name,id) {
-    constructor(
-        name: String,
-        id: Int,
-        pokemonColorId: Int?,
-        baseColor: Int?,
-        textColor: Int?,
-        hasDetails: Boolean = false
-    ) : this(
-        name = name,
-        id = id,
-        pokemonColorId = pokemonColorId,
-        baseColor = baseColor,
-        textColor = textColor,
-        hasDetails = hasDetails,
-        height = 0
-    )
+    var hasDetails: Boolean = false,
+    @Ignore
+    var drawableId: Int? = null,
+    @Ignore
+    var description: String? = null,
+) : GenericPokemonData(name, id) {
+
+    constructor(): this(id= -1,name="")
+
+    fun addColors(simpleItem: PokemonSimpleListItem) {
+        if (this.pokemonColorId == null && simpleItem.pokemonColorId != null)
+            this.pokemonColorId = simpleItem.pokemonColorId
+        if (this.baseColor == null && simpleItem.baseColor != null)
+            this.baseColor = simpleItem.baseColor
+        if (this.textColor == null && simpleItem.textColor != null)
+            this.textColor = simpleItem.textColor
+    }
 
     companion object {
         fun GetPokemonDetailsQuery.PokemonItem?.toPokemonDetails(): PokemonDetails? {
@@ -178,6 +188,12 @@ data class PokemonDetails @JvmOverloads constructor(
                 specy = pokemon_v2_pokemonspecy?.toSpecy(),
                 hasDetails = true,
             ) else null
+        }
+
+        fun getExamplePokemonDetails(missingno:Boolean): PokemonDetails{
+            return PokemonDetails(
+                name = if(missingno)"Missingno" else "Caterpie", id = if(missingno)-1 else 10, drawableId = -1,description ="A picture of caterpie"
+            )
         }
     }
 
@@ -198,33 +214,55 @@ data class PokemonSpecy(
     val legendary: Boolean,
     val mythical: Boolean,
     val baby: Boolean,
-    val evolutionChain: PokemonEvolutionChain?,
+    val pokemonColorId: Int?,
+    val evolutionChain: PokemonEvolutionChain? = null,
+    val evolution: MutableList<PokemonSpecy> = mutableListOf(),
+    val pokemonSpecyEvolution: List<PokemonSpeciesEvolution>? = listOf(),
     val name: String,
     val id: Int
 ) {
     companion object {
         fun GetPokemonDetailsQuery.Pokemon_v2_pokemonspecy.toSpecy(): PokemonSpecy {
+            val evolutionChain =
+                PokemonEvolutionChain(
+                    pokemon_v2_evolutionchain?.pokemon_v2_pokemonspecies?.map { species ->
+                        PokemonSpecy(
+                            id = species.id,
+                            evolvesFromId = species.evolves_from_species_id,
+                            legendary = species.is_legendary,
+                            mythical = species.is_mythical,
+                            baby = species.is_baby,
+                            name = species.name,
+                            pokemonColorId = species.pokemon_color_id,
+                            pokemonSpecyEvolution = species.pokemon_v2_pokemonevolutions.toPokemonSpeciesEvolutionList()
+                        )
+                    })
+            evolutionChain.pokemonEvolutionChain?.forEach {
+                if (it.evolvesFromId != null) {
+                    evolutionChain.pokemonEvolutionChain.find { inner -> it.evolvesFromId == inner.id }?.evolution?.add(
+                        it
+                    )
+                }
+            }
+            val evolution =
+                evolutionChain.pokemonEvolutionChain?.find { inner -> id == inner.id }?.evolution
+                    ?: mutableListOf()
+
             return PokemonSpecy(
                 evolvesFromId = evolves_from_species_id,
                 legendary = is_legendary,
                 mythical = is_mythical,
                 baby = is_baby,
-                evolutionChain =
-                PokemonEvolutionChain(
-                    pokemon_v2_evolutionchain?.pokemon_v2_pokemonspecies?.map {
-                        PokemonSpecy(
-                            evolvesFromId = evolves_from_species_id,
-                            legendary = is_legendary,
-                            mythical = is_mythical,
-                            baby = is_baby,
-                            name = name,
-                            id = id,
-                            evolutionChain = null
-                        )
-                    }),
+                evolutionChain = evolutionChain,
+                evolution = evolution,
                 name = name,
+                pokemonColorId = pokemon_color_id,
                 id = id
             )
+        }
+
+        fun PokemonSpecy.toSimplePokemon(gender: GenderEnum = GenderEnum.INVALID): PokemonSimpleListItem {
+            return PokemonSimpleListItem(name, id, pokemonColorId, gender = gender)
         }
     }
 }
@@ -233,12 +271,115 @@ data class PokemonEvolutionChain(
     val pokemonEvolutionChain: List<PokemonSpecy>?,
 )
 
+data class PokemonSpeciesEvolution(
+    val id: Int,
+    val evolutionItemId: Int? = null,
+    val evolutionTriggerId: Int? = null,
+    val evolvedSpeciesId: Int? = null,
+    val heldItemId: Int? = null,
+    val genderId: Int? = null,
+    val knownMoveId: Int? = null,
+    val knownMoveTypeId: Int? = null,
+    val minBeauty: Int? = null,
+    val minHappiness: Int? = null,
+    val minLevel: Int? = null,
+    val timeOfDay: String? = null,
+    val tradeSpeciesId: Int? = null,
+    val minAffection: Int? = null,
+    val locationId: Int? = null,
+    val evolutionItem: GenericPokemonData? = null,
+    val moveNeeded: GenericPokemonData? = null,
+    val locationNeeded: GenericPokemonData? = null
+) {
+    companion object {
+        fun List<GetPokemonDetailsQuery.Pokemon_v2_pokemonevolution>.toPokemonSpeciesEvolutionList(): List<PokemonSpeciesEvolution> {
+            return this.map {
+                PokemonSpeciesEvolution(
+                    id = it.id,
+                    evolutionItemId = it.evolution_item_id,
+                    evolutionTriggerId = it.evolution_trigger_id,
+                    evolvedSpeciesId = it.evolved_species_id,
+                    heldItemId = it.held_item_id,
+                    genderId = it.gender_id,
+                    knownMoveId = it.known_move_id,
+                    knownMoveTypeId = it.known_move_type_id,
+                    minBeauty = it.min_beauty,
+                    minHappiness = it.min_happiness,
+                    minLevel = it.min_level,
+                    timeOfDay = it.time_of_day,
+                    tradeSpeciesId = it.trade_species_id,
+                    minAffection = it.min_affection,
+                    locationId = it.location_id,
+                    evolutionItem = if (it.pokemon_v2_item != null) GenericPokemonData(
+                        it.pokemon_v2_item.name,
+                        it.pokemon_v2_item.id
+                    ) else null,
+                    moveNeeded = if (it.pokemon_v2_move != null) GenericPokemonData(
+                        it.pokemon_v2_move.name,
+                        it.pokemon_v2_move.id
+                    ) else null,
+                    locationNeeded = if (it.pokemon_v2_location != null) GenericPokemonData(
+                        it.pokemon_v2_location.name,
+                        it.pokemon_v2_location.id
+                    ) else null
+                )
+            }
+        }
+
+        fun PokemonSpeciesEvolution.neededToEvolve(
+            evolutionTypeEnum: EvolutionTypeEnum,
+            resultCallback: (String, Int?) -> Unit
+        ) {
+            var result = ""
+            var itemId: Int? = heldItemId
+            when (evolutionTypeEnum) {
+                EvolutionTypeEnum.LEVEL -> {
+                    if (minLevel != null) {
+                        result += " to $minLevel"
+                    }
+                    if (!timeOfDay.isNullOrEmpty()) result += " during $timeOfDay"
+                    if (knownMoveTypeId != null) result += " knowing a ${
+                        TypeEnum.fromInt(
+                            knownMoveTypeId
+                        ).name.lowercase()
+                    } move"
+                    if (knownMoveId != null && moveNeeded != null) result += " knowing ${moveNeeded.name}"
+                    if (locationId != null && locationNeeded != null) result += " near ${locationNeeded.name}"
+
+                }
+
+                EvolutionTypeEnum.TRADE -> {
+                    result = "Trade"
+                }
+
+                EvolutionTypeEnum.USEITEM -> {
+                    result = "Use"
+                    itemId = evolutionItemId
+                }
+
+                EvolutionTypeEnum.AGILEMOVE -> {
+                    itemId = knownMoveId
+                }
+
+                EvolutionTypeEnum.STRONGMOVE -> {
+                    itemId = knownMoveId
+                }
+
+                else -> {
+                }
+            }
+
+            resultCallback(result, itemId)
+        }
+    }
+}
+
 data class Ability(
     val slot: Int,
     val id: Int,
     val ability: GenericPokemonData?,
     val isHidden: Boolean,
-) : Serializable {
+)  {
 
     companion object {
 
@@ -248,8 +389,8 @@ data class Ability(
                     id = it.id,
                     slot = it.slot,
                     ability = GenericPokemonData(
-                        it.pokemon_v2_ability?.name,
-                        it.pokemon_v2_ability?.id
+                        it.pokemon_v2_ability?.name.orEmpty(),
+                        it.pokemon_v2_ability?.id ?: -1
                     ),
                     isHidden = it.is_hidden
                 )
@@ -263,7 +404,7 @@ data class Stats(
     val effort: Int,
     val stat: GenericPokemonData,
     val id: Int
-) : Serializable {
+) {
 
     companion object {
         fun List<GetPokemonDetailsQuery.Pokemon_v2_pokemonstat>.toStats(): List<Stats> {
@@ -272,7 +413,7 @@ data class Stats(
                 Stats(
                     baseStat = it.base_stat,
                     effort = it.effort,
-                    stat = GenericPokemonData(it.pokemon_v2_stat?.name, it.pokemon_v2_stat?.id),
+                    stat = GenericPokemonData(it.pokemon_v2_stat?.name.orEmpty(), it.pokemon_v2_stat?.id ?: -1),
                     id = it.id
                 )
             }
@@ -283,20 +424,18 @@ data class Stats(
 data class Moves(
     val move: UrlGenericPokemonData,
     val versionDetails: List<MoveVersionGroupDetails>
-) : Serializable
+)
 
 data class Type(
     val slot: Int,
-    val id: Int,
     val type: GenericPokemonData
-) : Serializable {
+) {
     companion object {
         fun List<GetPokemonDetailsQuery.Pokemon_v2_pokemontype>.toType(): List<Type> {
             return this.map {
                 Type(
                     slot = it.slot,
-                    id = it.id,
-                    type = GenericPokemonData(it.pokemon_v2_type?.name, it.pokemon_v2_type?.id)
+                    type = GenericPokemonData(it.pokemon_v2_type?.name.orEmpty(), it.pokemon_v2_type?.id  ?: -1)
                 )
             }
         }
@@ -306,16 +445,16 @@ data class Type(
 data class HeldItems(
     val item: GenericPokemonData,
     val versionDetails: GenericPokemonData
-) : Serializable {
+) {
 
     companion object {
         fun List<GetPokemonDetailsQuery.Pokemon_v2_pokemonitem>.toHeldItem(): List<HeldItems> {
             return this.map {
                 HeldItems(
                     GenericPokemonData(
-                        it.pokemon_v2_item?.name,
-                        it.pokemon_v2_item?.id
-                    ), GenericPokemonData(it.pokemon_v2_version?.name, it.pokemon_v2_version?.id)
+                        it.pokemon_v2_item?.name.orEmpty(),
+                        it.pokemon_v2_item?.id ?: -1
+                    ), GenericPokemonData(it.pokemon_v2_version?.name.orEmpty(), it.pokemon_v2_version?.id ?: -1)
                 )
             }
         }
@@ -326,4 +465,4 @@ data class MoveVersionGroupDetails(
     val levelLearned: Int,
     val moveLearnMethod: UrlGenericPokemonData,
     val versionGroup: UrlGenericPokemonData
-) : Serializable
+)

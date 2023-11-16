@@ -14,8 +14,7 @@ import androidx.navigation.navArgument
 import coil.Coil
 import coil.ImageLoader
 import com.gustavoeliseu.domain.database.PokemonDatabase
-import com.gustavoeliseu.domain.database.PokemonDatabase_Impl
-import com.gustavoeliseu.pokedexlist.ui.PokedexListFragment
+import com.gustavoeliseu.pokedex.ui.PokedexListFragment
 import com.gustavoeliseu.pokedex.ui.fragment.PokemonDetailsFragment
 import com.gustavoeliseu.pokedex.ui.network_compose.NetworkComposableObserver
 import com.gustavoeliseu.pokedex.ui.theme.MyPokedexTheme

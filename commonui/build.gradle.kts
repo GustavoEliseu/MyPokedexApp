@@ -43,7 +43,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":domain"))
     implementation(libs.androidx.ktx)
     implementation(platform(libs.kotlin.bom))
     implementation(libs.androidx.palette.ktx)
