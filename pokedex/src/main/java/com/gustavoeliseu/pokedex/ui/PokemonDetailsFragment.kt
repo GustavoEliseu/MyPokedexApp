@@ -1,5 +1,7 @@
-package com.gustavoeliseu.pokedex.ui.fragment
+package com.gustavoeliseu.pokedex.ui
 
+import android.content.Context
+import android.os.Environment
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -42,8 +44,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.gson.Gson
 import com.gustavoeliseu.commonui.utils.extensions.shimmerEffect
 import com.gustavoeliseu.domain.models.PokemonDetails
+import com.gustavoeliseu.domain.models.PokemonEvolutionChain
 import com.gustavoeliseu.domain.models.PokemonSimpleListItem
 import com.gustavoeliseu.domain.models.PokemonSpeciesEvolution
 import com.gustavoeliseu.domain.models.PokemonSpeciesEvolution.Companion.neededToEvolve
@@ -51,19 +55,20 @@ import com.gustavoeliseu.domain.models.PokemonSpecy
 import com.gustavoeliseu.domain.models.PokemonSpecy.Companion.toSimplePokemon
 import com.gustavoeliseu.domain.utils.ClickType
 import com.gustavoeliseu.domain.utils.ColorEnum
+import com.gustavoeliseu.domain.utils.Const.EVOLUTION_CARD_LOCATION_TEST
+import com.gustavoeliseu.domain.utils.Const.EVOLUTION_CARD_TEST
 import com.gustavoeliseu.domain.utils.EvolutionRequirementTypeEnum
 import com.gustavoeliseu.domain.utils.EvolutionTypeEnum
 import com.gustavoeliseu.domain.utils.GenderEnum
 import com.gustavoeliseu.domain.utils.TypeEnum
 import com.gustavoeliseu.domain.utils.TypeEnum.Companion.isValid
-import com.gustavoeliseu.pokedex.R
-import com.gustavoeliseu.pokedex.ui.DefaultValue
-import com.gustavoeliseu.pokedex.ui.PokemonCard
-import com.gustavoeliseu.pokedex.ui.PokemonImageLoader
-import com.gustavoeliseu.pokedex.ui.PokemonTypeRoundComposable
-import com.gustavoeliseu.pokedex.ui.PokemonTypeTextComposable
 import com.gustavoeliseu.pokedex.viewmodel.PokemonDetailsViewModel
+import com.gustavoeliseu.pokedexlist.R
+import java.io.File
+import java.io.FileOutputStream
+import java.io.ObjectOutputStream
 import java.util.Locale
+
 
 @Composable
 fun PokemonDetailsFragment(
@@ -198,12 +203,27 @@ fun PokemonDetailsScreen(
     }
 }
 
+fun saveJsonFile(spec: PokemonSpecy, context: Context){
+//    val path = context.getFilesDir()
+    val name = spec.name
+    val path = context.getExternalFilesDir(null)
+    val gson = Gson()
+    val json: String = gson.toJson(spec)
+    val letDirectory = File(path, "JSON")
+    letDirectory.mkdirs()
+    val file = File(letDirectory, "${name}.txt")
+    file.writeText(json)
+    FileOutputStream(file).use {
+        it.write(json.toByteArray())
+    }
+}
+
 @Composable
 fun showPokemonAndEvolutions(spec: PokemonSpecy) {
     Column {
         if (spec.evolution.isNotEmpty()) {
             Row {
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp),) {
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     spec.evolution.sortedWith(compareBy<PokemonSpecy> { it.evolvesFromId }.thenBy { it.id })
                         .forEach { evolution ->
                             val evolutionData =
@@ -211,8 +231,9 @@ fun showPokemonAndEvolutions(spec: PokemonSpecy) {
                             val simplePokeEvol = evolution.toSimplePokemon()
                             evolutionData?.sortedWith(compareBy<PokemonSpeciesEvolution> { it.evolvedSpeciesId }.thenBy { it.id })
                                 ?.filter { it.locationId == null }
+                                ?.distinctBy { it.evolvedSpeciesId }
                                 ?.forEachIndexed { index, innerSpec ->
-                                    Card(modifier = Modifier,
+                                    Card(modifier = Modifier.testTag(EVOLUTION_CARD_TEST),
                                     shape = CardDefaults.shape,
                                     colors = CardDefaults.cardColors(),
                                     elevation = CardDefaults.cardElevation(),
@@ -387,7 +408,7 @@ fun showPokemonAndEvolutions(spec: PokemonSpecy) {
                                         }
                                         if (hasLocationRelatedEvolution) {
                                             Text(
-                                                modifier = Modifier.align(Alignment.CenterHorizontally),
+                                                modifier = Modifier.align(Alignment.CenterHorizontally).testTag(EVOLUTION_CARD_LOCATION_TEST),
                                                 text = "Also level up near specific places",
                                                 textAlign = TextAlign.Center
                                             )

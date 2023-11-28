@@ -4,14 +4,4 @@
     <string name="pokemon_description">Image of the pokemon %s</string>
     <string name="missing_no">Image of missigno, due to not being able to load %s picture</string>
     <string name="disable_no_connection">Disabled when there is no connection</string>
-
-    <string name="evolve_recoil">Receive 294 of recoil damage</string>
-    <string name="evolve_use_item">Use %s</string>
-    <string name="evolve_level">Level up to %s</string>
-    <string name="evolve_level_custom">Level up%s</string>
-    <string name="evolve_agile">Use Agile %s 20 times</string>
-    <string name="evolve_strong">Use Strong %s 20 times</string>
-    <string name="evolve_shed">Level up to 20 with empty slot</string>
-    <string name="evolve_trade">Trade</string>
-    <string name="evolve_trade_holding">Trade holding %s</string>
 </resources>

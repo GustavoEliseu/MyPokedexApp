@@ -1,4 +1,4 @@
-package com.gustavoeliseu.pokedex.ui
+package com.gustavoeliseu.pokedex.ui.card
 
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
@@ -21,6 +21,7 @@ import coil.test.FakeImageLoaderEngine
 import com.gustavoeliseu.commonui.utils.extensions.colorDistance
 import com.gustavoeliseu.domain.models.PokemonSimpleListItem
 import com.gustavoeliseu.domain.utils.ColorEnum
+import com.gustavoeliseu.pokedex.ui.PokemonCard
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

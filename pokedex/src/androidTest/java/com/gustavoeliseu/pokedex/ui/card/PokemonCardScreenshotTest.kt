@@ -1,4 +1,4 @@
-package com.gustavoeliseu.pokedex.ui
+package com.gustavoeliseu.pokedex.ui.card
 
 import android.content.Context
 import android.graphics.Color
@@ -17,6 +17,7 @@ import coil.test.FakeImageLoaderEngine
 import com.gustavoeliseu.domain.models.PokemonSimpleListItem
 import com.gustavoeliseu.domain.utils.ColorEnum
 import com.gustavoeliseu.domain.utils.GenderEnum
+import com.gustavoeliseu.pokedex.ui.PokemonCard
 import com.gustavoeliseu.myapplication.R as commonResources
 import com.karumi.shot.ScreenshotTest
 import org.junit.Before
@@ -51,14 +52,6 @@ class PokemonCardScreenshotTest : ScreenshotTest {
                             }
                         }
                         val drawable = context.getDrawable(drawableId)
-                        drawable?.let {
-                            SuccessResult(
-                                drawable = it,
-                                request = chain.request,
-                                dataSource = DataSource.MEMORY,
-                            )
-                        }
-
                         drawable?.let {
                             SuccessResult(
                                 drawable = it,

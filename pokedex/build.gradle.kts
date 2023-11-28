@@ -90,6 +90,7 @@ dependencies {
 
     // Paging
     implementation(libs.androidx.paging.compose)
+    implementation(libs.gson)
 
 
     testImplementation(libs.junit)

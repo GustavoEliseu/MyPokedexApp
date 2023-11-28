@@ -24,4 +24,8 @@ object Const {
             return arrayOf()
         }
     }
+
+    //Test Tags
+    const val EVOLUTION_CARD_TEST = "EvolutionCard"
+    const val EVOLUTION_CARD_LOCATION_TEST = "EvolutionLocationCard"
 }

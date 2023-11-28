@@ -15,7 +15,7 @@ import coil.Coil
 import coil.ImageLoader
 import com.gustavoeliseu.domain.database.PokemonDatabase
 import com.gustavoeliseu.pokedex.ui.PokedexListFragment
-import com.gustavoeliseu.pokedex.ui.fragment.PokemonDetailsFragment
+import com.gustavoeliseu.pokedex.ui.PokemonDetailsFragment
 import com.gustavoeliseu.pokedex.ui.network_compose.NetworkComposableObserver
 import com.gustavoeliseu.pokedex.ui.theme.MyPokedexTheme
 import com.gustavoeliseu.pokedex.utils.Const.POKEMON_ID

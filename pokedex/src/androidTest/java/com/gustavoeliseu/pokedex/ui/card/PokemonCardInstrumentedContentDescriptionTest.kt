@@ -1,4 +1,4 @@
-package com.gustavoeliseu.pokedex.ui
+package com.gustavoeliseu.pokedex.ui.card
 
 import android.content.Context
 import android.graphics.Color
@@ -19,6 +19,7 @@ import coil.request.SuccessResult
 import coil.test.FakeImageLoaderEngine
 import com.gustavoeliseu.domain.models.PokemonSimpleListItem
 import com.gustavoeliseu.domain.utils.ColorEnum
+import com.gustavoeliseu.pokedex.ui.PokemonCard
 import com.gustavoeliseu.myapplication.R as commonResources
 import org.junit.Before
 import org.junit.Rule
