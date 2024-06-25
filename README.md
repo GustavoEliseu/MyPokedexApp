@@ -4,7 +4,7 @@ Este é um projeto pessoal com intuito de aprendizado das ferramentas Compose, A
 
 O desenvolvimento deste projeto está temporariamente pausado enquanto termino minha tese.
 
-Este projeto necessita lançar uma API localmente utilizando o Docker.
+Este projeto necessita que a seguinte API esteja rodando localmente utilizando o Docker.
 
 Api: https://github.com/PokeAPI/pokeapi
 Necessita python 3.10, instalar os requisitos disponíveis no arquivo requirements.txt da api.
