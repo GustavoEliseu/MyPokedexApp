@@ -1,7 +1,13 @@
+# Pokedex completa <br>
+
+Este é um projeto pessoal com intuito de aprendizado das ferramentas Apollo (para Graphql) e Palette (Para detecção de cores e proximidade de cores). Devido a isso, ele pode NÃO SEGUIR perfeitamente o uso da arquitetura MVVM, CLEAN e SOLID.<br>
+
+O desenvolvimento deste projeto está temporariamente pausado enquanto termino minha tese.
+
+
 # Complete Pokemon Pokedex <br>
 
 This is a personal android app project that utilizes Apollo with the GraphQL pokeApi to fill a pokedex with Palette to get the pokemon colors. <br> 
- ***Due to severe back pain the progress in this project is going to be slow***
 
 <p align="center">
   <img src="https://github.com/GustavoEliseu/MyPokedexApp/assets/30469845/47b093bf-3540-46af-8b8f-3d0af269cefd"/><br>
@@ -46,4 +52,4 @@ This is a personal android app project that utilizes Apollo with the GraphQL pok
 * Started using PokeApi Graphql - **${\color{green}DONE}$**
 * Added localHost build variant - **${\color{green}DONE}$**
 
-Credits - **${\color{yellow}TODO}$**<br> ( add all libraries and people that helped)
+Credits - **${\color{yellow}TODO}$**<br> 
