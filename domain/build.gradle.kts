@@ -40,6 +40,7 @@ android {
         create("localHost") {
             isMinifyEnabled = false
             buildFeatures.buildConfig= true
+            initWith(getByName("debug"))
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             buildConfigField("String", "POKEAPI_URL", "\"https://10.0.2.2:8080/api/v2/\"")
             buildConfigField("String", "GRAPHQLAPI_URL", "\"http://10.0.2.2:8080/v1/graphql\"")
@@ -69,6 +70,13 @@ dependencies {
     implementation(platform(libs.kotlin.bom))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
+    implementation(libs.appcompat)
+    implementation(project(mapOf("path" to ":data")))
+    implementation(libs.androidx.runner)
+    // Tests
+    androidTestImplementation(libs.truth)
+    testImplementation(libs.androidx.junit.ktx)
+    androidTestImplementation (libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
     //Compose
@@ -94,6 +102,10 @@ dependencies {
     kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation)
 
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    kapt(libs.androidx.room.compiler)
+
     // Network
     //apollo
     implementation(libs.apollo.runtime)
@@ -103,6 +115,8 @@ dependencies {
     //okhttp
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
+
+    implementation(libs.gson)
 
     // Paging
     implementation(libs.androidx.paging.compose)

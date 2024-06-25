@@ -21,17 +21,17 @@ This is a personal android app project that utilizes Apollo with the GraphQL pok
   * Search - **${\color{green}DONE}$** <br>
   * List - **${\color{green}DONE}$** (need small layout fixes) <br>
   * Use Android Palette to get the pokemon color - ****${\color{green}DONE}$**** <br>
-  * PokemonDetails Screen - **${\color{yellow}REOPEN}$** (needs to redo the query due to the rest->graphql change) <br>
+  * PokemonDetails Screen - **${\color{yellow}TODO}$** <br>
   * AbilityDetails Screen - **${\color{yellow}TODO}$** <br>
   * MoveDetails Screen - **${\color{yellow}TODO}$** <br>
-* Add test libraries and start the testing - **${\color{yellow}TODO}$** (planning to use espresso and junit) <br>
+* Add test libraries and start the testing - **${\color{yellow}TODO}$** <br>
 * Cleanup and improve git Readme layout - **${\color{yellow}TODO}$** <br>
 * Add and configure apolloCache - **${\color{green}DONE}$**<br> (Still needs to add local search, going to wait for the ROOM database)
 
 ## Part 2 - Offline first and improvements <br>
 * Adds error messages for communication errors - **${\color{yellow}TODO}$**<br>
 * Fixes Architecture flaws - **${\color{yellow}TODO}$**<br>
-* Add Room database - **${\color{yellow}TODO}$**<br>
+* Add Room database - **${\color{yellow}PARTIALLY DONE}$** Add tables for Ability, Moves, Details etc...<br>
 * if possible planning to add an option to download the data locally, with option to choose to download or not the images - **${\color{yellow}TODO}$**<br>
 * Check for accessibility, text-to-speak, manual tests with content readers, test colors for better contrast etc... - **${\color{yellow}TODO}$**<br>
 

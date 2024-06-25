@@ -8,6 +8,7 @@ firebaseCrashlytics = "18.4.3"
 firebaseCrashlyticsGradle = "2.9.9"
 googleServices = "4.4.0"
 gradle = "8.0.2"
+gson = "2.10.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 kotlinxCoroutinesPlayServices = "1.7.3"
@@ -36,6 +37,8 @@ androidGradlePlugion = "8.1.2"
 kotlin_coreKtx_version = "1.12.0"
 runner = "1.0.2"
 shot = "6.0.1"
+roomRuntime = "2.6.0"
+truth = "1.1.5"
 uiToolingPreview = "1.5.3"
 org-jetbrains-kotlin-android = "1.8.21"
 kotlin-bom = "1.8.21"
@@ -56,6 +59,9 @@ androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtim
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingCompose" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "uiToolingPreview" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 coil-test = { module = "io.coil-kt:coil-test", version.ref = "coilCompose" }
@@ -66,6 +72,7 @@ firebase-crashlytics-ktx = { module = "com.google.firebase:firebase-crashlytics-
 google-services = { module = "com.google.gms:google-services", version.ref = "googleServices" }
 gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
 hilt-core = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt_navigation" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 hilt-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
@@ -94,6 +101,9 @@ compose-test = {group = "androidx.compose.ui", name = "ui-test-manifest", versio
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-palette-ktx = { group = "androidx.palette", name = "palette-ktx", version = "1.0.0" }
 shot = { module = "com.karumi:shot", version.ref = "shot" }
+androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version = "1.1.5" }
+truth = { module = "com.google.truth:truth", version.ref = "truth" }
+androidx-runner = { group = "androidx.test", name = "runner", version = "1.5.2" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "androidGradlePlugion" }

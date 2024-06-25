@@ -1,12 +1,16 @@
+@file:OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
+
 package com.gustavoeliseu.pokedexlist.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.gustavoeliseu.domain.entity.PokemonSimpleListItem
-import com.gustavoeliseu.domain.repository.PokemonRepository
+import com.gustavoeliseu.domain.usecase.GetSimplePokemonListUseCase
+import com.gustavoeliseu.pokedexdata.models.GenericPokemonData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -18,7 +22,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PokemonListViewModel @Inject constructor(
-    private val pokemonRepository: PokemonRepository
+    genericPokemonListUseCase: GetSimplePokemonListUseCase
 ) : ViewModel() {
 
     private val _isSearchShowing = MutableStateFlow(false)
@@ -37,9 +41,9 @@ class PokemonListViewModel @Inject constructor(
             initialValue = "",
         )
 
-    var pokemonListState: Flow<PagingData<PokemonSimpleListItem>> =
-            search.debounce(300).flatMapLatest { query ->
-                pokemonRepository.queryPokemonList(query).cachedIn(viewModelScope)
+    var pokemonListState: Flow<PagingData<GenericPokemonData>> =
+            search.debounce(300).flatMapLatest {query ->
+                genericPokemonListUseCase.getList(query).cachedIn(viewModelScope)
             }
 
     fun setSearch(query: String) {

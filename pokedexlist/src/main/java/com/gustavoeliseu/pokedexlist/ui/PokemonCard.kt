@@ -40,11 +40,10 @@ import coil.compose.SubcomposeAsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.gustavoeliseu.commonui.utils.extensions.chooseBestPalette
-import com.gustavoeliseu.commonui.utils.extensions.colorDistance
 import com.gustavoeliseu.commonui.utils.extensions.getPaletteFilterFromColor
 import com.gustavoeliseu.commonui.utils.extensions.isDarkColor
 import com.gustavoeliseu.commonui.utils.extensions.shimmerEffect
-import com.gustavoeliseu.domain.entity.PokemonSimpleListItem
+import com.gustavoeliseu.domain.models.PokemonSimpleListItem
 import com.gustavoeliseu.domain.utils.ColorEnum
 import com.gustavoeliseu.pokedexlist.R
 import java.util.Locale
