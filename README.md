@@ -1,9 +1,14 @@
 # Pokedex completa <br>
 
-Este é um projeto pessoal com intuito de aprendizado das ferramentas Apollo (para Graphql) e Palette (Para detecção de cores e proximidade de cores). Devido a isso, ele pode NÃO SEGUIR perfeitamente o uso da arquitetura MVVM, CLEAN e SOLID.<br>
+Este é um projeto pessoal com intuito de aprendizado das ferramentas Compose, Apollo (para Graphql) e Palette (Para detecção de cores e proximidade de cores). Devido a isso, ele pode NÃO SEGUIR perfeitamente o uso da arquitetura MVVM, CLEAN e SOLID.<br>
 
 O desenvolvimento deste projeto está temporariamente pausado enquanto termino minha tese.
 
+Este projeto necessita lançar uma API localmente utilizando o Docker.
+
+Api: https://github.com/PokeAPI/pokeapi
+Necessita python 3.10, instalar os requisitos disponíveis no arquivo requirements.txt da api.
+Seguir o Guia da api para rodar o backend localmente.
 
 # Complete Pokemon Pokedex <br>
 
